@@ -1,0 +1,740 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{James}
+\usepackage{dynkin-diagrams}
+\title{Lie Algebras and their Representations}
+\author{James Hindmarch}
+\setcounter{section}{0}
+\date{October 2023}
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\newlec
+\section{Introduction}
+A \underline{Lie group} is, fundamentally, a group that is also a smooth manifold, for example:
+\[ GL_{n}, \hspace{0.1cm} SL_{n}, \hspace{0.1cm} SO_{n}, \hspace{0.1cm} Sp_{2n} \]
+Over, for example, some infinite field, such as $\bbC$.
+\ex $S^1 = \{ z \in \bbC \suchthat{|z| = 1} \}$ is the prototypical example of a Lie group. \gap 
+Let $G$ be a Lie group. The \underline{Lie Algebra} of $G$ is the tangent space of $G$ at the identity, $e$, of $G$. That is to say: \[ \mathfrak{g} = T_{e} G. \] $\frakg$ is a vector space, but also has additional structure.\\ By taking a differential, we can turn the conjugation map:
+\begin{align*}
+    G &\to \Aut G\\
+    g &\mapsto g (\widecdot) g^{-1}
+\end{align*}
+where $G$ is a Lie group, into a map $\ad$ (for adjoint):
+\[ \ad : \frakg \to \End \frakg. \] This gives a bilinear map:
+\begin{align*}
+    [\widecdot, \widecdot] : \frakg \times \frakg &\to \frakg\\
+    [x,y] &\mapsto \ad(x)(y)
+\end{align*}
+\ex If $G=GL_{n}(\bbR)$, then \[ \frakg = \frakgl_{n}(\bbR) = M_{n}(\bbR)\] \[ [x,y] = xy-yx \]
+So far, so good, so what?
+\begin{enumerate}
+    \item[(a)] How do Lie algebras tell us about the structure of $G$?
+    \begin{itemize}
+        \item We'll define the \underline{root system} of $G$; this tells us about commutator relations in $G$ (See Carter's book for more)
+        \item We'll define the \underline{Weyl group} of $\frakg$, e.g. the Weyl group of $GL_{n}(\bbC)$ is $\cong S_{n}$. This is basically to do with the fact that there is an embedding
+        \[ S_{n} \hookrightarrow GL_{n}(\bbC)\] which is obtained via permutation matrices acting on a basis of $\bbC^{n}$.
+    \end{itemize}
+    Let $\mathcal{B} = \{ \text{upper triangular matrices in } GL_{n}(\bbC) \}$. Then $\exists$ Bruhat decomposition, which is: \[ GL_{n}(\bbC) = \disunion_{w \in S_{n}} \mathcal{B}w\mathcal{B}\]
+    (i.e. the disjoint union of double cosets of $\mathcal{B}$.)
+    \item[(b)] They tell us about the representation theory of $G$ and $\frakg$. For example, there is a bijection \[ \{\text{finite dim. } \bbC\text{-reps of } SL_{n}(\bbC)\} \longleftrightarrow \{\text{finite dim. } \bbC\text{-reps of the Lie algebra of } SL_{n}(\bbC)\}\] Where the Lie algebra of $SL_{n}(\bbC)$ is
+    \[ \fraksl_{n}(\bbC) = \{A \in M_{n}(\bbC)| \, \tr(A)=0 \}. \]
+    We will be able to describe the RHS completely (by listing all the representations).
+    \item[(c)] They have applications in Algebraic Geometry. We can use Lie Algebras to build families of surfaces, or algebraic curves (See Slodowy's book for more).\gap
+    We define the \underline{Dynkin diagram} of a semi simple Lie algebra, e.g.\[
+    \dynkin E7 \]
+    (This is the Dynkin diagram of "Type E7"). This tells you about singularities on surfaces.
+    \item[(d)] There are applications to Number theory: root systems and Weyl groups can help you to get the structure of groups over $\bbQ_{p}$ (the $p$-adics).\footnote{See the Iwahari-Matsumoto Paper} \gap
+    There is the Local Langlands correspondence which predicts a relationship:
+    \[ \text{Galois Theory of Local Fields} \longleftrightarrow \text{Complex Lie Theory} \]
+    \item[(e)] There are also applications to applied maths, and that's all we'll say about that.
+\end{enumerate}
+\section{Basic Definitions and Examples}
+Let $k$ be a field (most of the time this will be $\bbC$, but not always: we'll sometimes look at how things go wrong in fields with $\chr k > 0$.)
+\begin{fancydefine}{Lie Algebra}
+    A \textbf{Lie algebra} over $k$ is a vector space $\frakg$ over $k$ with a bilinear pairing
+    \[
+    [\widecdot, \widecdot]: \frakg \times \frakg \to \frakg \]
+    which satisfies
+    \begin{itemize}
+        \item $[x,x]=0$
+        \item $[x,[y,z]] + [y,[z,x]] + [z,[x,y]] = 0$ \hspace{1cm} (Jacobi Identity)
+    \end{itemize}
+\end{fancydefine}
+    \textbf{\underline{Exercise:}} Check that these properties imply antisymmetry
+    \[ [x,y] + [y,x] = 0 \]
+\begin{fancydefine}{Lie sub-algebra}
+     A \textbf{Lie sub-algebra} is a $k$-subspace $\frakh \subset \frakg$, such that $\frakh$ is closed under the Lie bracket of $\frakg$: \[
+[x,y] \in \frakh \hspace{0.5cm} \forall x,y \in \frakh \]
+\end{fancydefine}
+\ex Let $V$ be finite-dimensional over $k$.
+\begin{enumerate}
+    \item[(a)] Let $\frakgl_{n}(V) = \End_{k}(V)$ with bracket \[
+    [x,y]=xy-yx. \]
+    Then it is clear that $[x,x]=0$, and you can check Jacobi yourself. \gap If we choose a basis for $V$, then we can identify $\frakgl_{n}$ with the space of $n\times n$ matrices over $k$, and then we can write $\frakgl(V)$ as $\frakgl_{n}$ (or $\frakgl_{n}(k)$ to emphasise the field, or just $M_{n}(k)$).
+    \item[(b)] Let \[ \fraksl(V) = \{ x \in \frakgl(V) \, : \, \tr(x)=0 \}. \] This is clearly a subspace, since $\tr$ is linear. It is also closed under the Lie bracket, since $\tr$ is symmetric. That is to say:
+    \[ \tr(xy-yx) = \tr(xy)-\tr(yx) = \tr(xy) - \tr(xy) = 0 \]. Then $\dim(\fraksl(V)) = n^{2}-1$. And the standard basis for this is given by:
+    \[ \{E_{ii} - E_{i+1,\, i+1} \,: 1 \leq i \leq n-1 \} \, \cup \, \{E_{ij} \, : \, i \neq j\}.  \]
+
+
+
+
+
+
+
+
+
+
+
+
+
+    %LECTURE 2
+    \newlec
+
+
+
+
+
+    \item[(c)] Assume $\chr k \neq 2$. Suppose that $V$ is endowed with a symmetric bilinear form \[ [ \widecdot, \widecdot ] : V \times V \to k \]
+    Let \[ \frakso(V) = \{ X \in \frakgl(V) \, : \, \langle Xv, w \rangle = - \langle v, Xw \rangle \, \forall v,w \in V \} \]
+    If we use coordinates, then we have $\exists M \in GL(V)$ such that $\langle v,w \rangle = v^{\text{t}}Mw$, so then we have \[ \frakso(V) = \{ X \, : \, MX + X^{\text{T}}M =0 \}. \] Usually, we take \[ M = \begin{cases} 
+    \begin{bmatrix}
+        0 & I_{l} \\
+        I_{l} & 0 \\
+    \end{bmatrix}, & n=2l\\
+    \\
+    \begin{bmatrix}
+        1 & 0 & 0\\
+        0 & 0 & I_{l}\\
+        0 & I_{l} & 0\\
+    \end{bmatrix}, & n=2l+1
+    \end{cases}
+    \]
+    These are the \textit{orthogonal Lie algebras}, denoted $\frakso_{n}$.\gap
+    \textbf{Exercise:} What is their dimension? \gap
+    (A note: $\mathfrak{o}_{n}$ and $\frakso_{n}$ are the same thing, since we "take tangent spaces at the identity", but the structure of $O(n)$ and $SO(n)$ do not differ at the identity, since the difference between them comes about because $O(n)$ has two connected components, so their Lie algebras are, in fact, identical).
+    \remark If we let $n=2$, and take \[
+    e=\begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \, f= \begin{pmatrix}
+        0 & 0\\
+        1 & 0
+    \end{pmatrix}, \, h = \begin{pmatrix}
+        1 & 0\\
+        0 & -1
+    \end{pmatrix},
+    \] viewed as matrices (in $\fraksl_{2}(\bbC)$). This gives the standard basis from example (2). Then we have \[
+    [e,f]=h, \, \, [h,e]=2e,\, \, [h,f]=-2f,\] and we will see that (in some sense) the structure of all \underline{semisimple} Lie algebras 'comes from' $\fraksl_{2}(\bbC)$.
+\end{enumerate}
+\begin{enumerate}
+    \item[(d)] Assume $\chr k \neq 2$. Suppose $V$ has a skew-symmetric non-degenerate bilinear form: \[ \langle \widecdot, \widecdot \rangle: V \times V \to k\]
+    i.e. such that
+    \[ \langle v, w \rangle = - \langle w, v\rangle\]
+    Then \[
+    \fraksp = \{ x \in \frakgl(V) \, : \, \langle Xv,w \rangle = \langle v, Xw \rangle \} \]
+    In coordinates, we take $\langle \widecdot, \widecdot \rangle$ to be the skew-symmetric form associated to: \[
+    \begin{pmatrix}
+        0 & I_{l}\\
+        -I_{l} & 0\\
+    \end{pmatrix}, \, \, \, \text{where $n=2l$}\]
+    This is the \textit{symplectic Lie algebra}, denoted $\fraksp_{n}$ (where $n=2l$). \gap
+    Note: $n$ \textit{must} be even, in order for $V$ to have a skew-symmetric bilinear form. \gap
+    \textbf{Exercise:} Check (3) and (4) are indeed Lie subalgebras of $\frakgl(V)$. \\
+    \item[(e)] Any space $V$ is a Lie algebra if we specify that \[ [v,w]=0, \, \, \forall v,w \in V \]
+    These are called \textit{abelian} Lie algebras. Named for obvious reasons, (i.e. for linear Lie algebras, it means that matrices commute).
+    \item[(f)]$\mathfrak{b}_{n}$: The set of upper triangular matrices (including the diagonal, i.e. non-strict upper triangular). This is the Borel subalgebra associated to the Borel subgroup of $GL_{n}$. \gap \textbf{Exercise}: What is the dimension of this Lie algebra, and why is it $\binom{n+1}{2}$?
+    \item[(g)] $\mathfrak{n}_{n}$ The set of \textit{strictly} upper-triangular matrices. (The $\mathfrak{n}$ stands for nilpotent.)
+\end{enumerate}
+\newpage
+\section{Basic Representation Theory}
+\begin{fancydefine}{Lie Algebra Homomorphism}
+    A \underline{linear} transformation \[ \phi : \frakg \to \frakh \] between two Lie algebras is a \textbf{homomorphism} if: \[
+    [\phi(x), \phi(y)] = \phi([x,y]) \, \, \forall x,y \in \frakg \]
+    If $\phi$ is also bijective (i.e. is an isomorphism of vector spaces) then it is a Lie algebra \textbf{isomorphism}.
+\end{fancydefine}
+\begin{fancydefine}{Representation}
+     Given a Lie algebra $\frakg$, we say that a \textbf{representation} of $\frakg$ is a Lie algebra homomorphism \[ \varphi : \frakg \to \frakgl(V) \] for some $V$. (We can write $\varphi = \varphi_{V}$ to emphasise the space).
+\end{fancydefine}
+\underline{Notation:}
+\begin{itemize}
+    \item We also call $V$ itself a 'representation,' or sometimes a $\frakg$-module.
+    \item We write: $G \curvearrowright V$ and say $\frakg$ acts on $V$ (on the left).
+    \item We usually write $x.v$ or $xv$ to mean $\varphi(x)(v)$
+    \item The 'dimension' of the representation is $\dim V$.
+\end{itemize}
+\exs \hspace{0.1cm}
+\begin{enumerate}
+    \item The trivial representation: Let $\dim V = 1$, and let $\frakg \curvearrowright V$ via:\[
+    x.v=0 \, \, \forall x \in \frakg, v \in V \]
+    We call this representation the \textit{trivial representation}
+    \item The defining representation: If $\frakg$ is a subalgebra of $\frakgl(V)$, then $\exists$ a natural inclusion: \[
+    \iota: \frakg \to \frakgl(V).
+    \] We call this inclusion the \textit{defining representation} of $\frakg$.
+    \item The adjoint representation: Let $x \in \frakg$. Define \begin{align*}
+        \ad(x) : \frakg &\to \frakg,\\
+        y &\mapsto [x,y],
+    \end{align*}
+    then the map \begin{align*}
+        \frakg &\to \frakgl(\frakg)\\
+        x &\mapsto \ad x
+    \end{align*}
+    is the adjoint map. (Exercise: Show this is a Lie algebra homomorphism -- Use Jacobi, one line). \gap
+    Note: Recall the earlier remark, the adjoint representation of $\fraksl_{2}(\bbC)$, with basis $\{e,h,f\}$ in that order, has:
+    \begin{align*}
+        \ad h &= \begin{bmatrix}
+            2 & 0 & 0\\
+            0 & 0 & 0\\
+            0 & 0 & -2
+        \end{bmatrix}\\
+        \ad e &= \begin{bmatrix}
+            0 & -2 & 0\\
+            0 & 0 & 1\\
+            0 & 0 & 0
+        \end{bmatrix}\\
+        \ad f &= \begin{bmatrix}
+            0 & 0 & 0\\
+            -1 & 0 & 0\\
+            0 & 2 & 0 \\
+        \end{bmatrix}
+    \end{align*}
+    \item If $V,W$ are representations, then so is $V \oplus W$ via: \[ x.(v,w) = (xv,xw). \]
+    \item If $V$ is a representation of $\frakg$, then so is $V^{*}$ via: \[
+    \forall x \in \frakg, \, v \in V, \, f \in V^{*}; \, (xf)(v) \to -f(x.v)\]
+    Check this.
+    \item If $V, W$ are representations of $\frakg$, then so is $\Hom(V,W)$ via:
+    \[ \forall v \in V, \, x \in \frakg, \, f \in \Hom(V,W); \, (x.f)(v) = x.f(v) - f(x.v)\]
+    Check this too.
+\end{enumerate}
+\begin{fancydefine}{$\frakg$-equivariance} 
+    If $V,W$ are reps of $\frakg$, then a linear transformation \[ \varphi : V \to W \]
+    is called $\frakg$\textbf{-equivariant} if \[ \forall x \in \frakg, \, v \in V, \, x.\varphi(v) = \varphi(x.v). \]
+    We say $V,W$ are isomorphic as representations if there is a $\frakg$-equivariant isomorphism between them.
+\end{fancydefine}
+\begin{fancydefine}{Subrepresentation}
+     A \textbf{subrepresentation} $V' \subseteq V$ is a subspace such that \[ \forall x \in \frakg, \, v \in V'; \, \,x.v \in V'.\]
+\end{fancydefine}
+\begin{fancydefine}{Irreducible} 
+    We say that a representation is \textbf{irreducible} or \textbf{simple} if the only subrepresentations are $V$ \& $\mathbf{0}$ (but the $\mathbf{0}$ vector space is \textit{not} an irreducible representation).
+\end{fancydefine}
+\textbf{Exercise(s)} \begin{itemize}
+    \item The trivial representation is irreducible.
+    \item The defining and adjoint representations of $\fraksl_{2}(\bbC)$ are irreducible.
+\end{itemize}
+
+
+
+
+
+
+
+\newlec 
+%LECTURE 3
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{fancydefine}{Completely reducible/Semisimple} 
+    $V$ is a \textbf{completely irreducible} or \textbf{semisimple} representation if it decomposes as a sum of irreducible representations.
+\end{fancydefine} 
+\textbf{Exercise: }For V a representation, complete reducibility is equivalent to \[ \forall \text{subreps }W \subseteq  V, \, \, \exists W' \text{ such that } V' = W \oplus W'. \]
+ If V is a representation, $W \leq V$ a subrepresentation, then \[ \frac{V}{W} \] is a representation of $\frakg$ via \[ x : (v + W) = xv + W \]
+\section{Representation Theory of $\fraksl_{2}(\bbC)$}
+Recall that \[ \fraksl_{2}(\bbC) = \{ X \, : \, \tr(X)=0 \}. \]
+\textbf{Example: } Consider the Borel subalgebra of dimension 2, given by \[ \frakb_{2} = \{ \begin{pmatrix} a & b \\ 0 & c \end{pmatrix} \, : \, a,b,c \in \bbC \}.\] Then let $V = \spann\{\begin{pmatrix} 0 \\ 1 \end{pmatrix}, \, \begin{pmatrix}
+    1 \\ 0
+\end{pmatrix} \}$, the defining representation of $\frakb_{2}$. This is not completely irreducible (there is a similar example in II Representation theory). $\left< \begin{pmatrix}
+    1 \\ 0
+\end{pmatrix} \right>$ is a subrepresentation, but there is no complement subrepresentation by easy linear algebra.
+\define[Faithful] A representation $V$ of a Lie algebra $\frakg$ is \textbf{faithful} if \[ \frakg \to \frakgl(V)\] is injective. \gap Henceforth, all Lie algebras and their representations are over $\bbC$ (unless stated otherwise). \gap Let $V$ be a representation of $\fraksl_{2}(\bbC)$, recall: \[e=\begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \, f= \begin{pmatrix}
+    0 & 0\\
+    1 & 0
+\end{pmatrix}, \, h = \begin{pmatrix}
+    1 & 0\\
+    0 & -1
+\end{pmatrix},\] 
+We know three representations of $\fraksl_{2}(\bbC)$ already:\\
+\begin{table}[h]
+    \centering
+    \begin{tabular}{c | c | c}
+        Dim & Name & Action of $h$ \\ \hline
+        $1$ & trivial & $0$\\ 
+        $2$ & defining & $\begin{pmatrix}
+            1 & 0 \\ 0 & -1 
+        \end{pmatrix}$\\ \hspace{0.1cm} & \hspace{0.1cm} & \hspace{0.1cm} \\
+        $3$ & adjoint & $\begin{pmatrix}
+            2 & 0 & 0\\
+            0 & 0 & 0\\
+            0 & 0 & -2\\
+        \end{pmatrix}$
+    \end{tabular}
+\end{table}
+\define[$\lambda$-weight space] For $\lambda \in \bbC$ the $\mathbf{\lambda}$ \textbf{-weight space} of $V$ is  \[ V_{\lambda} = \{ v \in V \, : \, hv=\lambda v\}.\]
+The following are \underline{vector space} sums (of weight-spaces), \underline{not} decompositions into irreducible representations.
+\begin{itemize}
+    \item The trivial is $V_{0}$
+    \item The defining is $V_{1} \oplus V_{-1}$
+    \item The adjoint is $V_{2} \oplus V_{0} \oplus V_{-2}$. Given by $\langle e \rangle \oplus \langle h \rangle \oplus \langle f \rangle$
+\end{itemize}
+\textbf{Actions:}\gap
+Of $e$: for $v \in V_{\lambda}$, \begin{align*} h \cdot (ev) &= ([h,e] + eh)v\\
+    &=(2ev) + \lambda e v
+\end{align*}
+So $h \cdot ev = (\lambda + 2)ev$. So $ev \in V_{\lambda + 2}$.
+\gap
+Of f: By a virtually identical argument, $fv \in V_{\lambda-2}$. So we have the following diagram: 
+\begin{center}
+\begin{tikzcd}
+    V_{\lambda-4} \arrow[r, bend left=50, "e"]
+    & \arrow[l, bend left=50, "f"] V_{\lambda-2}
+    \arrow[r, bend left=50, "e"]
+    & \arrow[l, bend left=50, "f"] V_{\lambda}
+    \arrow[r, bend left=50, "e"]
+    & \arrow[l, bend left=50, "f"] V_{\lambda+2}
+    \arrow[r, bend left=50, "e"]
+    & \arrow[l, bend left=50, "f"] V_{\lambda+4}
+\end{tikzcd}
+\end{center}
+\define[Highest Weight Vector] If a non-zero $v \in V_{\lambda} \cap \ker(e)$ for some $\lambda$, then $v$ is called a \textbf{Highest Weight Vector} (or HWV) of weight $\lambda$ \begin{align*}
+    hv = \lambda v & & ev=0
+\end{align*}
+\textbf{Example: } In the adjoint representation, $e$ is a highest weight vector.
+\lem Suppose $v \in V_{\lambda}$ is a HWV, then $\forall n \geq 1$ \[ ef^{n}v = n(\lambda-n+1)f^{n-1}v\]
+\proof Easy induction on $n$ \gap Base Case: \[ (ef)v = ([e,f] +fe)v = (h + fe)v = hv = \lambda v. \]
+Inductive Step: Suppose this is true for $n=k-1$, then we have: \[ ef^{k-1}v = (k-1)(\lambda-(k-1)+1)f^{k-2}v. \]
+Then: \begin{align*} ef^{k}v&=([e,f]f^{k-1} + fef^{k-1})v\\
+    &=(h + fe) \left[f^{k-1}v\right]\\
+    &=  (hf^{k-1}v) + (k-1)(\lambda - (k-1) + 1)f^{k-1}v\\
+    &= (\lambda - 2(k-1))f^{k-1}v + (k-1)(\lambda - k + 2)f^{k-1}v\\
+    &=(k)(\lambda - k + 1)f^{k-1}v
+\end{align*}
+\lem Suppose $v \in V_{\lambda}$ is a HWV. Then $W=\spann\{v,fv,f^{2}v,\dots \}$ is a subrepresentation of $V$.
+\proof It suffices to show that if $w=f^{n}v$, then
+    \begin{enumerate}
+        \item[(i)] $ew \in W$
+        \item[(ii)] $hw \in W$
+        \item[(iii)] $fw \in W$  
+    \end{enumerate}
+(iii) Clearly true by definition of $W$. \gap (i) If $n>1$ this follows from Lemma 4.4 above, and if $n=0$ then $ew=0$ by definition of HWV. \gap (ii) $f^{n}w \in V_{\lambda -2n}$, so $hw = (\lambda-2n)w \in W$.
+\prop If V is finite dimensional, it contains at least one highest weight vector (no claim about uniqueness).
+\proof Choose any non-zero eigenvector $v$ of $h$. (This can always be done, since we're in $\bbC$ now). \gap Consider $v,ev,e^{2}v,\dots$. This set: \[ \{e^{n}v \, : \, ev \neq 0 \}\] is linearly independent, as the $e$ action changes the eigenvalue of $v$ when acted on by $h$. Therefpre. as $V$ is finite dimensional, this set must be finite. So $\exists \, n$ such that $ e^{n}v \neq 0$, but $e^{n+1}v =0$. Therefore $e^{n}v$ is a highest weight vector, with weight $\lambda +2n$.
+\lem Suppose $V$ is finite dimensional, and $v \in V_{\lambda}$ is a highest weight vector, then $\lambda \in \bbZ_{\geq0}$.
+\proof Any non-zero vectors of the form $f^{n}v$ must be linearly independent. So \[ \exists n\geq 0 \text{  s.t  } f^{n}v \neq 0 \text{  but  } f^{n+1}v=0\]
+By ($4.4$) \[ 0 = (ef^{n+1})v = (n+1)(\lambda - n)f^{n}v \]
+Therefore $f^{n}v \neq 0$, $n+1 \neq0$, so $\lambda=n$. \endproof Suppose that $V$ is irreducible, of dimension $n+1$. Then by (4.6), there is a HWV $v \in V_{\lambda}$, by (4.5), the span of $\{ v,fv,f^{2},\dots\}$ is a subrepresentation of $V$. So $\{v,fv,f^{2}v, \dots, f^{n}v\}$ is a basis, as the $f^{i}v$ are all linearly independent for $0 \leq i \leq n$. We know from (4.7) that $\lambda = n \in \bbZ_{\geq 0}$.
+\begin{cor} If $V$ an irreducible representation of $\fraksl_{2}(\bbC)$ of dimension $n+1$, then there exists a basis $v_{0},v_{1},\dots v_{n}$ of $v$ such that
+\begin{enumerate}
+    \item[(i)] $hv_{i} = (n-2i)v_{i}$, that is: \[
+        h =
+        \begin{bmatrix}
+          n & & & &\\
+          & n-2 & & &\\
+          & & \ddots & &\\
+          & & & 2-n &\\
+          & & & & n
+        \end{bmatrix}
+      \]
+    \item[(ii)] $f_{v_{i}}=v_{i+1}$ for $0\leq i \leq n-1$, that is:\[
+        f =
+        \begin{bmatrix}
+          0 & & & &\\
+          1 & 0 & & &\\
+          & 1 & 0 & &\\
+          & & \ddots & \ddots  &\\
+          & & & 1 & 0
+        \end{bmatrix}
+      \]
+    \item[(iii)] $ev_{i} = \begin{cases}
+        i(n-i+1)v_{i-1}, & i\geq 1\\
+        0, & i=0 
+    \end{cases}, \, \, \, \,$
+    that is: \[
+        e =
+        \begin{bmatrix}
+          0 & n & & &\\
+            & 0 & 2(n-1) & &\\
+            & & 0 & \ddots &\\
+          & & & \ddots & n \\
+          & & & & 0
+        \end{bmatrix}.
+      \]
+\end{enumerate}
+\end{cor}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newlec 
+%LECTURE 4
+\section{Irreducible modules for $\fraksl_{2}$}
+\begin{remark}
+    Let $V$ be an (n+1)-dimensional irreducible representation of $\fraksl_{2}$, $v \in V$ a highest weight vector. Then note: \[ (ef + fe + \frac{1}{2}h^{2})(v) = nv + \frac{n^{2}}{2}v = (\frac{n^{2}}{2}+n)v.\]
+    This is a special operator, and we're going to see it three times very quickly.
+\end{remark}
+We write $V(n)$ for the unique irreducible representation of $\fraksl_{2}$ of dimension $n+1$.
+\begin{fancydefine}{Weights}
+    Given a representation $V$ of $\fraksl_{2}$, then \[ \{ \lambda \in \bbC \, : \, V_{\lambda} \neq 0 \}\] are called the \textbf{weights} of V.
+\end{fancydefine}
+Today, we will show \underline{Weyl's theorem} which states that the category of finite dimensional representations of $\fraksl_{2}(\bbC)$ is irreducible.
+\begin{fancythm}{}
+    Every finite dimensional representation of $\fraksl_{2}$ is completely reducible.
+\end{fancythm}
+This result, along with (4.8), basically says that to understand a representation of $\fraksl_{2}$, you basically just need to understand the action of $h$. That is, the action of $h$ completely determines a finite dimensional representation of $\fraksl_{2}(\bbC)$.
+\begin{ex}
+    Suppose you have some $5$-dimensional representation of $\fraksl_{2}$, and that $\exists v \in V$ such that $hv = 3v$. This means that the weights will contain $3, 1, -1, -3$, so we must have \[ V = V(0) \oplus V(3), \] since $1+4=5$. \endproof
+\end{ex}
+Before we prove (5.2), we need some facts. First of all, if $\frakg$ is an arbitrary Lie algebra, and \[ \varphi : \frakg \to \frakgl(V) \] is a representation of $\frakg$, and there is some $\sigma$ which commutes with $\varphi(x)$ $\forall x \in \frakg$. Then we have facts, which you should check:
+\begin{enumerate}
+    \item $\ker(\sigma - \lambda \id_{V})$ is a subrepresentation of $V$ for all $\lambda \in \bbC$.
+    \item If $V$ is irreducible, then $\sigma$ is a scalar multiple of the identity. (Schur's Lemma).
+\end{enumerate}
+\newpage
+\begin{fancydefine}{Casimir element}
+    Let $V$ be a finite dimensional representation of $\fraksl_{2}$. Then \[\Omega = (ef + fe + \frac{1}{2}h^{2}) \in \frakgl(V)\] is called the \textbf{Casimir element} (of $\fraksl_{2}$). In fact, $\Omega$ is central.
+\end{fancydefine}
+\begin{fancylem}{Casimir element is central}
+    If \[ \varphi : \fraksl_{2} \to \frakgl(V), \] then $\Omega$ commutes with $\varphi(x)$, $\forall x \in \fraksl_{2}$ (for $V$ finite dimensional).
+\end{fancylem}
+\proof
+    To show $\Omega$ is central, show $e\Omega = \Omega e$, $f\Omega = \Omega f$, $h \Omega = \Omega h$. Just a mechanical check. 
+\endproof
+\begin{cor}
+    If $V$ is an irreducible finite dimensional representation of $\fraksl_{2}$ then $\Omega$ acts on $V$ by a scalar.
+\end{cor}
+\proof Schur's Lemma. By the remark above, the scalar is $(\frac{n^2}{2} + n)$. \endproof
+
+\textit{Proof of $\mathit{(5.2)}$}. The general case is done in Humphrey's book on page $63$. There's a different proof in Henderson's book: 5.2.1, 7.5.1. \gap
+Let a representation \[ \varphi : \fraksl_{2} \to \frakgl(V) \] be a finite dimensional representation of $\fraksl_{2}$. Let $W \leq V$ be a subrepresentation. Then we need to show $\exists U \leq V$ such that \[ V = W \oplus U. \]\gap 
+
+\textit{Case 1.} $W$ has codimension $1$\footnote{$\frac{V}{W}$ has dimension $1$}. So we must have $\frac{V}{W} \cong V(0)$. \\
+
+Subcases: \begin{enumerate}
+    \item[(1)] W is trivial, so $\dim V = 2$, and there exists a basis of $V$ ($v_{1}, v_{2}$ such that $W=\bbC v_{1}$) with respect to which $\fraksl_{2}$ acts on $V$ by matrices which look like:
+    \[ \begin{pmatrix}
+        0 & * \\ 
+        0 & 0
+    \end{pmatrix}. \]
+    We show $V \cong V(0) \oplus V(0)$ where the first $V(0)$ is $W$ and the second one is the $U$ that we are looking for.\\
+    Note: \[ \left[ \begin{pmatrix}
+        0 & x\\
+        0 & 0
+    \end{pmatrix},
+    \begin{pmatrix}
+        0 & y\\
+        0 & 0
+    \end{pmatrix} \right]=0 \, \, \forall x,y \in \bbC \] 
+    Since $\varphi$ respects the bracket: \[ \varphi(h) = [\varphi(e),\varphi(f)]=0,\] \[ \varphi(e) = \frac{1}{2}[\varphi(h),\varphi(e)]=0, \] \[ \varphi(f) = \frac{1}{2}[\varphi(h), \varphi(f)]=0.\]
+    So in other words, the action \textit{must} be trivial on the other factor, and that is the complement that we were after.\gap
+
+
+    \item[(2)] $W \cong V(n)$ is irreducible, but nontrivial $(n > 0)$. Now we have: \[ \Omega \in \frakgl(V)\] We show $V=V(n) \oplus \ker(\Omega)$.\gap By Schur, and the fact that $W$ is irreducible, \textit{and} the fact that $\Omega$ acts on the quotient trivially (since codimension is $1$), there is a basis for $V$ such that $\Omega$ acts via: \[
+    \begin{pmatrix}
+        \lambda & & & & *\\
+        & \lambda & & & *\\
+        & & \ddots & & *\\
+        & & & \lambda & *\\
+        & & & & 0
+    \end{pmatrix}\]
+    $W$ is nontrivial, so $\ker \Omega \neq 0$, and it's now clear that \[ W \cap \ker \Omega = 0.\] So in other words, \[ V = W \oplus \ker \Omega.\]
+
+    \item[(3)] Now let's take an arbitrary $W$. The idea now is to do induction on the $\dim V$. If $\dim V = 1$ then it is trivial, so that is already taken care of in subcase 1. So now assume $\dim V \geq 2$. \gap Take some subrepresentation $0 \neq W' \leq W$. As $\dim \left( \frac{W}{W'} \right) < \dim V$, and the codimension of $\frac{W}{W'}$ in $\frac{V}{W'}$ is $1$ (by, like, the third(?) isomorphism theorem, maybe it's the second), then by induction, we have: \[ \frac{V}{W'} = \frac{W}{W'} \oplus \frac{W''}{W'} \tag{1} \] for some subspace $W''$ of $V$ which contains $W'$, and is such that $\frac{W''}{W'}$ is a subrepresentation of $\frac{V}{W'}$.
+    
+    Then $W' \leq W''$ has codimension $1$ and morover $\dim W' < \dim V$. $W''$ is a subrepresentation of $V$, since $\frac{W''}{W'}$ being a subrepresentation implies that \[ xw \in W' \leq W'' \, \, \forall x \in \fraksl_{2}.\] Again by induction, $\exists U \leq W''$ such that \[ W'' = W' \oplus U. \tag{2} \] Then we claim that \[V = W \oplus U. \] We know already that $\dim U = 1$, and that $W \cap U \leq W \cap W'' = W'$, since we showed that (1) is a direct sum. But, by (2), as this sum is direct, $W \cap U \leq W' \cap U = 0$, and since $\dim U = 1$ and the codimension of $W$ in $V$ is $1$, we're done by counting dimensions (rank-nullity).
+\end{enumerate}
+\textit{Case 2.} Let $W$ be arbitrary. Recall from chapter $3$ the action on $\Hom(V,W)$: \[ (x \varphi)(v) = x(\varphi(v)) - \varphi(xv) \tag{3.3(6)}\]
+Now we define \begin{align*}
+    \mathbf{V} &= \{ \psi \in \Hom(V,W) \, : \, \psi |_{W} = \lambda \id_{W} \text{ for some } \lambda \in \bbC\},\\
+    \mathbf{W} &= \{ \psi \in \mathbf{V} \, : \, \psi |_{W} = 0 \}.
+\end{align*}
+    Note that the codimension of $\mathbf{W}$ in $\mathbf{V}$ is $1$, and suppose \[\psi |_{W} = \lambda \id_{W}, \, x \in \fraksl_{2}, \, w \in W.\] Then \begin{align*} 
+    (x\psi)(w) = x \psi(w) - \psi(xw) &= x(\lambda w) - \lambda (xw) \\
+    &= 0.
+\end{align*}
+So $\mathbf{V}$ is a subrepresentation of $\Hom(V,W)$ threfore $\mathbf{W}$ is a subrepresentation. By case 1, $\exists 1-$dim subrepresentation $\mathbf{U}$ of $\mathbf{V}$ such that \[ \mathbf{V} = \mathbf{W} \oplus \mathbf{U}.\] Write $\mathbf{U} = \langle \gamma \rangle$ for some $\gamma \in \mathbf{V}$, so that $\gamma|_{W} = \lambda \id_{W}$, for some $0 \neq \lambda \in \bbC$. The claim is that (as vector spaces, and then as representations): \[ V = W \oplus \ker(\gamma).\] where, we claim, that $U = \ker \gamma$.
+\newlec
+$W \cap \ker \gamma=0$, so by dimension counting, \[ \dim V = \dim W + \dim \ker \gamma.\] as $W= \im \gamma$. So we \textit{do} have a direct sum of vector spaces. Finally, we show that $\ker \gamma$ is a subrepresentation of $V$. Let $v \in \ker \gamma$ and take $x \in \fraksl_{2}$. $\mathbf{U}$ is a 1-dimensional representation of $\fraksl_{2}$, so it must be the trivial representation, since this is the only 1-dim representation of $\fraksl_{2}$.
+Then we have 
+\begin{align*}
+    0 = (x \gamma)(v)&=x \gamma(v)-\gamma(xv)\\
+    \Rightarrow x \gamma(v)&=\gamma(xv)\\
+    \Rightarrow 0 &= \gamma(xv) \tag{$v \in \ker \gamma$}
+\end{align*}
+as required, since then $xv \in \ker \gamma$ for any $x \in \fraksl_{2}$, so it must be a subrepresentation.
+\begin{remark}
+    Proof only needed:
+    \begin{itemize}
+        \item The existence of $\Omega$, the Casimir element.
+        \item Every 1-dimensional representation of $\fraksl_{2}$ is the trivial representation.
+    \end{itemize}
+\end{remark}
+\begin{remark}
+    Complete reducibility is \textit{rare}. It can fail for infinite dimensional Lie algebras, or \textit{simple Lie algebras} in positive characteristic fields.
+\end{remark}
+\textbf{Exercise: } Show that the adjoint representation of $\fraksl_{n}(\bbF_{p})$ on $gl_{n}(\bbF_{p})$ is not completely reducible, provided $p | n$. (Quite a hard exericse, apparently).
+\section{Tensor products}
+Given two finite dimensional vector spaces $V$, $W$; with bases $\{v_{1},\dots, v_{k}\}$, and $\{w_{1},\dots,w_{m}\}$ respectively. Recall that \[ V \otimes_{\bbC} W\] has basis \[ \{v_{i} \otimes w_{j} \, : \, 1\leq i \leq k, \, 1 \leq j \leq m\}.\]
+\begin{fancydefine}{Tensor representation}
+    If $V,W$ are representations of a Lie algebra $\frakg$, then so is $V \otimes W$ with \[ x\cdot(v \otimes w) = (x \cdot v) \otimes w + v \otimes (x \cdot w).\]
+\end{fancydefine}
+\begin{exs}
+    \begin{enumerate}
+    \item[(1)] If $V,W$ representations of $\fraksl_{2}$, $v \in V_{\lambda}$, $w \in W_{\mu}$, then \[ h \cdot (v \otimes w) = (\lambda + \mu)(v \otimes w).\] In particular, the weights of $V \otimes W$ are: \[ \{ \lambda + \mu \, : \, \lambda \text{ a weight for } V, \mu \text{ a weight for } W\}.\]
+    \item[(2)] Decomposition of $V(2) \otimes V(2) = V(2)^{\otimes 2}$:
+    \begin{center}
+        \begin{tabular}{c | c c c }
+                & 2 & 0 & -2 \\ \hline
+                2 & 4 & 2 & 0 \\ 
+                0 & 2 & 0 & -2\\
+                -2 & 0 & -2 & -4
+        \end{tabular}
+    \end{center}
+    So $V(2)^{\otimes 2} = V(4) \oplus V(2) \oplus V(0)$.
+    \item[(3)]
+    \item[] If $v_{n}$ is a highest weight vector in $V(n)$, show that $v_{n} \otimes v{m}$ is the highest weight vector in $V(n) \otimes V(m)$. \gap \textbf{Question: }Is there a general formula for decomposing $V(n) \otimes V(m)$?\gap
+    \textbf{Answer: } Clebsch-Gordon formula \[V(n) \otimes V(m) = \bigoplus_{r=|n-m|}^{n+m} V(r),\] going up in $2$s\footnote{See Part II Representation Theory for more information}.
+    \end{enumerate}
+
+
+
+\end{exs}
+
+\begin{fancydefine}{Symmetric power}
+    The \textbf{nth Symmetric power is} \[ S^{n}(V) = \Sym^{n}(V)=SV= \frac{V \otimes V \otimes \dots \otimes V}{N_{n}}\] where $M_{n}=\langle u_{1} \otimes \dots \otimes u_{n} - u_{\sigma(1)} \otimes dots \otimes u_{\sigma(n)} \, | \, \sigma \in S_{n}, u_{i} \in V \rangle$. \gap For example $n=2$, have $M_{2}=\{v\otimes u - u \otimes v\}$.
+\end{fancydefine}
+\textbf{Fact. } $M_{n}$ is a subrepresentation of $V \otimes \dots \otimes V$ whenever $V$ is a subrepresentation of $\frakg$, so $\Sym^{n}(V)$ is a subrepresentation. Prove this.
+\begin{ex}
+    In $S^{2}V$, $v \otimes w = w \otimes v$. Therefore $S^{2}V$ has basis \[ \{v_{i} \otimes  v_{j} \, : \, i\leq j\}.\] Decomposing $S^{2}(V(2))$, we have $0 \neq e \otimes e \in S^{2}(V(2))$, so $V(4)$ is a subrepresentation, and in fact \[S^{2}(V(2)) = V(4) \oplus V(0)\]
+\end{ex}
+\begin{fancydefine}{Exterior/Alternating Power}
+    The \textbf{nth exterior/alternating power} is \[\Lambda^{n} V = \frac{V^{\otimes n}}{N_{n}}\] where $N_{n} = \langle u_{1} \otimes \dots \otimes u_{n} \, : \, u_{i} \in V \, \forall i, \, u_{i}=u_{j} \text{ for some j} \rangle$.
+\end{fancydefine}
+\begin{ex} With $n=2$, we have $N_{2} = \langle v \otimes v \, : \, v \in V \rangle$. $N_{n}$ is a subrepresentation of $V^{\otimes n}$. Prove this. \gap \textbf{Notation. } Write (the coset of) $u_{1} \otimes \dots \otimes u_{n}$ as $u_{1} \wedge \dots \wedge u_{n}$.\gap Decompose \[ \Lambda^{2}(V(2)) \cong V(2). \] with basis \[ \{e \wedge f, e \wedge h, h \wedge f\}.\] 
+\end{ex}
+\textbf{Exercise. } Find the dimensions of symmetric/exterior powers.
+\section{Results about semisimple Lie algebras}
+First, let $\frakg$ be a semisimple Lie algebra over $\bbC$.
+\begin{fancydefine}{Ideal}
+    A subspace $I \subseteq \frakg$ is an \textbf{ideal} of $\frakg$ if \[ [x,y] \in I, \, \, \forall x \in \frakg,\, y\in I.\]
+    \begin{itemize}
+        \item Any ideal is a subalgebra
+        \item If $I$ is an ideal, then $\frac{\frakg}{I}$ is a Lie algebra when taken with bracket: \[ [x+I,y+I]=[x,y]+I.\] 
+        \item $I$ is an ideal if and only if it is a subrepresentation of the adjoint representation of $\frakg$.
+    \end{itemize}
+\end{fancydefine}
+\textbf{Examples. } \hspace{0.1cm}
+    \begin{enumerate}
+        \item[(1)] The \underline{centre} of $\frakg$ is \[ Z(\frakg) = Z = \{ x \in \frakg \, : \, [xy] = 0, \, \forall y \in \frakg \}.\] Check that this is an ideal (use Jacobi identity). Note $Z = \ker( \ad : \frakg \to \End \frakg)$.\gap
+         \textbf{Remark. } If $Z(G)=0$, then the adjoint is faithful, and $\frakg$ can be embedded inside $\End \frakg$, so it can be regarded as a Lie subalgebra of $\frakgl_{n}$ for some $n$.
+         \footnote{Therefore is a deep theorem of Ado (not proved here) that says that if $\charr k =0$ then any finite dimensional Lie algebra $\frakg$ embeds as a Lie subalgebra in $\frakgl_{n}$ for some $m$, but this embedding is necessarily from the adjoint. In fact, this is true in characteristic $p$ as well, due to Iwasawa.}
+        \item[(2)] Derived subalgebra \[ D(\frakg) =\langle [x,y] \, | \, x,y \in \frakg \rangle.\] This is an ideal. Recall that $\fraksl_{n}$ is a subalgebra of $gl_{n}$. Show that, in fact, $\fraksl_{n}$ is the \textit{Derived subalgebra} of $\frakgl_{n}$.
+        \item[(3)] If \[ \phi : \frakg \to \frakh\] is a homomorphism. Then $\ker \phi$ is also an ideal (this shouldn't be too surprising).
+    \end{enumerate}
+\newpage
+\newlec
+\begin{fancydefine}{Simple Lie algebra}
+    The Lie algebra $\frakg$ is \textbf{simple} if \[ [\frakg, \frakg] \neq 0 \] and the only ideals of $\frakg$ are $0$ and $\frakg$.
+\end{fancydefine}
+\textbf{Examples. } \hspace{0.1cm}
+    \begin{itemize}
+    \item We can show $\fraksl_{n}$ is simple for $n \geq 2$.
+    \item $so_{n}$ is simple for $n \geq 5$.
+    \item $sp_{2l}$ for $l \geq 1$ is simple.
+    \end{itemize}
+    Try this now for $\fraksl_{2}(\bbC)$
+\textbf{Note. } \begin{itemize}
+    \item $\frakg$ simple $\Rightarrow$ $[\frakg,\frakg]=\frakg$.
+    \item $\frakg$ simple $\Rightarrow$ every representation of $\frakg$ is either faithful or a direct sum of trivial representations.
+\end{itemize}
+So $\frakg$ simple $\Leftrightarrow$ the adjoint representation is irreducible.
+\begin{fancydefine}{Semisimple Lie algebra}
+    A Lie algebra $\frakg$ is \textbf{semisimple} if it is the direct sum of simple ideals. I.e. ideals which are themselves simple when viewed as Lie algebras.
+\end{fancydefine}
+For example $\frakso_{4} \cong \fraksl_{2} \oplus \fraksl_{2}$. We state a more "standard" definition of semisimple Lie algebras and then show it is equivalent to (7.3).
+\begin{fancydefine}{Central series}
+    The \textbf{Central series} (or lower central series) is the sequence of subalgebras \[ \frakg^{0} \supseteq \frakg^{1} \supseteq \frakg^{2} \supseteq \dots, \] where $\frakg^{0} = \frakg$ and $\frakg^{n} = [\frakg, \frakg^{n-1}]$. That is to say: \[ \frakg \supseteq [\frakg, \frakg] \supseteq [\frakg, [\frakg, \frakg]] \supseteq \dots. \]
+\end{fancydefine}
+\begin{fancydefine}{Derived series}
+    The \textbf{Derived series} (or upper central series) for $\frakg$ is the sequence \[ \frakg^{(0)} \supseteq \frakg^{(1)} \supseteq \frakg^{(2)} \supseteq \dots, \] where $\frakg^{(0)} = \frakg$, $\frakg^{(n)} = \frakg^{(n-1)}, \frakg^{(n-1)}$. That is to say \[ \frakg \supseteq [\frakg, \frakg] \supseteq [[\frakg, \frakg], [\frakg, \frakg]] \supseteq \dots. \]
+\end{fancydefine}
+Note that: \begin{itemize}
+    \item $\frakg^{(n)} \subseteq \frakg^{n}$
+    \item $\forall n \, \, \frakg^{(n)}, \frakg^{n}$ are ideals, we will prove this:
+\end{itemize}
+\proof Induction on $n$, with $n=0$ clear. Let $x$,$y$ in $\frakg$, $\frakg^{n}$ respectively, then \[ [x,y] \in \frakg^{n-1}.\] Since $\frakg^{n-1}$ is an ideal, and $\frakg^{n} \subseteq \frakg^{n-1}$. But \begin{align*} \frakg^{n} &= \{ [x,y] \, : \, x \in \frakg, y \in \frakg^{n-1} \} \\
+    &\supseteq \{ [x,y] \, : \, x \in \frakg, y \in \frakg^{n}
+\end{align*}
+Similarly, do $\frakg^{(n)}$. \gap \textbf{Examples. }
+\begin{itemize}
+    \item If $\frakg$ is simple, both series look like \[ \frakg \supseteq \frakg \supseteq \frakg \supseteq \dots.\]
+    \item If $\frakg$ is abelian, both series look like \[\frakg \supseteq 0 \supseteq 0 \supseteq \dots.\] 
+    \item Let \[ \frakn_{n} = \begin{pmatrix}
+        0 & * & *\\
+        0 & \ddots & *\\
+        0 & 0 & 0
+    \end{pmatrix} \subseteq \frakgl_{n}\]
+    Central series for $\frakn_{n}$: \[ \left\{ \begin{pmatrix}
+        0 & * & * & *\\
+        0 & \ddots & * & *\\
+        0 & 0 & \ddots & *\\
+        0 & 0 & 0 & 0
+    \end{pmatrix} \right\} \supseteq \left\{ \begin{pmatrix}
+        0 & 0 & * & *\\
+        0 & \ddots & \ddots & *\\
+        0 & 0 & \ddots & 0\\
+        0 & 0 & 0 & 0
+    \end{pmatrix} \right\} \supseteq \left\{ \begin{pmatrix}
+        0 & 0 & 0 & *\\
+        0 & \ddots & \ddots & 0\\
+        0 & 0 & \ddots & 0\\
+        0 & 0 & 0 & 0
+    \end{pmatrix} \right\} \supseteq \dots \] If $n=3$ this is the Heisenberg Lie algebra. Moreover, this central series eventually becomes $0$, so we call it nilpotent, as a result of the following definition.
+\end{itemize}
+\begin{fancydefine}{Nilpotent/Solvable}
+    If $\frakg^{n}=0$ for some $n$, then $\frakg$ is called \textbf{nilpotent}. If $\frakg^{(n)}=0$ for some $n$, then $\frakg$ is called \textbf{solvable}.
+\end{fancydefine}
+\textbf{Exercise. } Show $\frakb_{n}$ is solvable but not nilpotent $(n \geq 2)$. By the note to (7.5), we have that nilpotent $\Rightarrow$ solvable.\gap Next result allows the theory of compex semisimple Lie algebras to go very far with minimal work.
+\begin{fancythm}{Lie's theorem}
+    Let $k=\bbC$. Let $\frakg \leq \frakgl(V)$ be a Lie subalgebra. Suppose that $\frakg$ is solvable. Then there exists a common eigenvector for all the elements of $\frakg$: \[ \exists 0 \neq v \in V \, \text{ s.t. } \, \forall x \in \frakg, \, \, \exists \lambda_{n} \in \bbC \, \text{ s.t. } \, xv = \lambda_{n}v\]
+\end{fancythm}
+\proof See Humphrey, Theorem 4.1. Just a two page linear algebra hack.
+\begin{corr}{}
+    There exists a basis for $V$ such that every element is upper triangular. In fact, using Lie's theorem and an inductive argument, we can show that there is a chain of subspaces of $V$ such that \[ 0 = V_{0} \leq V_{1} \leq V_{2} \leq \dots \leq V_{n} =V \text{\footnote{This is called a maximal flag}} \] with $\dim V_{i}=i$ and $\frakg(V_{i}) \subseteq V_{i}$ for each $i$. Taking basis of $V$ such that $V_{i} = \spann (e_{1}, \dots, e_{i})$, we have that $\frakg$ can be represented by upper triangular matrices, and so using such a basis \[ \frakg \leq \frakb_{n}.\]
+\end{corr}
+\proof Non-examinable. Probably also in Humphrey's book?\newpage 
+\begin{fancyprop}{}
+    Suppose $I$, $J$ ideals of $\frakg$, then \begin{enumerate}
+        \item If $\frakg$  solvable, then any subalgebra, or quotient of $\frakg$ is solvable.
+        \item If $I$ is solvable, and $\frac{\frakg}{I}$ is solvable, then so is $\frakg$.
+        \item If $I$ is solvable and $J$ is solvable, then $I+J$ is solvable too.
+    \end{enumerate}
+\end{fancyprop}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item Obvious from the definition of solvability.
+    \item Choose $n$ such that \[\left(\frac{\frakg}{I}\right)^{n}=0\] So $\frakg^{(n)} \subseteq I$. Now we have \[\frakg^{(n+m)} \subseteq I^{(m)}\] for each $m \geq 0$, and since $I$ is solvable, we're done.
+    \item Note that \[ \frac{(I+J)}{J} \cong \frac{I}{I \cap J}.\] The RHS is solvable by 1, and $J$ is solvable by assumption, and $\frac{(I+J)}{J}$ is therefore solvable. By 2, $I+J$ also solvable
+\end{enumerate}
+\endproof
+\begin{fancydefine}{Radical}
+    The \textbf{Radical} of $\frakg$, $\rad (\frakg)$ is the maximal solvable ideal of $\frakg$. It is the sum of all the solvable ideals of $\frakg$.
+\end{fancydefine}
+\begin{fancydefine}{Trace form}
+    If $\phi : \frakg \to \frakgl(V)$ is a finite dimensional representation of $\frakg$m the \textbf{Trace form} of $V$: \begin{align*} 
+        (\widecdot, \widecdot) : \frakg \times \frakg &\to \bbC\\
+        (x,y) &\mapsto \tr(\phi(x)\phi(y))
+    \end{align*}
+\end{fancydefine}
+\newpage
+\textbf{Exercise. } \begin{enumerate}
+    \item $\phi$ a representation of $\frakg$ $\Rightarrow$ $(\widecdot, \widecdot)_{V}$ is symmetric and bilinear.
+    \item $([x,y],z)_{V} = (x,[y,z])_{V}$, called "Invariance."
+\end{enumerate}
+\begin{fancydefine}{Killing form}
+    The \textbf{Killing form} $K(\widecdot, \widecdot)$ is the trace form attached to the adjoint representation, \[ K(x,y) = \tr( \ad(x), \ad(y)) = (x,y)_{\ad}.\]
+\end{fancydefine}
+\newlec \begin{fancythm}{}
+    The following are equivalent for a finite dimensional Lie algebra $\frakg$ \begin{enumerate}
+        \item $\frakg$ is semisimple (as defined in 7.3)
+        \item $\rad (\frakg) = 0$
+        \item The Killing form on $\frakg$ is non-degenerate. (Cartan-Killing criterion).
+    \end{enumerate}
+\end{fancythm}
+\begin{remark*}
+    $\rad(\frac{\frakg}{\rad(\frakg)})=0$ (A solvable ideal of $\frac{\frakg}{\rad(\frakg)})$) would lift to give an ideal $J$ of $\frakg$ containing $\rad(\frakg)$ with $\frac{J}{\rad(\frakg)}$ solvable
+    \begin{align*}
+        &\Rightarrow J \text{ solvable} \therefore J \subseteq \rad(\frakg)\\
+        &\Rightarrow \frac{\frakg}{\rad(\frakg)} \text{  semisimple}
+    \end{align*}\hspace{0.1cm}\\
+    \textbf{Levi's Theorem. }(not proved here) Says that if $\chr k = 0$ and $\frakg$ is finite dimensional, then there is a Lie subalgebra $\frakg'$ such that \[ \frakg' \cap \rad(\frakg)=0\] and also \[\frakg = \frakg' \oplus \rad(\frakg).\] Thus \[ \frakg \cong \frac{\frakg}{\rad{\frakg}} \] is a semisimple Lie algebra. What this is saying is that, considering the following short exact sequence. \[ 0 \rightarrow \rad(\frakg) \rightarrow \frakg \rightarrow \frac{\frakg}{\rad(\frakg)} \rightarrow 0 \] splits, i.e. there exists $\frakg' \subseteq \frakg$ which maps into $\frac{\frakg}{\rad(\frakg)}$. This is called the Levi decomposition and $\frakg'$ is the Levi subalgebra of $\frakg$.\gap This result fails in $\chr k = p$ and for $\dim \frakg = \infty$.
+\end{remark*}
+\begin{fancylem}{}
+    Let $\frakg$ be a Lie algebra, then \begin{enumerate}
+        \item If $I$ is an ideal of $\frakg$, then so is the derived algebra $[I,I]$
+        \item $\rad(\frakg)=0 \Leftrightarrow \frakg$ has no non-trivial abelian ideals.
+    \end{enumerate}
+\end{fancylem}
+\proof \hspace{0.1cm} \begin{enumerate}
+    \item If $x, y \in I$, $z \in \frakg$, we need to show \[ [z,[x,y]] \in [I,I]. \] The obvious thing to try is Jacobi, which gets us \[ [z,[x,y]] = -[x,[y,z]] - [y,[z,x]] \] then both summands on the right hand side have the inner bracket containing something in $I$, so the overall bracket is in $I$, and therefore the outer bracket is also contained in $I$, from the definition of an ideal. Therefore the left hand side must also be in $I$.
+    \item It's clear that any abelian ideal must be solvable. So if $I$ is solvable then the last non-zero term in the derived series for $I$ will be abelian. (Done by contrapositive both ways).
+\end{enumerate}
+\endproof
+Let \[ \frakg^{\perp} = \{ x \in \frakg : K(x,y)=0 \, \forall y \in \frakg \}. \] This is an ideal, to show why: take $x \in \frakg^{\perp}$ and $y,z \in \frakg$. Then we need to show that \[ K([x,y],z])=0.\] But \[K([x,y],z) = K(x,[y,z]) = 0\] since $x \in \frakg^{\perp}$.
+\begin{fancylem}{}
+    Let $I$ be an ideal of $\frakg$ and let $K_{I}$ be the killing form of $I$. Then \[ K_{I}(x,y)=K(x,y) \, \forall x,y \in I. \]
+\end{fancylem}
+\proof Choose a basis of $I$ and extend to a basis for $\frakg$. Let $x,y \in I$, then with respect to this basis: \[ \ad(x) = \begin{pmatrix}
+    A & * \\
+    0 & 0
+\end{pmatrix} \] where $A= \ad(x)|_{I}$. And similarly for $\ad(y)$. Then we have \[ K_{I}(x,y) = \tr(AB) = tr(\ad(x),\ad(y))=K(x,y).\]
+\begin{fancythm}{Cartan's criterion (for solvability)}
+Suppose $\frakg$ is a subalgebra of $\frakgl(V)$, for $V$ a finite dimensional $\bbC$-space. If $K(x,y)$ is identically zero on $\frakg \times [\frakg,\frakg]$ then $\frakg$ is solvable. (This is saying that $\frakg^{(1)}\leq \frakg^{\perp})$.
+\end{fancythm}
+\proof A big linear algebra hack, in Humprey 4.3, uses Lie's theorem and Jordan decomposition (which we will cover next chapter). Not very hard, just very long. This fails in $\chr k = p$ as well. \endproof
+\begin{corollary}{}
+    \hspace{0.1cm} \begin{enumerate}
+        \item If $\frakg = \frakg^{\perp}$ then $\frakg$ is solvable.
+        \item If $\frakg$ is simple, then $\frakg^{\perp}=0$
+        \item $\frakg^{\perp}$ is solvable for any finite dimensional $\frakg$.
+    \end{enumerate}
+\end{corollary}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item Consider the adjoint \[ \ad : \frakg \to \frakgl(V) \] The image $\ad (\frakg)$ is $\frakg$ modulo the kernel, so \[ \ad(\frakg) = \frac{\frakg}{Z(\frakg)}.\] $Z(\frakg)$ is solvable since it's abelian. Since $\frakg = \frakg^{\perp}$, Cartan's criterion (7.16) implies $\ad(\frakg)$ is solvable. So by (7.9), $\frakg$ must be solvable.
+    \item $\frakg^{\perp}$ is an ideal, so either $\frakg^{\perp}=0$ (in which case we're done) or $\frakg^{\perp}=\frakg$, but then $\frakg$ is solvable by what we've just proved, which contradicts the fact that $\frakg$ is simple.
+    \item $(\frakg^{\perp})^{\perp} = \frakg^{\perp}$ by (7.15) and basic properties of this ideal, so by 1. which we just proved, $\frakg^{\perp}$ is solvable. 
+\end{enumerate}
+\endproof
+\textit{Proof of (7.13). }\begin{enumerate}
+    \item[$(2) \Rightarrow (3)$:] $\frakg$ is a solvable ideal in its own right, so $\frakg^{\perp} \subseteq \rad(\frakg)$ which is assumed to be $0$, so $\frakg^{\perp}=0$
+    \item[$(3) \Rightarrow (2)$:] Let $A$ be an abelian ideal of $\frakg$. We claim $A \subseteq \frakg^{\perp}$. Let $x \in A, y \in \frakg$. Choose a basis for $A$ and extend to $\frakg$. Then \[ \ad(x)= \begin{pmatrix}
+        0 & *\\
+        0& 0
+    \end{pmatrix}\] 
+    \[ \ad(y) = \begin{pmatrix}
+        * & *\\
+        0 & *
+    \end{pmatrix}\] So $\tr(ad(x)\ad(y))=0$, therefore $A=0$. And if $\rad(\frakg) \neq 0$ then $\frakg^{\perp}\neq 0$.
+    \item[(2)\, \& (3) $\Rightarrow $(1):] If $\frakg$ is simple, then we're done. If not, then choose some minimal non-trivial ideal $I$. Let \[ \frakg_{I} = \{ x \in \frakg \, : \, K(x,y)=0 \, \forall y \in I \}\] This is an ideal of $\frakg$ (prove this). \gap \textbf{Claim 1: } \[ \frakg = I \oplus \frakg_{I}.\] Since $I$ is simple (by minimality) and being non-abelian by (2), we know that \[ I \cap \frakg_{I} \subseteq I^{\perp} = 0.\] Consider the map \[ \frakg \xrightarrow{\simeq} \frakg^{*} \xrightarrow{\text{restrict}} I^{*}\] \[ x \to K(x, \widecdot) \to K|_{I^{*}}(x, \widecdot).\] The kernel of this map is $\frakg_{I}$, which prove the claim. We then repeat this argument with $g_{I}$ (choosing some minimal ideal of $g_{I}$). We can do this because (Exercise:) any ideal of $\frakg_{I}$ must be an ideal of $\frakg$ and so $\rad(\frakg_{I})=0$. \gap \textbf{Claim 2:} $(g_{I})^{\perp}=0$, since if $\alpha \in (g_{I})^{\perp}$ then $x \in \frakg^{\perp}$
+    \item[(1) $\Rightarrow$ (2)] Write $\frakg = \oplus I_{j}$, $I_{j}$ simple ideals. Let $\pi_{j}$ be projection onto $I_{j}$. 
+\end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
