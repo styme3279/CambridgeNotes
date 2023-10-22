@@ -1,0 +1,591 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{James}
+\title{Commutative Algebra}
+\author{James Hindmarch}
+\setcounter{section}{-1}
+\date{October 2023}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\newlec
+\section{Preliminaries}
+\begin{fancydefine}[Ring]
+    In this course a \textbf{ring} will mean a \textit{commutative}, \textit{unital} ring (i.e. a commutative ring with a multiplicative identity). \linebreak
+    There is immediately a non-commutative exception $\End (M) \equiv \{ f : M \to M \suchthat{f \text{ is a group homomorphism}} \}$ with function composition being the multiplication in this ring.
+\end{fancydefine}
+
+\define An $\mathbf{R}$\textbf{-module} M is an abelian group M with a fixed ring homomorphism \[ \rho : R \to \End(M), \] we will write $r \cdot m \equiv \rho(r)(m)$. This multiplication has the distributive properties:
+\begin{enumerate}
+    \item $r(m_{1} + m_{2}) \equiv \rho(r)(m_{1} + m_{2}) = \rho(r)(m_{1}) + \rho(r)(m_{2})$. Since $\rho(r)$ is an endomorphism of $M$.
+    \item $(r_{1} + r_{2})m \equiv \rho(r_{1} + r_{2})(m) = \rho(r_{1})(m) + \rho(r_{2})(m)$. Since $\rho$ itself is a homomorphism of rings.
+\end{enumerate}
+\examples
+\begin{itemize}
+    \item A $k$-module (where $k$ is a field) gives a vector space
+    \item Every abelian group $M$ is a $\bbZ$-module in a unique way, via \[1_{\bbZ} \mapsto \id_{M}\]. This uniquely determines the module structure.
+    \item Every ring $R$ is an $R$-module. \[ R \to R \] \[ r_{0} \mapsto (r \mapsto r_{0}\cdot r)\]
+    \item $R^{\oplus \bbN}$ and $R^{\bbN}$ are $R$-modules. (Distinguished by the fact that the former must be eventually $0$, and the latter need not be).
+\end{itemize}
+\section{Chain Conditions}
+\begin{fancydefine}[Noetherian/Artinian]
+    An $R$-module $M$ is \textbf{noetherian} if one of the following hold:
+    \begin{enumerate}
+        \item Every ascending chain of submodules \[ M_{0} \subseteq M_{1} \subseteq \dots\] stabilises. That is to say, $\exists k \hspace{0.1cm} \forall j \hspace{0.1cm} M_{k+j}=M_{k}$. (We call this ACC)
+        \item Every non-empty set $\Sigma$ of submodules of $M$ has a maximal element
+    \end{enumerate}
+    M is \textbf{artinian} if the same holds, but in $(1)$ chains descend instead of ascend (DCC), and in $(2)$ we take minimal instead of maximal
+\end{fancydefine}
+\lem \hspace{0.1cm} \\ An $R$-module is noetherian $\Leftrightarrow$ Every submodule is finitely generated.\gap
+This means every Noetherian module is finitely generated, but the converse is false, for example $\bbZ[T_{1},\dots]$ as a module over itself is finitely generated (by $1_{R}$), but not Noetherian as a module or a ring (e.g. $\langle T_{1},\dots \rangle $ is not f.g., but is a submodule). \gap
+Proof omitted.
+\define A ring is \textbf{noetherian} (resp. \textbf{artinian}) if $R$ as an $R$-module is noetherian (resp. artinian).
+\ex \hspace{0.1cm}
+\begin{itemize}
+    \item $\bbZ$ is a noetherian module which is non-artinian. Noetherian since it is a PID, and so the ACC must hold. It is non-artinian since $(2) \supseteq (4) \supseteq (8)$, and this never need terminate.
+    \item  $\bbZ [\frac{1}{2} ] / \bbZ = \{ \frac{a}{2^{n}} + \bbZ \suchthat{a \in \bbZ} \}$ is an artinian module over $\bbZ$ which is not noetherian.
+\end{itemize}
+However, A \underline{ring} $R$ is artinian $\Leftrightarrow$ $R$ is noetherian \& has \textit{Krull} dimension $0$. (More on this later).
+\begin{fancydefine}[Exact Sequence]
+    A sequence: \[
+    \dotsc \rightarrow M_{i-1} \xrightarrow{f_{i}} M_{i} \xrightarrow{f_{i+1}} M_{i+2} \rightarrow \dotsc \]
+    of $R$-module homomorphisms is \textbf{exact} if:
+    \[
+    \forall i \hspace{0.1cm}\Im(f_{i}) = \ker(f_{i+1}) \hspace{0.1cm} \]
+    (Slogan: "Two steps get $0$").\gap
+    A \textbf{short exact sequence} is an exact sequence of the form \[
+    0 \rightarrow M' \xrightarrow[\text{injective}]{i} M \xrightarrow[\text{surjective}]{} M'' \rightarrow 0\].
+    This gives \[
+    M'' \simeq \dfrac{M}{i(M')}.\] Where $i$ is some embedding of $M'$ into $M$.
+\end{fancydefine}
+\lem Let \[
+0\rightarrow N \rightarrow M \rightarrow L \rightarrow 0\]
+be a short exact sequence of $R$-modules. Then $M$ is noetherian (artinian) iff $N$ And $L$ are noetherian (artinian).
+\proof $L \simeq \dfrac{M}{N}$. This (apparently) does it. Consider module properties and use the lifting-projections trick (I'm pretty sure this does it).
+\cor If $M_{1}, \dots, M_{n}$ are noetherian/artinian, then so is: \[
+M_{1} \oplus M_{2} \oplus \dots \oplus M_{n}. \] \proof Use the same quotient trick and induct (induce? Do induction.)\\ \hspace{0.1cm} \\
+\large
+\underline{Reminder} \hspace{0.1cm} \\
+\normalsize A module homomorphism \[ M_{1} \oplus M_{2} \oplus \dots \oplus M_{n} \to L \] is precisely a series of module homomorphisms \[ \phi_{i} : M_{i} \to L.\]
+\prop For a noetherian/artinian ring $R$, every finitely generated $R$-module is noetherian
+\proof $M$ finitely generated $\Leftrightarrow \exists n \geq 1, \hspace{0.1cm} \exists \phi : R^{n} \to M$ surjective. \\ \hspace{0.1cm} \\So any quotient of $R^n$ finitely generated ($\Leftarrow$).\\
+If $M$ finitely generated, take generators and build this up to get $\phi : R^{n} \to M$ ($\Rightarrow$). $\Box$
+\begin{fancydefine}[$R$-algebra]
+    An $\mathbf{R}$\textbf{-algebra} is a ring $A$ together with a fixed ring homomorphism \[ \rho : R \to A.\] For example $k \to k[T_{1},\dots, T_{n}]$ where the first $k$ gets mapped to scalars in the polynomial ring.\gap We wrtie $r \cdot a = \rho(r)(a)$, so that $\rho(r) = \rho(r) \cdot 1_{A} = r \cdot 1_{A}$.
+\end{fancydefine}
+We can view this as a module by 'forgetting' information, e.g. in the example above by forgetting how to multiply polynomials, except by scalars. \gap
+In the same way that we talk about modules being finitely generated, we can talk about $R$-algebras being finitely generated, however the condition is slightly different.
+\define An $R$-algebra is \textbf{finitely generated} if \[ \exists n \geq 0 \hspace{0.1cm} \exists \phi : R[T_{1},\dots, T_{n}] \to A, \]
+where $\phi$ is a surjective $R$-algebra homomorphism. What is an $R$-algebra homomorphism, you ask? 
+\define If $\phi : A \to B$ is a map of $R$-algebras, it is an $\mathbf{R}$\textbf{-algebra homomorphism} if $\phi$ is both a ring homomorphism \textit{and} \[ \phi(r \cdot 1_{A}) = \phi(r \cdot 1_{B}). \] That is to say, the map 'does not touch scalars.'
+
+
+
+
+
+
+%LECTURE 2
+\newlec
+
+\begin{fancythm}[Hilbert's Basis Theorem]
+    Every finitely generated algebra over a noetherian ring is noetherian. For example \[
+    k[T_{1},\dots, T_{n}]. \]
+\end{fancythm}
+    \proof Suffices to prove for $R[T_{1}, \dots, T_{n}]$, since every finitely generated algebra is a quotient of the polynomial ring by (1.9). Moreover, suffices to prove for $R[T]$, since 
+    \[ 
+    R[T_{1}, \dots , T_{n}] \cong R[T_{1}, \dots, T_{n-1}][T_{n}]\] so the claim will follow by induction.
+    Let $A$ be an ideal of $R[T]$. \[
+    \forall i \, \, A(i) = \{C_{0} \, | \, C_{0}T^{i} + \dots + C_{i}T^{0} \in A, \, C_{0},\dots, C_{i} \in R \}. \]
+    Now, each $A(i) \subseteq R$ is an ideal of $R$, since it is closed under addition, and under multiplication by elements in $R$, Moreover, we have \[ A(i) \subseteq A(i+1) \] so this gives an ascending chain. Then since $R$ is noetherian, we know that each $A(i)$ must be a finitely generated ideal, and that the ascending chain of ideals $A(i)$ must eventually stabilise: \[
+    \exists m \, \, \forall m' \geq m , \, A(m')=A(m) \] Then we write
+    \[ A(i) = (b_{i,1}, \dots, b_{i,n_{i}}), \, \, b_{i,j} \in R\]
+    Take $f_{i,j} = b_{i,j} \cdot T^{i} + \text{terms of degree $< i$}$. Now we define a new ideal $B$ of $R[T]$: \[
+    B= (f_{i,j})_{\substack{i\leq m \\ j \leq n_{i}}}. \] Then by construction, we can define $B(i)$ similarly to $A(i)$ and obtain that \[ \forall i, \, B(i) = A(i). \] Also by construction, $B \subseteq A$, since each of the generators of $B$ is contained in $A$. So now, assume for contradiction that $A \nsubseteq B$. Take $f \in A\setminus B$ of minimal degree $i$.\gap It must be the case that $B(i)=A(i)$, so we must be able to find a $g \in B$ such that the leading term of $g$ is the same as $f$. Then take $f-g$ which has degree $<i$, so this must be in both $B$ and $A$ by the minimality of $i$. Therefore
+    \[ f = (f-g) + g \in B \, \, \,\contradiction \]
+    \flushright $\Box$
+    \flushleft
+    We can conclude that if $R$ is noetherian, then we have \[ S \subseteq \frac{R[T_{1}, \dots T_{n}]}{I} \] Then \[ (S) = (S_{0}),\]
+    where $S_{0}$ is a finite subset of $S$\footnote{We could also have proved this using something called Groebner Bases, but there will be more about those later (I think)}.
+\section{Tensor Products}
+\subsection{Tensor Products of $R$-modules}
+Let $M$, $N$ be $R$-modules, then the informal definition of the tensor product is \[ M \bigotimes_{R} N= \{\sum_{i=1}^{l} m_{i} \otimes n_{i} \, | \, m_{i} \in M, \, n_{i} \in N \}\]
+along with some distributive properties:
+\begin{itemize}
+    \item $(m_{1} + m_{2}) \otimes n = m_{1} \otimes n + m_{2} \otimes n$
+    \item $m \otimes (n_{1} + n_{2}) = m \otimes n_{1} + m \otimes n_{2}$
+    \item $(rm) \otimes n = r(m \otimes n) = m \otimes (rn)$
+\end{itemize}
+\ex \hspace{0.1cm}
+\begin{itemize}
+    \item Consider \[\frac{\bbZ}{2\bbZ} \bigotimes_{\bbZ} \frac{\bbZ}{3\bbZ}\]
+has that \[ x \otimes y = (3x) \otimes y = x \otimes (3y) = x \otimes (0\cdot 0) = 0. \] So in this case, everything collapses down to nothing, and we have that \[ \frac{\bbZ}{2\bbZ} \bigotimes_{\bbZ} \frac{\bbZ}{3\bbZ} = \{ 0 \}\]
+\item We have that \[ \bbR^{n} \bigotimes_{\bbR} \bbR^{l} \simeq \bbR^{n\cdot l}\] See later for more.
+\end{itemize}
+Recall the definition of bilinearity. When $M,\, N,\, L$ all $R$-modules \[ f: M \times N \to L \] is $R$-bilinear if
+\begin{align*}
+    \forall m_{0}, \, \, \, n &\mapsto f(m_{0},n)\\
+    \forall n_{0}, \, \, \, m &\mapsto f(m, n_{0})\\
+\end{align*}
+are both $R$-linear.
+\begin{fancydefine}[Tensor Product of Modules]
+    Let $M,N$ be $R$-modules. \begin{align*} \calF &= R^{\bigoplus(M \times N)} \\ &= \spann_{R}\{e_{(m,n)} | (m,n) \in M\times N\}.\end{align*}
+    This is an absolutely \textit{huge} set, with a basis vector for each element of the cartesian product of $M$ and $N$, so we need to quotient by something. We define $K \subseteq \calF$ to be the subset generated by \begin{align*} &\{(m,n_{1})+(m,n_{2}) - (m,n_{1}+n_{2}) \, | \, m \in M, \, \, n_{1},n_{2} \in N \}\\
+    \cup & \{(m_{1},n) + (m_{2},n) - (m_{1} + m_{2}, n) \, | \, \dots \}\\
+    \cup & \{r \cdot (m,n) - (rm,n) | \dots \}\\
+    \cup & \{r \cdot (m,n) - (m,rn) | \dots \}
+    \end{align*}
+    Then we define \[ M \bigotimes_{R} N \defeq \frac{\calF}{K}.\]
+    And this gives us an $R$-bilinear map
+    \begin{align*}
+        i_{M \otimes N} : M \times N &\to M \otimes_{R} N\\
+        (m,n) &\mapsto (m \otimes n)
+    \end{align*}
+    We call the elements of the form $m \otimes n$ \textit{pure tensors}. The pure tensors generate $M \otimes N$, but not every element is pure (in general).
+\end{fancydefine}
+\begin{fancyprop}[The universal property of a tensor product] The tensor product \[ \left(M \bigotimes_{R} N, i_{M\otimes N} \right) \]
+satisfies the property that for all $R$-modules $L$, and $R$-bilinear maps $f: M \times N \to L$, there is exactly one $R$-linear $h: M \otimes N \to L$ such that $f=h \circ i_{M \otimes N}$, i.e. such that the following diagram commutes: 
+\begin{center} 
+\begin{tikzcd}
+M \times N \arrow[r, "i_{M\otimes N}"] \arrow[dr, swap, "f"]
+& M \otimes N \arrow[d, "h"]\\
+& L
+\end{tikzcd}
+\end{center}
+\end{fancyprop}
+\proof  We want to show that 
+\[
+    h \circ i_{M \otimes N} = f
+\]
+These are two bilinear maps, so let us plug in $(m,n)$. \[ h(i_{M\otimes N} (m,n)) = f(m,n) \]
+So we are 'solving' for $h$, however we already know that there can be at most one option for $h$, because \[\{m \otimes n\}_{(m,n) \in M \times N} \]
+generate $M\otimes N$ as an $R$-module. \gap
+But why does $h(m\otimes n)=f(m,n)$ extend to an $R$-linear map \[ h : M \otimes N \to L ? \]
+Because \begin{align*}R^{\oplus(M\times N)} &\to L \\ e_{(m,n)} &\mapsto f(m,n)\end{align*}
+must vanish on $K$ (because $L$ is an $R$-module, so we have $R$-linearity; and moreover this gives us an $h$ from $M \otimes N$ by how we defined the tensor product). Therefore $h$ must exist. \newline \flushright $\Box$ \flushleft
+\prop Take $M$, $N$ to be $R$-modules and a pair $(T,\, j)$ where $T$ is an $R$-module and $j$ is an $R$-bilinear map, $j : M\times N \to T$ which satisfies the univeral property from 2.3. Then $\exists!$ R-linear isomorphism \[ \phi : M \otimes_{R} N \to T\]
+such that $\phi \circ i_{M\otimes N} = j$.
+\gap
+\newpage
+\proof We have \gap
+\begin{center}
+
+\begin{tikzcd}[column sep = small]
+    & M \times N \arrow[dr, "j"] \arrow[dl, swap, "i_{M\otimes N}"] & \\
+    M \otimes N  \arrow[rr, dotted, shift left, "\phi"]  &                 & \arrow[ll, dotted, shift left,  "\psi"] T
+\end{tikzcd}
+\end{center}
+We 'challenge' $M\otimes N$ with the existence of $j$ to get $\phi$ from the universal property of tensor products.\gap Then we challenge $T$ with $i_{M\otimes N}$ to get $\psi$, since $T$ also has the univeral property. We obtain \[ \psi \circ \phi \circ i_{M \otimes N} = i_{M\otimes N}.\] Therefore $(\psi \circ \phi)$ is the solution we obtain when we challenge $M \otimes N$ with $i_{M \otimes N}$. But so is $\id_{M\otimes N}$ so it must be the case that $ \psi \circ \phi = \id_{M \otimes N}$
+\flushright $\Box$ \flushleft
+
+
+\newlec
+
+
+So we have proved that for $M,N$ being $R$-modules, for all $R$-modules $L$, and where $i_{M\otimes N} : M \times N \to M \otimes_{R} N$: \begin{align*} \bil_{R}(M \times N, L) &\xrightarrow{\sim} \Hom(M\otimes_{R} N, L)\\
+    h \circ i_{M \otimes N} &\mapsfrom h \end{align*}
+\prop If $M,N$ $R$-modules, then \begin{align*}
+    \sum m_{i} \otimes n_{i} = 0 \Longleftrightarrow &\forall R\text{-module } L,\\ &\forall R\text{-bilinear } f:M \times N \to L, \\ &\sum f(m_{i},n_{i})=0.
+\end{align*}
+\proof Assume $\sum m_{i} \otimes n_{i} = 0$. Then $f$ factors through \begin{center} 
+    \begin{tikzcd}
+    M \times N \arrow[r, "i_{M\otimes N}"] \arrow[dr, swap, "f"]
+    & M \otimes N \arrow[d, "h"]\\
+    & L
+    \end{tikzcd}
+    \end{center}
+So therefore $\sum f(m_{i},n_{i})$ can be written as \begin{align*}
+    &\sum h(i_{M \otimes N}(m,n))\\
+    =&\sum h(m\otimes n)\\
+    =&h\left(\sum m_{i} \otimes n_{i}\right) \tag{by linearity}\\
+    =&0
+\end{align*}
+If $\sum m_{i} \otimes n_{i} \neq 0$, then \[ \sum i_{M \otimes N}(m_{i},n_{i}) = 0\] since $i_{M \otimes N}(m_{i},n_{i})=0$. \endproof
+
+\ex \hspace{0.1cm} \\ Consider $k^{m} \otimes k^{l}$, where $k$ is a field. $k^{m}$ has a basis given by \[ \{e_{1}, \dots, e_{m} \} \] and $k^{l}$ has a basis given by \[ \{ f_{1}, \dots, f_{l} \}. \] Then \begin{align*}k^{m} \otimes k^{l} &= \spann_{k}\{v \otimes w \, | \, v \in k^{m}, \, w \in k^{l}\}\\
+    &= \spann \{ e_{i} \otimes f_{j} \, | \, i \leq m, \, j \leq l \} \end{align*}
+    So $\{e_{i} \otimes f_{j}\}$ forms a basis for $k^{m} \otimes k^{l}$.
+    \proof Assume $\sum_{i,j} \alpha_{ij} \cdot (e_{i} \otimes f_{j})=0$. Then $\forall a \leq m, \, \forall b \leq l$,
+    \begin{align*}
+        T_{a,b} : k^{m} \times k^{l} \to k\\
+        T_{a,b}((v_{i})_{i=1}^{m},(w_{j})_{j=1}^{l}) = v_{a} \cdot w_{b} \tag{$k$-bilinear}
+    \end{align*}
+    So these maps just map vectors to their multiplied $a^{\text{th}}$ and $b^{\text{th}}$ coordinates. Then by the proposition above $\sum \alpha_{i,j} \cdot T_{a,b}(e_{i},f_{j})= \sum \alpha_{i,j} \cdot (e_{i} \otimes f_{j}) = 0$ for each $a,b$. But then \[ \sum \alpha_{i,j} \cdot T_{a,b}(e_{i},f_{j})= \alpha_{a,b} = 0. \] So the $e_{i} \otimes f_{j}$ do indeed form a basis.
+    \endproof
+    \ex \hspace{0.1cm}\\
+    Consider $\bbR^{2} \otimes_{\bbR} \bbR^{2}$, this has infinitely many pure tensors, and has a basis given by: \[ e_{1} \otimes f_{1}, \, e_{1} \otimes f_{2}, \, e_{2} \otimes f_{1}, \, e_{2} \otimes f_{2}. \]
+    A pure tensor in $\bbR^{2} \otimes \bbR^{2}$ looks like \[ (\alpha e_{1} + \beta e_{2}) \otimes (\gamma f_{1} + \delta f_{2}). \] But then, when we expand brackets, we get \[ (\alpha \gamma) e_{1} \otimes f_{1} + (\alpha \delta) e_{1} \otimes f_{2} + (\beta \gamma) e_{2} \otimes f_{1} + (\beta \delta) e_{2} \otimes f_{2}\].
+    These coefficients are \textit{not} generic, since there are linear dependencies between $(\alpha \gamma, \alpha \delta, \beta \gamma, \beta \delta)$. For example\[ 1 e_{1} \otimes f_{1} + 2 e_{1} \otimes f_{2} + 3 e_{2} \otimes f_{1} + 4 e_{2} \otimes f_{2}\] is \textit{not} a pure tensor (but if we took other numbers, it might be pure, even though it wouldn't \textit{look} pure, we can manipulate it until it does).
+    \ex (Warning)\\
+    Consider $\bbZ \otimes_{\bbZ} \frac{\bbZ}{2\bbZ}$: $2 \otimes (1+ 2\bbZ) = 1 \otimes (2+ 2\bbZ) = 0$. However, if we consider:
+    \[ 2\bbZ \otimes \frac{\bbZ}{2\bbZ}\] as a submodule, then this submodule contains an element which looks like $2 \otimes (1+2\bbZ)$. However, this element is \textit{not} $0$. Why? \gap 
+    Indeed, define \begin{align*} b: (2\bbZ) \times \frac{\bbZ}{2\bbZ} &\to \frac{\bbZ}{2\bbZ}\\
+        b(2n,x+2\bbZ) &= nx + 2\bbZ\\
+        b(2,1+2\bbZ) &= 1 + 2\bbZ\\ 
+    \end{align*}
+    It is notationally tempting to think that the 'natural' embedding of $2\bbZ \otimes \frac{\bbZ}{2\bbZ}$ (and submodules of tensor products in general) is injective, but clearly it is not injective, and there are often things that can be $0$ when considered as elements in the first module, which are not $0$ in the submodule. \gap \underline{But} if $M' \subseteq M$, $N' \subseteq N$ are $R$-modules and \[\sum m_{i} \otimes n_{j} = 0 \in M' \otimes N',\] then \[\sum m_{i} \otimes n_{j} = 0 \in M \otimes N.\] So it \textit{does} go the other way.
+    \prop If $\sum m_{i} \otimes n_{i}=0$ in $M \otimes_{R} N$ then there are finitely generated $R$-submodules $M' \subseteq M$, $N' \subseteq N$, such that \[ \sum m_{i} \otimes n_{i} = 0 \in M' \otimes_{R} N'.\]
+    \idea First of all, when we write the expression above, we assume that it is meaningful. The idea of the proof is that if it is $0$, then there is a finite proof by playing with the bilinear relationship, so we only see finitely many elements on the left side of the tensor product, and on the right side of the tensor product. So take those elements to generate.
+    \proof Let \[ \sum m_{i} \otimes n_{i} = 0 \] in  \[ M \bigotimes_{R} N = \frac{R^{\otimes(M \times N)}}{K}. \] I.e. this sum lies in $K$, the quotient we use in the construction of $M \otimes N$. Then we know that \[ \sum e_{(m_{i},n_{i})} \in K. \] But $K$ is defined with some set of generators, so this is a finite sum: \[ \sum \alpha_{i}k_{i}, \] take the $m_{1}', \dots, m_{n}'$ which appear in the $k_{i}$ as generators for $M'$, and similarly for $N'$ to construct these $M'$ and $N'$.
+    \cor Let $A$ and $B$ be torsion-free abelian groups. Then \[A \bigotimes_{\bbZ} B\]is torsion-free as well.
+    \proof Assume that \[ n \cdot (\sum a_{i} \otimes b_{j} = 0) \] for some $n \in \bbN$. Then by the proposition, there must be a finitely generated subgroup\footnote{The proposition talks about submodules, but here we are talking about subgroups because they are abelian groups, so deal with it.} given by $A' \subseteq A$ and $B' \subseteq B$ such that \[ n( \sum a_{i} \otimes b_{j}) = 0 \in A' \otimes B'.\] But $A'$ and $B'$ are finitely generated abelian groups, and since $A$ and $B$ are torsion-free, $A'$ and $B'$ must also be torsion-free, but they are finitely generated, so we know the only torsion-free, finitely generated abelian groups are $\bbZ^{n}$, so we have \[ A' \otimes B' = \bbZ^{m} \otimes \bbZ^{l} \simeq \bbZ^{ml}. \] This is torsion-free, so $\sum a_{i} \otimes b_{j} = 0 \in A' \otimes B' \Rightarrow \sum a_{i} \otimes b_{j} = 0 \in A \otimes B.$ \endproof 
+    \note $\bbC^{2} \otimes_{\bbC} \bbC^{3} \simeq_{\bbC} \bbC^{6} \simeq_{\bbR} \bbR^{12}$. ($\simeq_{R}$ means isomorphic as $R$-modules). \gap But $\bbC \otimes_{\bbR} \bbC^{3} \simeq_{\bbR} \bbR^{4} \otimes \bbR^{6} \simeq \bbR^{24}$.
+    \begin{fancyprop}[Tensor Product Laws] \[M \otimes N \xrightarrow{\simeq} N \otimes M.\] That is to say, they are isomorphic as $R$-modules. The isomorphism is obvious, we just swap. Moreover \[ (M \otimes N) \otimes P \simeq M \otimes (N \otimes P).\] One way to prove this is to prove that both of these are isomorphic to $M \otimes N \otimes P,$ and also to define what this means (tri-linear maps, and quotients, et cetera et cetera). \gap Another thing: \[ \left(\bigoplus_{i} M_{i}\right) \otimes P \simeq \bigoplus( M_{i} \otimes P).\] Yet \textit{another} thing(!):
+    \[ R \bigotimes_{R} M \simeq M\] \[ r \otimes m \mapsto rm\].
+    \proof Example sheet, distributive law is proved in lecture notes.
+    \end{fancyprop}
+    \cor We have another proof of the tensor-product of free-modules. We will now do it for general $R$ and not just fields (even though our previous proof worked just fine).
+    \proof \[ R^{m} \otimes_{R} R^{l} = \left(\bigoplus_{i=1}^{m} R^{i} \right) \otimes \left( \bigoplus_{j=1}^{l} R^{j} \right). \]
+    \[ \simeq \bigoplus_{i,j} R \simeq R^{ml}. \] \endproof
+    \subsection{Tensor Products of $R$-linear maps}
+    \prop For $R$-linear maps \begin{align*}
+        f:M \to M' & & g: N \to N'
+    \end{align*}
+    There is a unique $R$-linear map \[ f\otimes g : M \otimes N \to M' \otimes N' \] such that \[ (f \otimes g)(m \otimes n) = f(m) \otimes g(n).\]
+    \proof Easy using the universal property. Define an $R$-bilinear map: \begin{align*} T: M \times N &\to M' \otimes N' \\ T(m,n) \mapsto f(m) \otimes g(n) \end{align*}
+    Then we are immediately done by the universal property of $M \otimes N$, since this gives us $f \otimes g$ as in the statement. \endproof
+    
+
+
+    % LECTURE 4
+
+
+\newlec
+
+    Let \[ f : M \to M'\] \[ g: N \to N' \]
+    be $R$-linear maps, then we define $f \otimes g$ as: \begin{align*}
+        f \otimes g : M \otimes N &\to M' \otimes N'\\
+        (f \otimes g)(m \otimes n) &= f(m) \otimes g(n)
+    \end{align*}
+    \textbf{Exercise: } Show that $(f \otimes g) \circ (h \otimes i) = (f \circ h) \otimes (g \circ i)$ \gap
+    \textbf{Example:} Consider \begin{align*}
+        T : k^{a} &\to k^{b}\\
+        S : k^{c} &\to k^{d}.
+    \end{align*}
+    Then \begin{align*}
+        T \otimes S : k^{a} \otimes k^{c} &\to k^{b} \otimes k^{d}\\
+                      k^{ac} &\to k^{bd},
+    \end{align*}
+    This is characterised on the basis of $k^{ac}$ via \begin{align*}
+        (T \otimes S)(e_{i} \otimes e_{j}) &= T(e_{i}) \otimes S(e_{j})\\
+        &= \sum_{l,t} \left[T \right]_{l,i} \left[ S \right]_{t,j}(f_{l} \otimes f_{t}).
+    \end{align*}
+    We order the basis of $k^{a} \otimes k^{c}$:\[
+    \begin{matrix}
+        e_{1} \otimes e_{1}, & \dots & e_{1} \otimes e_{c},\\
+        e_{2} \otimes e_{1}, & \dots & e_{2} \otimes e_{c},\\
+        \vdots & & \vdots\\
+        e_{a}\otimes e_{1}, & \dots & e_{a}\otimes e_{c}.
+    \end{matrix}\]
+    And we order the range similarly. Then we can write \[ \left[T \otimes S \right] = \begin{pmatrix}
+        [T]_{1,1}S & [T]_{1,2}S & \dots & [T]_{1,a} S\\
+        \vdots & \vdots & & \vdots\\
+        [T]_{b,1}S & [T]_{b,2}S & \dots & [T]_{b,a}S
+    \end{pmatrix}
+    \]
+    This is called the Kronecker product of matrices.
+    \prop Let \[ f:M \to M'\] \[g : N \to N'\] be $R$-linear functions, then \begin{enumerate}
+        \item If $f,g$ are isomorphims, so is $f \otimes g$.
+        \item If $f,g$ are surjective, so is $f \otimes g$.
+    \end{enumerate}
+    \proof \hspace{0.1cm} \begin{enumerate}
+        \item $f^{-1} \otimes g^{-1}$ is a two-sided invese for $f \otimes g$. (Just apply the result from the exercise)
+        \item We have that $\Im(f \otimes g)$ contains every pure tensor of $M' \otimes N'$. Then $f \otimes g$ is surjective, and we are done.
+    \end{enumerate}
+    \endproof
+    There can be no injectivity claim here, as we saw before (but will repeat here), we have:
+    \begin{align*}
+        f: \bbZ &\xrightarrow{ \cdot p} \bbZ\\
+        g: \frac{\bbZ}{p \bbZ} &\xrightarrow{\id} \frac{\bbZ}{p \bbZ}
+    \end{align*}
+    Then \begin{align*}
+        (f \otimes \id_{\frac{\bbZ}{p \bbZ}})(a \otimes b) &= pa \otimes b\\
+        &= p(a\otimes b)\\
+        &= a \otimes pb\\
+        &=a \otimes 0
+    \end{align*}
+    So this is the zero map, but the ring is not the zero ring, so this map is not injective, despite each of its tensor components being injective.
+    \subsection{Tensor Products of $R$-algebras}
+    Let $B,C$ be $R$-algebras (rings with a fixed ring homomorphism). \begin{align*}
+        \phi_{B} : R &\to B\\
+        \phi_{C} : R &\to C
+    \end{align*}
+We can forget structure, and make $B$ and $C$ into $R$-modules, if we want to. Then we can consider \[ B \otimes_{R} C \] as a tensor product of modules, and try to make it into a ring, and then into an algebra.\gap First of all, we want: \[ (b \otimes c) \cdot (b' \otimes c') = (b \cdot b') \otimes (c \cdot c')\]
+We need to check that this is indeed well-defined:\gap 
+Fix $(b,c) \in B \times C$, then we have an $R$-bilinear map: \begin{align*}
+    B \times C &\to B \otimes C\\
+    (b',c') \mapsto (bb')\otimes(cc')
+\end{align*}
+Then from the universal property of tensor products, this $R$-bilinear map gives rise to an $R$-linear map: \begin{align*}
+    B \otimes C &\to B \otimes C\\
+    b' \otimes c' &\to bb' \otimes cc'.
+\end{align*}
+So this multiplication is well-defined. \endproof
+Showing that this satisfies the ring axioms is an easy check. Then the $R$-algebra structure given by \begin{align*}
+    R &\to B \otimes C\\
+    r &\mapsto (r \cdot 1_{B}) \otimes 1_{C}\\
+    &\mapsto 1_{B} \otimes (r \cdot 1_{C})\\
+    &\mapsto r \cdot (1_{B} \otimes 1_{C})
+\end{align*}
+Gives us the fixed ring homomorphism. \gap \textbf{Example: }
+There exists an isomorphism, $\varphi$, with: \[ \varphi : R[X_{1}, \dots, X_{n}] \otimes R[T_{1}, \dots, T_{r}] \xrightarrow \sim R[X_{1},\dots, X_{n}, T_{1}, \dots, T_{r}]. \]
+(N.B. We denote the tensor product of algebras the same way as the tensor product of modules, just remember that there is extra structure when we tensor algebras).
+\proof First of all, we have a basis for the left-hand side, given by \[ \{a \otimes b \}\] such that $a \in R[X_{1}, \dots X_{n}]$, $b \in R[T_{1}, \dots, T_{r}]$, where $a$ and $b$ are both monomials. \gap Moreover, we also have a basis for the right-hand side, given by \[ \{ ab \, | \, a \text{ a monomial}, \, b \text{ a monomial} \}.\] Now, define $\varphi(a,b)=ab$, which gives an $R$-module isomorphism. So we need to check that this is an $R$-algebra homomorphism. \[ \varphi(r \otimes 1) = r\cdot 1 \in R[X_{1}, \dots, X_{n},T_{1},\dots,T_{r}] \] gives a ring homomorphism. Then we need to check that we have a module homomorphism: \begin{align*}
+    \varphi\left((\sum_{i} p_{i}\otimes q_{i})(\sum_{j}h_{j}\otimes g_{j})\right) &= \varphi \left( \sum_{i,j} p_{i}h_{j} \otimes q_{i}g_{j} \right)\\ &= \sum_{i,j} (p_{i}h_{j}) \cdot (q_{i}g_{j})\\
+    &= \sum_{i,j}(p_{i}q_{i})(h_{j}g_{j})\\
+    &= \left[ \sum_{i} \varphi(p_{i} \otimes q_{i}) \right] \cdot \left[ \sum_{j} \varphi(h_{j} \otimes g_{j}) \right]\\
+    &= \varphi\left( \sum_{i} p_{i} \otimes q_{i} \right) \cdot \varphi \left( \sum_{j} h_{j} \otimes g_{j} \right).
+\end{align*}
+In general \begin{align*}
+    \frac{R[X_{1}, \dots, X_{n}]}{I} \bigotimes \frac{R[T_{1}, \dots, T_{r}]}{J} & = \frac{R[X_{1}, \dots, X_{n}] \otimes R[T_{1}, \dots, T_{r}]}{L}\\
+\end{align*}
+where $L$ is some ideal that we can construct somehow (unspecified), however, when working with $R$-algebras, we have that these things are \[ \simeq \frac{R[X_{1},\dots,X_{n},T_{1},\dots,T_{r}]}{(I^{e} + J^{e})}.\] where $I^{e}$ is the extension of $I$, that is to say, the ideal generated by elements of $I$ but considered as an ideal of the larger ring.\gap \textbf{Example:} Consider \[ \frac{\bbC[X,Y,Z]}{(f,g)} \bigotimes_{\bbC} \frac{\bbC[W,U]}{(h)}\]
+This is isomorphic, as a $\bbC$-algebra, to \[ \frac{\bbC[X,Y,Z,W,U]}{(f,g,h)}.\]
+\begin{fancyprop}[Universal property of tensor product of algebras]
+    Let $A,B$ be $R$-algebras, then
+    \begin{enumerate}
+        \item For all $R$-algebras $C$, for all algebra maps \[ f_{1}:A \to C\] \[f_{2}: B \to C, \] there exists a \textit{unique} \[ h : A \otimes B \to C \] such that \begin{center}
+        \begin{tikzcd}[column sep=tiny]
+            & A \ar[dr, "i_A"] \ar[drr, "j_1", bend left=20]
+            &
+            &[1.5em] \\
+            &
+            & A \otimes_{R} B \ar[r, dashed, "\exists ! h"]
+            & C \\
+            & B \ar[ur, "i_B"]\ar[urr, "f_2"', bend right=20]
+            &
+            &
+            \end{tikzcd}
+        \end{center}
+        commutes, i.e. $f_{1} = h \circ i_{A}$, and $f_2 = h \circ i_B$.
+        \item This characterises $(A \otimes B, i_A, i_B)$ uniquely. (But we won't prove this).
+    \end{enumerate}
+\end{fancyprop}
+\proof $A \otimes B$ is an $R$-algebra, which is generated by the set: \[ \{ a \otimes 1 \, | \, a \in A \} \cup \{ 1 \otimes b \, | \, b \in B\}.\] This would not generate $A \otimes B$ as an $R$-module, but since we have the additional structure of an algebra, we can multiply elements together to obtain everything else. This immediately implies the \textit{uniqueness} of $h$, because $h$ \underline{must} send these elements 'where they get sent' (so long as $h$ exists).\gap
+To show existence consider the $R$-bilinear map: \begin{align*}
+    A \times B &\to C\\
+    (A,B) \mapsto f_{1}(a)f_{2}(b)
+\end{align*}
+Then we use the universal property of tensor products of $R$-modules to guarantee that there exists an $R$-linear \[ h: A \otimes B \to C \]. Then we need only check $h$ is a homomorphism, just as we did with $\varphi$ earlier. \endproof \textbf{Example:} In the case of the algebra given by the polynomial ring: 
+\begin{center}
+    \begin{tikzcd}[column sep=tiny]
+        & R[X_{1}, \dots, X_{n}] \ar[dr, ] \ar[drr, "f_1", bend left=20]
+        &
+        &[1.5em] \\
+        &
+        & R[X_{1}, \dots, X_{n}, T_{1}, \dots, T_{r}] \ar[r, dashed, "\exists ! h"]
+        & C \\
+        & R[T_{1}, \dots, T_{r}] \ar[ur, ]\ar[urr, "f_2"', bend right=20]
+        &
+        &
+    \end{tikzcd}
+\end{center}
+Where \begin{align*}
+    R[X_{1}, \dots X_{n}, T_{1}, \dots, T_{r}] &\simeq R[X_{1}, \dots, X_{n}] \otimes R[T_{1},\dots, T_{r}]\\
+    \text{product of monomials} &\mapsfrom \text{monomial } \otimes \text{ monomial}.
+\end{align*}
+
+
+
+
+
+
+
+\newlec
+
+
+
+
+
+
+Two comments:
+\begin{enumerate}
+    \item[(1)] If \[ f: A \to A'\] and \[ g: B \to B'\] are $R$-algebra homormorphisms, then \[ f \otimes g : A \otimes B \to A' \otimes B'\] is an $R$-algebra homomorphism.
+    \item[(2)] $R$-algebra homomorphisms: \[ \frac{R}{I} \otimes \frac{R}{J} \simeq \frac{R}{I+J}\] \[ A \otimes B \simeq B \otimes A\] \[ A \otimes (B \times C) \simeq (A \otimes B) \times (A \otimes C)\] \[ \Rightarrow A \otimes B^{n} \simeq (A \otimes B)^{n}\] \[ (A \otimes B) \otimes C \simeq A \otimes (B \otimes C).\] Just like in the example sheet, but check that they satisfy the ring homomorphism property.
+\end{enumerate}
+\section{Restriction and extension of scalars}
+\subsection{Modules}
+We have two rings $R$ and $S$ in the background, and some specific ring homormophism: \[ f : R \to S.\] Then if $M$ is an $S$-module, then it is also an $R$-module. (The example to have in mind is that a vector space over $\bbC$ is a vector space over $\bbR$ with double the dimension).\gap Consider \[ r \cdot m = f(r) \cdot m \, \, r \in R,\, m \in M.\] How do we verify this gives us the structure of a module, well we have a map \[ R \xrightarrow f S \to \End M.\] Then because of our definition of a module, we know that $M$ must be an $S$ module, and don't need to start checking distributivity and other annoying axioms.
+\begin{ex}
+    If \[ f: \bbR \hookrightarrow \bbC\] then $\bbC^{n}$ is a $\bbC$-module means that it is also an $\bbR$-module: \[ \bbC^{n} \simeq \bbR^{2n}.\]
+\end{ex}
+\subsection{Extension of scalars}
+We still have $f: R \to S$ a ring homomorphism, and $M$ an $S$-module which is also an $R$-module, and we have $N$ which is an $R$-module. Then from this, we can form \[ M \bigotimes_{R} N \] which is an $R$-module, since we forget the action of $S$ on $M$ in order to form this tensor product. The restriction of scalars tells us that $M \otimes_{R} N$ is \textit{also} an $S$-module. \gap We define \[ s \cdot (m \otimes n) := (sm) \otimes n.\] Is this well-defined? Yes. We take an $R$-bilinear map:
+\begin{align*}
+    M \times N &\to M \otimes N\\
+    \text{via} \, \, (m,n) &\mapsto (sm) \otimes n
+\end{align*}
+Then by the universal proprty, we obtain an \[ h_{s} : M \otimes_{R} N \to M \otimes_{R} N\] such that $h_{s}(m \otimes n) = (sm) \otimes n$. To check that this is in fact a module, I define a function 
+\begin{align*}
+    \phi : S &\to \End(M \otimes_{R} N)\\
+    \phi(s)&=h_{s}
+\end{align*}
+Check that $h_{s} \in \End(M \otimes_{R} N)$ and that $\phi$ is a ring homomorphism. \gap Then, if we start treating $M \otimes_{R} N$ as an $S$-module "out of nowhere," then this is the default construction we will be using.
+\begin{exs}
+    \begin{enumerate}
+    \item[(1)] We have that \[ S \otimes_{R} R \simeq S\] as $R$-modules. This sends \[ s \otimes r \mapsto s \cdot f(r)\] where $f$ is the ambient homomorphism we're working with. This is also $S$-linear, and it's enough to check this on pure tensors:
+    \begin{align*}
+        s'(s \otimes r) &\mapsto (s's\cdot)\\
+        =(s's)\otimes r &= s'(s \cdot f(r))
+    \end{align*}
+    So $s'(s \cdot f(r))$ is the image of $s \otimes r$ under this map. Therefore, the clear example is that $\bbC \otimes_{\bbR} \bbR \simeq \bbC$ as $\bbC$-modules.
+
+    \item[(2)] If $M$ is an $S$-module and $N_{i}$ are $R$-modules, then \[ M \otimes (\bigoplus_{i} N_{i}) = \bigoplus_{i}(M\otimes N_{i})\] as $S$-modules. (We turn each of the $M \otimes N_{i}$ into $S$-modules, and then direct sum over $S$-modules).\gap
+    The concrete example would be that \[ \bbC \otimes \bbR^{n} \cong \bbC^{n}\] as $\bbC$-modules.
+
+    \item[(3)]Take $\bbC^{n}$ as a $\bbC$-module, then restrict to $\bbR$, and get: \[ \bbC^{n} \cong \bbR^{2n}\] as $\bbR$-modules. Then extend to $\bbC$ and get \[ \bbC \otimes \bbR^{2n} \cong \bbC^{2n}.\] So we do lose information by going to $\bbR$, since $\bbC \otimes \bbC^{n}$ does not give us this, so these operations are not inverse.
+
+    \item[(4)] Let $\bbR^{n}$ be an $\bbR$-module, then we can extend and get \[ \bbC \otimes_{R} \bbR^{n} \cong \bbC^{n} \] over $\bbC$. Or we can restrict and get \[ \bbC^{n} \cong \bbR^{2n}\] over $\bbR$.
+    \item[(5)] Let $\bbZ^{n}$ be a $\bbZ$-module, and take \[ f: \bbZ \to \frac{\bbZ}{2\bbZ}.\] Then extend this to $\frac{\bbZ}{2\bbZ}$, and get \[ \frac{\bbZ}{2\bbZ} \otimes_{\bbZ} \bbZ^{n} \cong \left(\frac{\bbZ}{2\bbZ}\right)^{n}.\] This is also called an \textit{extension of scalars}, even though it might not look like an extension. \end{enumerate}
+\end{exs}
+\begin{ex}
+    Take $\bbC^{n} \otimes_{\bbR} \bbR^{l}$, then this is, in one way:
+    \[ \bbC^{n} \otimes_{R} \bbR^{l} \cong \bbR^{2n} \otimes_{\bbR} \bbR^{l} \cong \bbR^{2nl} \cong \bbC^{nl}\] all as modules over $\bbR$, where the last isomorphism comes from equality of dimensions.\gap \textbf{Another way: } We can also view 
+    \begin{align*} 
+        \bbC^{n} \otimes_{\bbR} \bbR^{l} &\cong \bbC \otimes_{\bbC} (\bbC \otimes_{\bbR} \bbR^{l})\\
+        &\cong \bbC^{n} \otimes_{\bbC} \bbC^{l}\\
+        &\cong \bbC^{nl}
+    \end{align*}
+    So, when we prove the proposition we are about to prove, the construction will go like: \begin{align*}
+        v \otimes u \mapsto v \otimes (1 \otimes u) \mapsto v \otimes u
+    \end{align*}
+    This is strange, because we are getting 'more room' on the pure tensors, but the key point is that when we tensor over $\bbC$ we get more non-pure tensors than we had originally. So it is wrong to only look at pure tensors.
+\end{ex}
+\begin{fancyprop}{}
+    If $M$ is an $S$-module, and $N$ is an $R$-module, then we have \[ M \otimes_{R} N \cong M \otimes_{S} (S \otimes_{R} N)\] as $S$-modules, via \begin{align*}
+        m \otimes n &\mapsto m \otimes (1 \otimes n)\\
+        (sm) \otimes n \mapsfrom m \otimes (s \otimes n)
+    \end{align*}
+\end{fancyprop}
+\proof In example sheet, or lecture notes.
+\begin{fancyprop}{}
+    Let $M$, $M'$ be $S$-modules, and $N$, $N'$ be $R$-modules, then we have: \begin{enumerate} 
+        \item An $S$-module isomorphism: \[ M \otimes_{R} N \cong N \otimes_{R} M\] via \[m \otimes n \leftrightarrow n \otimes m\]
+        \item  An $S$-module isomorphism: \[ (M \otimes_{R} N) \otimes_{R} N' \cong M \otimes_{R} (N \otimes N').\] So we get associativity, on the LHS we extend to $S$-modules twice (inside and outside the brackets) and on the RHS we need to extend to an $S$-module only once.
+        \item Similarly to above, we have \[(M \otimes_{R} N) \otimes_{S} M' \cong M \otimes_{S} (N \otimes_{R} M')\] 
+        \item We also have the distributive property: \[ M \otimes_{R} (\bigoplus_{i} N_{i}) \cong \bigoplus_{i} \left( M \otimes N_{i}\right)\]
+    \end{enumerate}
+\end{fancyprop}
+\newpage
+\proof \hspace{0.1cm} We will prove only the third claim, since all the proofs are very similar. We have \[ (M \otimes_{R} N) \otimes_{R} M' \cong \left( M \otimes_{S} (N \otimes_{R} S)\right) \otimes_{S} M'.\] Now this is just a tensor product of $3$ $S$-modules, so we can just use ordinary tensor product associativity to get \[ M \otimes_{S} \left((N \otimes_{R} S) \otimes_{S} M'\right).\]
+But then, we don't need to "prepare" the module $N$ in this expression, just like the first expression, so we get \[ M \otimes _{S} (N \otimes_{R} M').\] 
+\endproof
+For a concrete example, we have \begin{align*} 
+    &\bbC \otimes_{\bbR} (\bbR^{l} \otimes{\bbR} \bbR^{n})\\
+    \cong & (\bbC \otimes_{\bbR} \bbR^{l}) \otimes_{\bbC} (\bbC \otimes_{\bbR} \bbR^{n}).\\
+    \cong & \bbC^{l} \otimes_{\bbC} \bbC^{n} \cong \bbC^{nl}
+\end{align*}
+\begin{corr}{}
+    Let $N$, $N'$ be $R$-modules, then \[ S \otimes_{R} (N \otimes_{R} N') \cong (S \otimes_{R} N) \otimes_{S} (S \otimes_{R} N')\]
+\end{corr}
+\proof "One line\footnote{Lecturer "lines" to real life lines apparently have a 1 to 2 conversion rate, although to be fair, he \textit{just} managed to fit it on one.}":
+ \begin{align*}
+    S \otimes_{R} (N \otimes_{R} N') &\cong (S \otimes_{R} N) \otimes_{R} N' \tag{\text{by 2. in prop 3.5}}\\
+    &\cong (S \otimes_{R} N) \otimes_{S} (S \otimes_{R} N') \tag{doing the "preparation"}
+\end{align*}
+\endproof
+\newlec So for example, we have \begin{align*}
+    \bbC \otimes_{\bbR} (\bbR^{m} \otimes_{\bbR} \bbR^{l}) &\cong (\bbC \otimes_{\bbR} \bbR^{m}) \otimes_{\bbC} (\bbC \otimes \bbR^{l})\\
+    &\cong \bbC^{m} \otimes \bbC^{l} \cong \bbC^{ml}
+\end{align*}
+By induction with the corollary, we can conlude that \[ S \otimes_{R} (N_{1} \otimes_{R} \dots \otimes_{R} N_{l}) \cong (S \otimes_{R} N_{1}) \otimes_{S} \dots \otimes_{S} (S \otimes_{R} N_{l}). \] And, in the example sheet it is proved that we can basically move the brackets around, since the tensor product is associative.
+\subsection{Extension of scalars on morphisms}
+Let $f:N \to N'$, be $R$-linear, and let $N$, $N'$ be $R$-modules, and let $M$ be an $S$-module. then: \[ \id_{M} \otimes f : M \otimes_{R} N \to M \otimes_{R} N', \] where this map is, by construction, an $R$-linear map. But in fact it is also $S$-linear, which we will verify:
+\begin{align*}
+    (\id_{M} \otimes f)(s(m \otimes n)) &= (id_{M} \otimes f)((sm) \otimes n)\\
+    &= (sm) \otimes f(n)\\
+    &= s((\id_{M} \otimes f)(m \otimes n))
+\end{align*}
+If we have \[ T: \bbR^{n} \to \bbR^{l}\] an $\bbR$-linear map, where $\bbR^{n}$ has basis $\{ e_{1}, \dots, e_{n}\}$, and $\bbR^{l}$ has basis $\{f_{1}, \dots, f_{l} \}$. Then if we consider \[ \id_{\bbC} \otimes T : \bbC \otimes_{\bbR} \bbR^{n} \to \bbC \otimes_{\bbR} \bbR^{l}\] where these modules have bases given by $1 \otimes e_{i}$ and $1 \otimes f_{j}$ respectively. Then we want to see what this map does on basis elements, and so we write: \begin{align*} 
+    (\id_{\bbC} \otimes T)(1 \otimes e_{i}) &= (1 \otimes T(e_{i}))\\
+    &= 1 \otimes (\sum_{j=1}^{l} [T]_{ji}\cdot f_{j})\\
+    &= \sum_{j=1}^{l}[T]_{ji} \cdot (1 \otimes f_{j})
+\end{align*}
+So $[\id_{\bbC} \otimes T]$ is the same as $[T]$ as a matrix\footnote{So don't be afraid of the extension of scalars on morphisms.}
+\subsection{Extension of scalars on algebras}
+Let $A,B$ be $R$-algebras, then we have the construction of the tensor product of algebras $A \otimes_{R} B$ is an $R$-algebra. Now, it is quite easy to see that $A \otimes_{R} B$ is both an $A$-algebra and a $B$ algebra, by sending \begin{align*}
+    A &\to A \otimes_{R} B\\
+    a &\mapsto a \otimes 1\\
+\end{align*}
+\hspace{0.1cm}\\
+\begin{align*}
+    B &\to A \otimes_{R} B\\
+    b &\mapsto 1 \otimes b\\
+\end{align*}
+\begin{ex}
+    If we have our ambient function $f: R \to S$, and $R[X_{1}, \dots, X_{n}]$ is a polynomial ring over $R$, then \[ S \otimes R[X_{1}, \dots, X_{n}] \cong S[X_{1}, \dots, X_{n}],\] both $S$-algebras. 
+\end{ex}
+\proof We already have an isomorphism between these as $S$-modules, which is given by 
+\begin{align*} 
+    \varphi(s \otimes p) &= sp\\
+    \varphi(1 \otimes 1) &= 1
+\end{align*}
+Now we just need to verify that multiplication is preserved (we won't do it, but you argue that multiplication is preserved for pure tensors, and then argue that this is enough for the whole algebra).\gap We can do something a little more complicated, and have \[ S \otimes \left( \frac{R[X_{1}, \dots, X_{n}]}{I} \right) \cong \frac{S[X_{1}, \dots, X_{n}]}{I^{e}}\]
+where $I^{e}$ is the ideal of $S[X_{1}, \dots, X_{n}]$ generated by $f(I)$. \gap 
+Two more propositions which we aren't going to prove:
+\begin{fancyprop}{}
+    If $A$ is an $R$-algebra, and $B$ is an $S$-algebra, then \begin{align*}
+        A \otimes_{R} B \cong (A \otimes_{R} S) \otimes_{S} B
+    \end{align*}
+    as $S$-algebras. This is what we called previously the \say{preparation}.
+\end{fancyprop}
+\proof We already know this for modules, so just check that the identity is sent to the identity, and multiplication is preserved. Use the ring homomorphism $f$ from $R$ to $S$ which we have been assuming exists.
+\begin{fancyprop}{}
+    Let $A$ and $B$ be $R$-algebras, then \[ S \otimes_{R} (A \otimes_{R} B) \cong (S \otimes_{R} A) \otimes_{S} (S \otimes_{R} B)\] as $S$-algebras.
+\end{fancyprop}
+\proof Just as above, we know it for modules, and then check it works for algebras too.
+\section{Exactness}
+\subsection{Exactness properties of the tensor products of a fixed module}
+Let $M$ be an $R$-module, we will define $T_{M}(N)=M \otimes_{R} N$ where $N$ is any $R$-module. If $f: N \to N'$ is $R$-linear homomorphism of $R$-modules, then we also have \[ T_{M}(f) = \id_{M} \otimes f\] so $T_{M}$ is defined not just on modules, but also on homomorphisms. \gap Our first goal is to show that if \[ A \xrightarrow f B \xrightarrow g C \rightarrow 0 \] is an exact sequence of $R$-modules (i.e. $g$ is surjective, and $f$ has image the kernel of $g$, but does not need to be injective since we don't have the starting $0$). Then \[ M \otimes_{R} A \xrightarrow{T_{M}(f)} M \otimes_{R} B \xrightarrow{T_{M}(g)} C \rightarrow 0.\] is also exact. $T_{M}$ acts on both the objects and the morphisms of the category, and preserves composition and identity, so it is a functor from $\cat{Module$_{R}$}$ to $\cat{Module$_{R}$}$.
+\begin{fancydefine*}{Right Exact}
+     The property of preserving these sorts of exact sequences (with a $0$ at the end but not at the start) is called being \textbf{right exact}. $T_{M}$ therefore is right exact.
+    \gap Left exactness is exactly what you would think, and they are not identical concepts, and in fact $T_{M}$ is \textit{not} left exact.
+\end{fancydefine*}
+\begin{fancydefine}{The $\Hom$ functor}
+    If $Q$ and $P$ are $R$-modules, then \[ \Hom_{R}(Q,P) = \{ f: Q \to P \, | \,  f \, \text{ is $R$-linear } \}.\] In fact, $\Hom_{R}(Q,P)$ is itself an $R$-module via 
+    \begin{align*}
+        (r \cdot \varphi)(q) = r \cdot (\varphi(q)).
+    \end{align*}
+    Then we can generate two \textbf{Hom functors} from this construction: \[ \Hom_{R}(Q, \widecdot) \] and \[ \Hom_{R}(\widecdot, P),\] where $Q$ and $P$ are both \textit{fixed} $R$-modules in these definitions. 
+    \gap
+    If $f: N' \to N$ is an $R$-linear map, then we can apply the $\Hom$ functor to both of them, and also to $f$, to get 
+    \begin{align*} 
+        \Hom_{R}(Q,N') &\xrightarrow{\Hom_{R}(Q,f)} \Hom_{R}(Q,N)\\
+        \varphi &\longmapsto f \circ \varphi := f_{*}(\varphi)
+    \end{align*}
+    Obviously, we have the other $\Hom$ functor, which works like: 
+    \begin{align*}
+        \Hom_{R}(N,P) &\xrightarrow{\Hom_{R}(f,P)} \Hom_{R}(N',P)\\
+        \varphi \mapsto \varphi \circ f := f^{*}(\varphi)
+    \end{align*}
+\end{fancydefine}
+
+\begin{fancyprop}{}\hspace{0.1cm}
+    \begin{enumerate}
+        \item If \[ 0 \rightarrow A \xrightarrow{f} B \xrightarrow{g} C \] is exact, then so is
+        \[ 0 \rightarrow A \rightarrow \Hom_{R}(Q,A) \rightarrow \Hom_{R}(Q,B) \rightarrow \Hom_{R}(Q,C)\] with the right morphisms defined.
+        \item If \[ A \xrightarrow{f} B \xrightarrow{g} C \rightarrow 0 \] is exact, then so is \[ 0 \rightarrow \Hom_{R}(C,P) \rightarrow \Hom_{R}(B,P) \rightarrow \Hom_{R}(A,P).\]
+    \end{enumerate}
+    Both of these are \textit{Left exact} because at the end, they start with a $0$, but for claim 2, we need to start with a $0$ on the right, since the second functor is order-reversing.
+\end{fancyprop}
+\proof In example sheets, but there is only one thing you can really do, you do it, and then it works.
+\begin{fancylem}{Using Hom functors to prove exactness}
+    Consider some sequence of $R$-modules (not necessarily exact), \[ A \xrightarrow{f} B \xrightarrow{g} C, \tag{*} \] and assume that for all $R$-modules $P$, we have \[ \Hom_{R}(C,P) \rightarrow \Hom_{R}(C,P) \rightarrow \Hom_{R}(B,P) \rightarrow \Hom_{R}(A,P) \] is exact. Then so is (*).
+\end{fancylem}
+\proof \hspace{0.1cm} \underline{Step 1:} Take $P=C$, then we get \[ \Hom_{R}(C,C) \rightarrow \Hom_{R}(B,C) \rightarrow \Hom_{R}(A,C) \] which we know is exact, so we can take \[ id_{C} \mapsto \id_{C} \circ g = g \mapsto \id_{C} \circ g \circ f = g \circ f. \] But then $g \circ f = 0$, since going two steps in an exact sequence always gives $0$. Therefore $\im(f) \subseteq \ker(g)$.
+\gap \underline{Step 2:} Take $P=\frac{B}{\im f}$\footnote{What we call the \textit{Cokernel} of $f$.}. Then we have \[ \Hom_{R}(C, \frac{B}{\im f}) \rightarrow \Hom_{R}(B, \frac{B}{\im f}) \rightarrow \Hom_{R}(A, \frac{B}{\im f})\]. Then we use the other property of exactness, which is that if we start somewhere that goes to $0$, then it has a preimage. So take \[ h: B \to \frac{B}{\im f}\] to be the canonical quotient map of $B$ to the quotient of $B$ by $\im f$. Then we get, starting at the middle, \[ h \mapsto h \circ f = 0, \] since $f$ takes you first to $im f$, and then $h$ sends you to $0$. So we have a preimage of $h$ which we call $e$, and we have: \[ e \mapsto e \circ g = h.\] So $e \circ g = h$, so $\ker g \subseteq \ker h$. So $\ker(g) \subseteq \im(f)$. \endproof
+\hspace{0.1cm} \gap
+Now, consider that \[ 
+    \Hom_{R}(M \otimes_{R} N, L) \leftrightarrow \Bil(M\times N, L)\] by the universal property. Then we can also say \[ \Hom_{R})(M \otimes_{R} N, L) \leftrightarrow \Bil(M \times N, L) \leftrightarrow \Hom_{R}(N, \Hom_{R}(M,L))\] Where the inner $\Hom$ functor is $R$-linear, and then the outer $\Hom$ functor must be $R$-linear, since for every fixed $m$ we need to make sure we get a $R$-linear map in $N$, and then this assignment from $m$ to these maps is \textit{itself} $R$-linear.
+
+
+
+
+
+
+
+
+
+\end{document}
