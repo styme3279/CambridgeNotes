@@ -1,0 +1,458 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{James}
+\usepackage{dynkin-diagrams}
+\title{Category Theory}
+\author{James Hindmarch}
+\setcounter{section}{0}
+\date{October 2023}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+\newlec
+
+
+%LECTURE 1
+
+
+
+
+\section{Chapter 1: Definitions \& Examples}
+\begin{fancydefine}{Category}
+    A category $\calC$ consists of:
+    \begin{itemize}
+        \item A collection of objects, denoted $\ob \calC$. ($A$, $B$, $C$, $\dots$)
+        \item A collection of morphisms, $\mor \calC$. ($f$, $g$, $h$, $\dots$)
+        \item Two operations $\dom , \, \cod : \mor \calC \to \ob \calC$. We write $f: A \to B$ or $A \xrightarrow[]{f} B$ to mean $\dom f = A$, $\cod f = B$.
+        \item An operation $A \mapsto (1_{A} : A \to A)$ (i.e. an identity associated with each object).
+        \item A partial binary operation $(f,g) \mapsto fg$ called composition if and only if $\dom f = \cod g$, and then $\dom(fg)=\dom(g)$, $\cod(fg)=\cod(f)$. This satisfies: \begin{itemize}
+            \item $f1_{A} = f$, $1_{A}g=g$ whenever such composites are defined.
+            \item $f(gh) = (fg)h$ whenever $fg$ and $gh$ are defined.
+        \end{itemize}
+    \end{itemize}
+\end{fancydefine}
+\remarks \hspace{0.1cm}
+\begin{enumerate}
+    \item[(1)] We don't require $\ob \calC$ to be sets, nor $\mor \calC$ (but if they are, we call $\calC$ a \textit{small category}).
+    \item[(2)] Objects are not technically necessary at all in this definition, since we could just say there are a bunch of $\id$ morphisms (but this would be counterintuitive and we won't do it)
+    \item[(3)] $fg$ means, as always, first $g$, then $f$. Computer scientists haven't understood this yet, so some books write this differently.
+\end{enumerate}
+\exs \hspace{0.1cm}
+\begin{enumerate}
+    \item[(a)] $\cat{Set} = $ category of all sets, and functions between them. (Strictly, set theory does not specify a codomain (although it should), so we \textit{technically} require a morphism to be $(f,B)$ defining a function and a codomain, but usually it's clear from context).
+    \item[(b)] \begin{itemize}
+        \item $\cat{Grp} = $ category of groups and group homomorphisms
+        \item $\cat{Ring} = $ category of rings and ring homomorphisms
+        \item $\cat{Vect$_{k}$} = $ category of $k$-vector-spaces and $k$-linear maps
+    \end{itemize}
+    \item[(c)] \begin{itemize}
+        \item $\cat{Top} = $ category of topological spaces and continuous maps between them
+        \item $\cat{Met} = $ category of metric spaces and (in this course) non-expansive maps between them (so that isomorphisms are isometries).
+        \item $\cat{Mfd} = $ category of smooth maps and $C^{\infty}$ maps
+        \item $\cat{TopGrp} = $ category of topological groups and continuous group homomorphisms (we can combine categories like this in other, similarly obvious ways, as long as it makes sense).
+    \end{itemize}
+    \item[(d)] $\cat{Htpy} = $ category of topological spaces, and morphisms given by \textit{homotopy classes of} continuous maps.\gap More generally, if $\sim$ is an equivalence relation on $\mor \calC$ such that \[ f \sim g \Rightarrow \dom f = \dom g, \, \cod f = \cod g \] and such that \[ fh \sim gh, \, kf \sim kg \] whenever defined, then we call $\sim$ a \textit{congruence} on $\calC$, and have a \textit{quotient category}, $\frac{\calC}{\sim}$ with: \[
+    \ob \\calC/{\sim} = \ob \calC
+    \]
+    \[ \mor (\calC/{\sim}) = (\mor \calC)/{\sim} \]
+    \item[(e)] $\cat{Rel} = $ category of sets and \textit{relations} $\calR \subseteq A \times B$ (where $A$ and $B$ are specified) with composition being defined by \[ \calS \circ \calR = \{ (a,c) \, | \, (\exists b \in B) \, \, (a,b) \in \calR, \, (b,c) \in \calS \} \] Note that \cat{Set} is a subcategory of \cat{Rel}. There is also $\cat{Part} = $ category of all sets and partial functions (functions from subsets of $A$ to $B$), and so we have \[
+    \cat{Set} \subset \cat{Part} \subset \cat{Rel}. \]
+    \item[(f)] Given any category $\calC$, we define $\calC^{\text{op}}$ (the \textit{opposite} of $\calC$) to have the same objects and morphisms, but $\dom$ and $\cod$ are interchanged, and composition is reversed.
+    \item[(g)] A small category with \underline{one} object is called a \textit{monoid} (i.e. a \textit{semigroup} with a 1). In particular, a group is a small category with one object in which every morphism is an isomorphism.
+    \item[(h)] A \textit{groupoid} is a category in which every morphism is an isomorphism. For example, the \underline{fundamental groupoid} $\pi_{1}(X)$ of a space has \[ \ob \pi_{1}(X) = X \]
+    and morphisms $x \to y$ are homotopy classes of paths from $x$ to $y$.
+    \item[(i)] A category $\calC$ with \underline{at most} one morphism $A \to B$ between any pair of objects is a \textit{preorder} (i.e. a class of objects with a reflexive, transitive relation). \gap In particular, a Poset (partially ordered set) is a small category which is a preorder in which the only isomorphisms are the identity morphisms. \gap "It is nice to use posets as an example whenever you are presented with a theorem about categories which you do not understand, since they are familiar objects, and theorems are usually not entirely trivial on posets."
+    \item[(j)] Given $k$ a field, have $\cat{Mat$_{k}$} = $ The category with $\ob \cat{Mat$_{k}$} = \bbN$, and morphisms $n \to p$ are $p\times n$ matrices in $k$, composition is obviously matrix multiplication. Identities are $\id_{n \times n}$.
+\end{enumerate}
+
+
+
+
+
+\newlec
+
+
+%LECTURE 2
+
+
+
+
+
+
+
+
+
+\begin{fancydefine}{Functor}
+Let $\calC$ and $\calD$ be categories, a \textbf{functor} \[ F : \calC \to \calD\]
+consists of mappings \begin{align*}
+    \ob \calC &\xrightarrow[]{F} \ob \calD\\
+    \mor \calC &\xrightarrow[]{F} \mor \calD\\
+\end{align*}
+satisfying
+\begin{align*}
+    F(\dom f) &= \dom (Ff)\\
+    F(\cod f) &= \cod (Ff)\\
+    F(1_{A}) &= 1_{FA}\\
+    F(fg) &= (Ff)(Fg).
+\end{align*}
+\end{fancydefine}
+\exs \textbf{Examples of Functors}
+\begin{enumerate}
+    \item[(a)] Forgetful Functors - These are functors which 'forget' some structure; there's no formal definition, but you know them when you see them.
+    \begin{itemize}
+        \item $\cat{Grp} \to \cat{Set}$
+        \item $\cat{Rng} \to \cat{Set}$
+        \item $\cat{Top} \to \cat{Set}$
+        \item $\cat{Rng} \to \cat{AbGrp}$
+        \item $\cat{Met} \to \cat{Top}$
+        \item $\cat{TopGrp} \to \cat{Top}$
+        \item $\cat{TopGrp} \to \cat{Grp}$
+    \end{itemize}
+    \item[(b)] The free group construction \[ A \mapsto FA \] such that any mapping \[ f : \to UG \] to the underlying set of a group extends uniquely to a homomorphism \[ FA \to G.\] We make this into a functor \[ F: \cat{Set} \to \cat{Grp}, \] and given \[ f : A \to B, \] $Ff$ is the unique homomorphism extending \[ A \xrightarrow[]{f}  B \to FB. \] Given $g: B \to C$, $F(gf)$ and $F(g)F(f)$ both extend the same mapping $A \to FC$, so they're equal.
+    \item[(c)] The powerset construction defines a functor \[ P : \cat{Set} \to \cat{Set}, \] where $PA = \{ \text{Subsets of } A \}$, and if $f: A \to B$, \[Pf(A') = \{f(a) \, | \, a \in A'\}.\]
+    \item[(d)] We also have a \textit{totally unrelated} functor \[P^{*} : \cat{Set}^{\text{op}} \to \cat{Set},\] (or $\cat{Set} \to \cat{Set}^{\text{op}}$), which is given by $P^{*}A = PA$ and for $f : A \to B$, \[ P^{*}f(B') = \{a \in A \, | \, f(a) \in B'\}. \] We call $P^{*}$ a \textbf{contravariant} functor - this means that it 'reverses the arrows' in the category (i.e. it goes from a category to its opposite category), the opposite of a contravariant functor is a \textbf{covariant} functor.
+    \item[(e)] The construction of dual spaces is a functor: \[ (-)^{*}: \cat{Vect$_{k}$}^{\text{op}} \to \cat{Vect$_{k}$},\] $V^{*}$ is the space of linear mappins \[ V \to k \], if $f: V \to W$, then $f^{*}: W^{*} \to V^{*}$ is given by composition with $f$.
+    \item[(f)] The assignment $\calC \to \calC^{\text{op}}$ defines a functor \[ \cat{Cat} \to \cat{Cat}, \] where $\cat{Cat}$ is the category of \textit{small} categories (to avoid any Russell's paradox problems) and functors between them.
+    \item[(g)] A functor between monoids is monoid homomorphism. \gap A covariant functor between posets is an order-preserving map (contravariant: order-reversing). \gap Let G be a group (considered as a $1$-object category), then a functor \[ F : G \to \cat{Set} \] consists of a set $A (=F(*))$ together with mappings \begin{align*}
+        A &\to A\\
+        a &\mapsto g\cdot a
+    \end{align*}
+    for the morphisms, which are compatible with identity and composition (i.e. it is an \underline{action} or \underline{permutation representation} of $G$ on the set $A$). \gap In a similar way, a functor $G \rightarrow \cat{Vect$_{k}$}$ is a $k$-linear representation of $G$
+    \item[(h)] The fundamental group defines a functor \[ \pi_{1} : \cat{Top}^{*} \to \cat{Grp},\] where $\cat{Top}^{*}$ is the category of topological with basepoint, and basepoint preserving maps. We could similarly have a functor from the category \textit{un}pointed topological spaces $\cat{Top}$ to the category $\cat{Groupoid}$.
+\end{enumerate}
+\begin{fancydefine}{Natural Transformation}
+    Let $\calC$ and $\calD$ be categories, $F,G: \calC \rightrightarrows \calD$ two functors, then a \textbf{natural transformation} is a mapping \begin{align*}
+        \alpha : F \to G
+    \end{align*}
+    which takes
+    \begin{align*}
+        \ob \calC \to \mor \calD
+    \end{align*}
+    which we write $A \to \alpha_{A}$. Moreover, this mapping satisfies \[ \alpha_{A}: FA \to GA \] for all $A$, and for any $f: A \to B$ in $\calC$, the following square commutes
+    \begin{center}
+        \begin{tikzcd}
+            FA \arrow{d}{\alpha_{A}} \arrow{r}{Ff}
+            & FB \arrow{d}{\alpha_{B}} \\
+            GA \arrow{r}{Gf}
+            & GB
+            \end{tikzcd}
+\end{center}
+\end{fancydefine}
+If we also have $\beta : G \to H$ we can then define $(\beta \alpha)$ by \[ (\beta \alpha)_{A} = \beta_{A}\alpha_{A}.\]
+So we have a category $[\calC, \calD]$ whose objects are functors $\calC$ to $\calD$ and whose morphisms are natural transformations.
+\exs
+\begin{enumerate}
+    \item[(a)] Given a vector space $V$, we have a linear map \[ \alpha_{V} : V \to V^{**}\] sending $v \in V$ to \[ \text{evaluate at $v$} : V^{*} \to k\] This is a natural transformation \[ 1_{\cat{Vect$_{k}$}} \to (-)^{**}.\]
+    \item[(b)] We have a mapping of $\cat{Set}$, $\alpha_{A} : A \to PA$ which sends $a \in A$ to $\{ a \}$. This is a natural transformation \[ 1_{\cat{Set}} \to P.\] since $Pf(\{a\}) = \{f(a)\}$.
+    \item[(c)] The mapping sending $A$ to the inclusion of generators $A \to FA$ is a natural transformation from \[ 1_{\cat{Set}} \to UF\] where $F$ is the free group functor and $U$ is the forgetful functor.
+    \item[(d)] If $f,g : P \rightrightarrows Q$ are order-preserving maps of posets, there exists a (unique) natural transformation \[ f \to g\] if and only if $f(p) \leq g(p) \, \forall p$.
+    \item[(e)] Suppose we are given two group homomorphisms \[ u,v: G \rightrightarrows H. \] A natural transformation $u \to v$ is an element $h \in H$ such that \[ h\cdot u(g) = v(g) \cdot h \, \, \forall g \in G, \] or equivalently: \[ v(g) = h \cdot u(g) \cdot h^{-1}.\] That is to say, natural transformations are exactly conjugacy relations. In particular, the natural transformations $u \to v$ are the elements of the centralizer $u(G)$.
+    \item[(f)] If $A$ and $B$ are permutation representations of $G$, then a natural transformation \[ A \xrightarrow{f} B\] is a mapping satisfying \[ g \cdot f(a) = f(g \cdot a)\] for all $a \in A, \, g \in G$.
+    \item[(h)] For a (nice) space $X$ with basepoint $x$, there is this thing that we should mention, even though it won't come up again (unless you're taking algebraic topology),called the Hurewicz Homomorphism \[ \cat{Top$^{*}$} \to \cat{Top}, \] given by \[ h_{n,x} : \pi_{n}(X,x) \to H_{n}(X).\] This is a natural transformation from $\pi_{n}$ to $H_{n}U$ where $U$ forgets the basepoint
+\end{enumerate}
+
+
+
+
+
+
+
+%LECTURE 3
+
+
+
+
+
+\newlec
+
+
+
+\begin{fancydefine}{Isomorphism of Categories}
+    We say that two categories $\calC$ and $\calD$ are \textbf{isomorphic} if there exist functors \[ F: \calC \to \calD \] \[ G: \calD \to \calC\] such that $GF=1_{\calC}$ and $FG=1_{\calD}$.\gap For example $\cat{Rel} \cong \cat{Rel}^{\text{op}}$ via the functor: \begin{align*}
+        A &\mapsto A\\
+        R &\mapsto R^{\text{op}} = \{(b,a) \, : \, (a,b) \in R\}
+    \end{align*}
+\end{fancydefine}
+However, this notion of equivalence of categories turns out to be not super useful, and there's a weaker notion of equivalence that is used more frequently. To define it, we need the following:
+\lem Let $\alpha : F \to G$ be a natural transformation between two functors \[ F, G : \calC \rightrightarrows \calD. \] Then $\alpha$ is an isomorphism in $[\calC, \calD] \Leftrightarrow $ each $\alpha_{A}$ is an isomorphism in $\calD$.
+\proof \hspace{0.1cm} \\
+$\Rightarrow$: Obvious, since composition in $[\calC, \calD]$ is pointwise \gap 
+$\Leftarrow$: Suppose $\beta_{A}$ is inverse to $\alpha_{A}$ for each $A$, then Given $f: A \to B$ in $\calC$, consider:
+
+\begin{center}
+    \begin{tikzcd}
+        FA \arrow[d,xshift=-0.7ex,"\alpha_{A}",swap] \arrow{r}{Ff}
+        & FB \arrow[d,xshift=-0.7ex,"\alpha_{B}",swap] \\
+        GA \arrow{r}{Gf} \arrow[u,xshift=0.7ex,"\beta_{A}",swap]
+        & GB \arrow[u,xshift=0.7ex,"\beta_{B}",swap]
+        \end{tikzcd}
+\end{center}
+Then $(Ff)\beta_{A} = \beta_{B} \circ \alpha_{B} (Ff)\beta_{A} = \beta_{B}(Gf)\alpha_{A} \circ \beta_{A}=\beta_{B}(Gf).$ So we have that $\beta$ is a natural transformation, and hence an inverse for $\alpha$ in $[\calC, \calD]$. \endproof
+\newpage
+\begin{fancydefine}{Equivalence of categories}
+    Let $\calC$ and $\calD$ be categories, by an \textbf{equivalence} between $\calC$ and $\calD$, we mean:
+    \begin{itemize}
+        \item A pair of functors $F: \calC \to \calD$, $G : \calD \to \calC$.
+        \item Natural isomorphisms: \begin{align*}
+            \alpha : 1_{\calC} \to GF & & \beta : FG \to 1_{\calD}
+        \end{align*}
+        (We've switched the directions around, but don't worry, we will see why in Chapter 3)
+    \end{itemize}
+    We write $\calC \simeq \calD$ if there exists an equivalence between $\calC$ and $\calD$.
+    
+\end{fancydefine}
+
+\textbf{Definition. }(Categorical Property) We say a property $P$ of categories is \textbf{Categorical} if it is preserved under equivalence. (If $\calC$ has $P$, and $\calC \simeq \calD$ then $\calD$ has $P$.)
+\begin{itemize}
+    \item Being a preorder \underline{is}
+    \item Being a partial order \underline{is not}
+    \item Being a groupoid \underline{is} (I think)
+    \item Being a group \underline{is not}
+\end{itemize}
+\exs \hspace{0.1cm} \begin{enumerate}
+    \item[(a)] Let \cat{Set$^{*}$} be the category of sets with base point and basepoint preserving functions. Then \[\cat{Set$^{*}$} \simeq \cat{Part}\] via \[ F: \cat{Set$^{*}$} \to \cat{Part}\] defined by \[ F(A,a)= A \setminus \{a\}\] \[ F((A,a) \xrightarrow f (B,b))(x) = \begin{cases}
+        f(x), & f(x) \neq b\\
+        \text{undefined}, & \text{o/w}
+    \end{cases}\]
+    and via \[ G : \cat{Part} \to \cat{Set$^{*}$} \] defined by:
+    \[ G(A) = (A \cup \{ A \}, A),\] \[ G(A \rightharpoondown B)(x) = \begin{cases}
+        f(x), & \text{if $x \in A$ and $f$ defined}\\
+        B, & \text{o/w}.
+    \end{cases}
+    \] ($\rightharpoondown$ means partial function.) Then $FG = 1_{\cat{Part}}$, since what we're doing is: adding a basepoint, then throwing away that basepoint; changing the function, then throwing away those changes. $GF \neq 1_{\cat{Set$^{*}$}}$, however there is an obvious isomorphism (apparently, need to look this up). There can be no isomorphism between these categories, however, since isomorphisms preserve isomorphism classes within categories, and we have $\{\}$ in \cat{Part} a $1$-object isomorphism class, and no such $1$-object isomorphism class in $\cat{Set$^{*}$}$
+    \item[(b)] Let \cat{fdVect$_{k}$} be the category of finite dimensuonal vector spaces over $k$. \gap Then \[\cat{fdVect$_{k}$} \simeq \cat{fdVect$_{k}^{\text{op}}$} \] via \[ F = (-)^{*} : \cat{fdVect$_{k}$} \to \cat{fdVect$_{k}^{\text{op}}$}\] and \[ G = (-)^{*} : \cat{fdVect\subk}^{*} \to \cat{fdVect\subk\opp}. \] $\alpha$ and $\beta$ are both the natural transformation of $1.7(a)$.
+    \item[(c)] $\cat{fdVect\subk} \simeq \cat{Mat$_{k}$}$ of $1.3(j)$. via \[ F : \cat{Mat\subk} \to \cat{fdVect\subk} \] which sends $n$ to $k^{n}$ and the matrix to the linear map $k^{n} \to k^{p}$, and \[ G: \cat{fdVect\subk} \to \cat{Mat\subk} \] where we havet o choose a basis for each finite dimensional vector space. Then $G(V) = \dim V$ and $G(V \xrightarrow f W) = \text{ Matrix of $f$ in a chosen basis}$. Then $GF=1_{\cat{Mat\subk}}$ provided we make the choice of the standard basis, and $FG \simeq 1_{\cat{fdVect\subk}}$ since chosen bases define an isomorphism: \[ k^{\dim V} \to V \] which are natural on $V$.
+\end{enumerate}
+\begin{fancydefine}{Properties of Functors}
+    Let \[ F : \calC \to \calD\] be a functor.
+    \begin{enumerate}
+        \item[(a)] We say $F$ is \textbf{faithful} if, given $f,g \in \mor \calC$, we have \begin{align*}
+            \dom f = \dom g, & & \cod f = \cod g, & & \text{and} \, \, \,   Ff=Fg \, \Rightarrow \, f=g.
+        \end{align*}
+        \item[(b)] We say $F$ is \textbf{full} if, given \[ FA \xrightarrow g FB, \] there exists $f : A \to B$ with $Ff = g$
+        \item[(c)] We say $F$ is \textbf{essentially surjective} if every $B \in \ob \calD$ is isomorphic to some $FA$.
+    \end{enumerate}
+    Note:  Essential injectivity is implied by full and faithful. That is, if $FA \xrightarrow g FB$ is an isomorphism, then the unique $f : A \to B$ with $Ff = g$ is an isomorphism. (With inverse the unique $B \to A$ which gets mapped to $g^{-1}$ by $F$.)
+\end{fancydefine}
+\lem Let \[ F: \calC \to \calD \] be a functor. Then $F$ is part of an equivalence $calC \simeq \calD \, \Leftrightarrow$ $F$ is full, faithful, and essnetially surjective.
+\proof $\Rightarrow$: Suppose, given $G,\alpha, \beta$ as in 1.9, the existence of $\beta$ ensures that \[ B \simeq FGB \] for any $B \in \ob \calD$ (so we have essential surjectivity). Also, we have for any $A \xrightarrow f B$ in $\calC$: \[f = \alpha_{B}^{-1}(GFf)\alpha_{A}, \] so $f$ is determined by $\dom f, \cod f,$ and $Ff$; so we have faithfulness. Then for fullness, given \[ FA \xrightarrow g FB, \] we define \[ f = \alpha_{B}^{-1}(Gg)\alpha_{A} : A \to B, \] then \[ GFf = Gg. \] But $G$ is faithful, since $F$ is (and the same arguments apply), so $Ff=g$.\gap 
+$\Leftarrow$: For each $B \in \ob \calD$, choose an isomorphism \[ \beta_{B} : FGB \to B. \] This defines $G$ on objects. To define $G$ on morphisms, we take $G(B \xrightarrow g C)$ to be the unique $GB \to GC$ whose image under $F$ is \[ FGB \xrightarrow \beta_{B} B \xrightarrow g C \xrightarrow \beta_{C}^{-1} FGC.\] This is functorial since given $h: C \to D$ \[ G(hg) \text{   and   } (Gh)(Gg)\] have the same image under $F$, so they must be equal by faithfulness. 
+Moreover $\beta_{B}$ is a natural transformation, by construction: \[ FG \to 1_{\calD}.\] So just need to construct $\alpha : 1_{\calC} \to GF$, we do this by: \[ \alpha_{A} : A \to GFA \] to be the unique morphism, whose image under $F$ is \[ FA \xrightarrow \beta_{FA}^{-1} FGFA. \] (This is an isomorphism since the image under $F$ is an isomorphism). Then, the naturality squares for $\alpha$ are mapped by $F$ to naturality squares for $\beta^{-1}$. So they commute. \endproof
+\define[Skeletal Category] We say $\calC$ is \textbf{skeletal} if every isomorphism class in $\ob \calC$ has just one member. By a \textbf{skeleton} of $\calC$, we mean a full subcategory $\calC'$ containing just one object from each isomorphism class. For example \cat{Mat\subk} is skeletal. Note that any equivalence between two skeletal categories is (bijective on objects, and hence) an isomorphism. \gap 
+
+
+
+
+
+
+
+
+
+%Lecture 4
+\newlec 
+
+
+
+
+Skeletons are basically a diversion, and are fundamentally unimportant. \gap We want something \textit{like} injectivity and surjectivity for morphisms within a category, but can't use those words, because the objects need not be sets. So:
+\begin{fancydefine}{Monomorphism/Epimorphism/Balanced Category}
+    Let $f: A \to B$ be a morphism in $\calC$. We say: \begin{itemize}
+        \item $f$ is a \textbf{monomorphism} (or \textbf{monic}) if \[fg = fh \Rightarrow g=h,\] whenever composition is defined.
+        \item Dually, $f$ is an \textbf{epimorphism} or (\large\textbf{EPIC}\normalsize) if \[ gf=hf \Rightarrow g=h,\] again, whenever composition is defined.
+    \end{itemize}
+    If $f$ is an isomorphism then it must be \textbf{monic} and \textbf{epic}. We say $\calC$ is a \textbf{balanced} category if the converse holds. \gap $f : A \rightarrowtail B$ means $f$ is monic; $A \twoheadrightarrow B$ means $f$ is epic.  
+    
+\end{fancydefine}
+\exs \begin{enumerate}
+    \item[(a)] In \cat{Set}, monic $\Leftrightarrow$ injective ($\Leftarrow$ obvious, for $\Rightarrow$, use morphisms $1 \to A$).\\ Epic $\Leftrightarrow$ surjective ( $Leftarrow$ easy, for $\Rightarrow$, use morphisms $B \to 2 = \{0,1\})$. So $\cat{Set}$ is balanced.
+    \item[(b)] In $\cat{Gp}$, monic $\Leftrightarrow$ injective (Use $\bbZ$ in place of $1$).\\ And epic $\Leftrightarrow$ surjective (proof nontrivial). So $\cat{Grp}$ is balanced.
+    \item[(c)] In $\cat{Rng}$, monic $\Leftrightarrow$ injective, but $\bbZ \hookrightarrow \bbQ$ is epic, so $\cat{Rng}$ isn't balanced.
+    \item[(d)] In \cat{Top}, monic $\Leftrightarrow$ injective, and epic $\Leftrightarrow$ surjective, but \cat{Top} isn't balanced.
+    \item[(e)] In a preorder, all morphisms are monic and epic, but a preorder is balanced iff it's an equivalence relation. 
+\end{enumerate}
+\section{Chapter 2: The Yoneda Lemma}
+\begin{fancydefine}{Locally Small}
+    We say a category $\calC$ is \textbf{locally small} if, for all $A, B \in \ob \calC$, the morphisms $A \to B$ in $\calC$ are parameterised by a set $\calC(A,B)$. Sometimes this is taken to be part of the definition of a category, but we won't do that, since P.T. Johnstone doesn't like it, and wants category theory's definition to be independent of set theory (and other reasons).
+\end{fancydefine}
+Given an object $A$ of a locally small category $\calC$, we have a functor \[ \calC(A, - ) : \calC \to \cat{Set}\] sending $B$ to $\calC(A,B)$ and $B \xrightarrow f C$ to the mapping $g \mapsto fg$ where $g \in \calC(A,B)$. This is functorial since composition in $\calC$ is associative. Similarly, for fixed $B$, we have a functor \[ \calC( - , B): \calC^{\text{op}} \to \cat{Set}.\] 
+\begin{fancylem}{Yoneda}
+     Let $\calC$ be locally small, let $A \in \ob \calC$, and $F: \calC \to \cat{Set}$ be a functor. Then \begin{enumerate}
+    \item[(i)] There is a bijection between natural transformations \[ \calC(A, - ) \to F \] and elements of $FA$
+    \item[(ii)] Moreover, this bijection is natural in both $A$ and $F$. 
+\end{enumerate}
+\end{fancylem}
+\proof \hspace{0.1cm} \begin{enumerate}
+    \item[(i)] Given $\alpha : \calC(A, - ) \to F$, we define \[\Phi(\alpha) = \alpha_{A}(1_{A}) \in FA. \] Given $x \in FA$, we define $\Psi(x) : \calC(A, - ) \to F$ by \[ \Psi(x)_{B}(A \xrightarrow f B) = (Ff)(x) \in FB.\] This is natural, since $F$ is a functor.\gap Clearly $\Phi \Psi (x) = \Psi(x)_{A}(1_{A}) = F(1_{A})(x) = x$.\\ If $\alpha: \calC(A, - ) \to F$, then \[\Psi \Phi(\alpha)_{B}(f) = \Psi(\alpha_{A}(1_{A}))_{B}(f) = (Ff)(\alpha_{A}(1_{A})) = \alpha_{B}(f 1_{A}) = \alpha_{B}(f).\]
+\end{enumerate}
+\endproof
+\corollary[Yoneda Embedding] For any locally small $\calC$, the mapping $A \mapsto \calC(A, - )$ is a full and faithful functor \[ \calC^{\text{op}} \to [\calC, \cat{Set}].\]
+\proof Putting $F=\calC(B, - )$ in 2.2, we get a bijection from $\calC(B,A)$ to the set of natural transformations \[ \calC(A, - ) \to \calC(B, -).\] This sends $f: B \to A$ to the natural transformation given by composition with $f$. Functorial since composition in $\calC$ is associative. \endproof 
+This says that any locally small category is equivalent toa full subcategory of a functor category $[\calC, \cat{Set}]$. This is like Cayley's theorem in Group Theory (which is technically a special case of this result), which takes this abstract thing called a group, and says we can present it as an action on a set of objects. Here we are saying we can present categories within the catgegory of sets (so long as the category is locally small).
+\begin{fancydefine}{Representable/Representation of a functor}
+    If $\calC$ is locally small, a functor \[ F: \calC \to \cat{Set}\] is called \textbf{representable} if it is isomorphic to $\calC(A, -)$ for some $A \in \ob \calC$. \gap By a \textbf{representation} of $F$, we mean a pair $(A,x)$ where $A \in \ob \calC$. and $x \in FA$ is such that $\Psi(x)$ is a natural isomorphism $\calC(A,-) \to F$. ($x$ is called a \textbf{universal element} of $F$).
+\end{fancydefine}
+\corollary If $(A,x)$ and $(B,y)$ are both representations of a functor $F$, then there is a unique isomorphism $f : A \to B$ which is compatible with $F$, i.e. such that \[ Ff(x)=y.\]
+\proof (Ff)(x)=y is equivalent to saying that 
+\begin{center}
+
+    \begin{tikzcd}[column sep=scriptsize]
+        \calC(B, -) \arrow[dr, "\Psi(y)", swap] \arrow[rr, "\calC (f{,} -)"]
+        & & \calC(A, -) \arrow[dl, "\Psi(x)"] \\
+        & F
+    \end{tikzcd}
+\end{center}
+commutes. So this holds if and only if $f$ is the unique ismorphism sent by the Yoneda embedding to $\Psi(x)^{-1}\Phi(y)$. \endproof
+\proof 2.2(ii) Suppose for a moment that $\calC$ is small, so that $[\calC, \cat{Set}]$ is locally small, then we have two functors \[ \calC \times [\calC, \cat{Set}] \to \cat{Set}.\] One of them sends $(A,F)$ to $FA$, the other is the composition: \[ \calC \times [\calC, \cat{Set}] \xrightarrow{Y \times 1} [\calC, \cat{Set}]^{\text{op}} \times [\calC, \cat{Set}] \xrightarrow{[\calC,\cat{Set}](-,-)} \cat{Set}.\] where $Y$ is the Yoneda embedding of $\calC$.
+In this case, Yoneda (ii) says that $\Phi$ and $\Psi$ are natural transformations between these functors. \gap Now, once we write it out, we realize we don't \textit{need} $\calC$ to be locally small, in elementary terms, we're simply saying that Given $f: A \to A'$ and $\alpha: F \to F'$, and $x \in FA$, if $x'=\alpha_{A}(Ff)(x)=(F'f)\alpha_{A}(x)$, then $\Psi(x')$ is the composite \[ \calC(A', -) \xrightarrow{\calC(f,-)} \calC(A,-) \xrightarrow{\Psi(x)} F \xrightarrow{\alpha} F. \] But this composite sends \[1_{A'} \mapsto f \mapsto (Ff)(x) \mapsto \alpha_{A'}(Ff)(x)\].
+\begin{ex} \newlec 
+    \begin{enumerate}
+        \item[(a)] The forgetful functor $\cat{Gp} \to \cat{Set}$ is representable by $\bbZ$.\\ Similar $\cat{Rng} \to \cat{Set}$ is representable by $\bbZ[X]$.\\ $\cat{Top} \to \cat{Set}$ is representable by the $1$-point space.
+        \item[(b)] $P^{*} : \cat{Set}^{\text{op}} \to \cat{Set}$ is representable by $2=\{0,1\}$ via the bijection which sends $f:A \to 2$ to $f^{-1}(1)$.\gap But $P : \cat{Set} \to \cat{Set}$ is not representable, we have $\cat{Set}(A,1) \equiv 1$ for any $A$, but $P1 \equiv 2$.
+        \item[(c)] We have a functor $\Omega : \cat{Top}^{\text{op}} \to \cat{Set}$ sending a space to its set of open subsets, and a continuous map $f$ to the effect of $f^{-1}$ on open subsets. This is representable by the \underline{Sierpinski Space} $\Sigma = \{0,1\}$ with $\{1\}$ open since continuous maps $X \to \Sigma$ are exactly the characteristic functions of open subsets of $X$.
+        \item[(d)] The dual vector space functor can't be representable, since it doesn't map to sets, but if we compose with the forgetful functor, \[ \cat{Vect}_{k}^{\text{op}} \xrightarrow{(-)^{*}} \cat{Vect}{k} \xrightarrow{U} \cat{Set}\] is representable by the 1-dimensional space $k$.
+        \item[(e)] If $G$ is a group, the unique representable functor $G \to \cat{Set}$ is the \underline{Cayley representation}, i.e. the set $G$ with $G$ acting by multiplication.
+        \item[(f)] Suppose, given two objects $A$ and $B$ of a locally small category $\calC$ and a functor $\calC^{\text{op}} \to \cat{Set}$ which sends $C$ to the cartesian product \[ C \mapsto \calC(C,A) \times \calC(C,B).\] If this is representable, we call the represented object a (categorical) \textbf{product} of $A$ and $B$, and we denote it $A \times B$\footnote{Which is notation to be careful about, since it \textit{doesn't} mean the cartesian product, although in many categories that is how it manifests. But you need to be careful because sometimes it just is not the cartesian product.}, with universal element $(pi_{1}: A \times B \to A, \,\, \pi_{2} : A \times B \to B)$, the \textbf{product projections}. This has the property: given any pair $(f:C \to A, \, g: C \to B)$, there exists a unique $h=(f,g) : C \to A \times B$ satisfying $pi_{1}h = f, \, \pi_{2}h=g.$ \gap Dually, we have the notion of \textbf{coproduct} $A + B$, with \textbf{coprojections} $\nu_{1} : A \to A+B, \, \nu_{2} : B \to A+B.$
+        \item[(g)] Given a parallel pair $f,g: A \rightrightarrows B$ in a locally small category $\calC$, we have a functor $F: \calC^{\text{op}} \to \cat{Set}$ which sends $C$ to $\{h: C \to A | fh = gh\}$ A representation of this functor is called an \textbf{equalizer} for $(f,g)$: it consists of an object $E$ with $e : E \to A$ satisfying $fe = ge$ and such that any $h$ with $fh=gh$ factors uniquely through $e$. Note that $e$ is necessarily a monomorphism, we say a monomorphism is \textbf{regular} if it occurs as an equalizer.
+    \end{enumerate}
+    In $\cat{Set}$, products are cartesian products, and coproducts are disjoint unions $A \times \{0\} \cup B \times \{ 0 \}$ \gap In $\cat{Gp}$, products are cartesian products, but the coproduct $A+B$ is the \underline{free product} $A * B$.\gap In $\cat{Set}$ or $\cat{Gp}$, the equalizer of $f,g : A \rightrightarrows B$ is the inclusion $\{a \in A | f(a)=g(a)\} \hookrightarrow A$. \gap The coequalizer of $(f,g)$ is the quotient $\frac{B}{R}$ where $R$ is the smallest \[\begin{cases} \text{Equivalence Relation} & \text{in \cat{Set}}\\
+        \text{Congruence} & \text{in \cat{Gp}} \end{cases}\]
+    which contains all pairs $(f(a),g(a)), a \in A$. \gap In both these categories, all monomorphisms and all epimorphisms are regular, but in $\cat{Top}$ not all injections/surjections are regular monomorphisms/epimorphisms.
+\end{ex}
+\begin{fancydefine}{Separating/Detecting Families}
+    Let $\calC$ be a locally small category. Let $\calG$ be a class of objects of $\calC$, then \begin{enumerate}
+        \item[(a)] We say $\calG$ is a \textbf{separating family} for $\calC$ if the functors $\calC(G,-)$, $G \in \calG$ are collectively faithfulm i.e. if given $f,g : \rightrightarrows B$, the equations $fh=gh$ fo all $h:G \to A$ with $G \in \calG$ implies that $f=g$.
+        \item[(b)] We say $\calG$ is a \textbf{detecting family} for $\calC$ if the functors $\calC(G,-)$ collectively 'reflect' isomorpisms, i.e. if, given $A \xrightarrow f B$ such that every $G \xrightarrow h B$ with $G \in \calG$ factors uniquely through $f$, then $f$ is an isomorphism.
+    \end{enumerate}
+    If $\calG = \{G \}$, we call $G$ a \textbf{separator}, or a \textbf{detector} for $\calC$.
+\end{fancydefine}
+\begin{fancylem}{}\hspace{0.1cm}
+    \begin{enumerate}
+        \item[(i)] If $\calC$ has equalizers, then any detecting family is separating.
+        \item[(ii)] If $\calC$ is balanced, then any separating family is detecting 
+    \end{enumerate}
+\end{fancylem}
+\proof \textit{(i).} Suppose $\calG$ is detecting and suppose $f,g: A \rightrightarrows B$ satisfy the hypothesis of 2.7(a). Then every $G \to A$ with $G \in \calG$ factors uniquely through the equalizer of $f$ and $g$, so the equalizer is an isomorphism. So $f=g$, since an isomorphism is an epimorphism.\gap
+\textit{(ii).} Suppose $\calG$ is separating, and $A \xrightarrow B$ satisfies the hypotheses of 2.7(b). If $fg=fh$ for some $g,h : C \rightrightarrows A$, then any $G \xrightarrow k C$ with $G \in \calG$ must satisfy that $gk=hk$, since both are factorizations of $fgk=fhk$ through $f$, so $g=h$, so $f$ is monic. Similarly, if $
+l, m: B \rightrightarrows D$ satisfy $lf=mf$, then any $G \xrightarrow n D$ with $G \in \calG$ satisfies $ln =mn$, since it factors through $f$, so $l=m$ so $f$ is epic. Since $\calC$ is balanced, $f$ is an isomorphism. \endproof
+\begin{exs} \hspace{0.1cm}
+    \begin{enumerate}
+    \item[(a)] In \cat{Gp}, $\bbZ$ is a separator and a detector. Similarly, for \cat{Rng}, $\bbZ[X]$ is a separator and a detector.
+    \item[(b)] If $\calC$ is small, the set $\{\calC(A,-) \, | \, A \in \ob \calC \} $ is both separating and detecting in $[\calC,\cat{Set}]$ by Yoneda.
+    \item[(c)] In \cat{Top}, 1 is a separator, but \cat{Top} has no detecting set of objects.
+    \newlec Given an infinite cardinal $\kappa$, let $X_{\kappa}$ be a disrecte space of cardinality $\kappa$, and $Y_{\kappa}$ the same set with the co-$<\kappa$\footnote{Open sets are those whose complements have cardinality $<\kappa$.} topology. The identity $X_{\kappa} \to Y_{\kappa}$ is (continuous but) not a homeomorphism. Given any set $\calG$ of spaces, if $\kappa>\card \calG$ for all $G \in \calG$, then $\calG$ can't detect that $X_{\kappa} \to Y_{\kappa}$ isn't an isomorphism.
+    \item[(d)] Let $\calC$ be the category whose objects are ordinals, and in addition to $1_{\alpha} : \alpha \to \alpha$ for each $\alpha$, $\calC$ has two morphisms $f,g: \alpha \rightrightarrows \beta$ whenever $\alpha < \beta$, with composition defined by $ff=fg=gf=gg=f$. $0$ is a detector for $\calC$: it detects that $f,g : 0 \rightrightarrows \alpha$ aren't isomorphisms since neither factors through the other, and it detects that $f,g : \alpha \rightrightarrows \beta$ $(0<\alpha<\beta)$ aren't isomorphisms since $0 \xrightarrow{g} \beta$ doesn't factor through either. But, given any set $\calG$ of ordinals if $\alpha > \gamma$ for all $\gamma \in \calG$, then $\calG$ can't separate $f,g : \alpha \rightrightarrows \alpha+1$.
+    \item[(e)] We saw that $\cat{Gp}$ has a single object $\bbZ$ which is both a separator and a detector, but it has no co-separating or co-detecting set of objects. Given any set $\calG$ of groups, let $H$ be a simple group with $\card H > \card G$ for all $G \in \calG$. Then the only homomorphisms from $H$ to members of $\calG$ are trivial, so $\calG$ can't detect that $H \to 1$ isn't an isomorphism.
+    \end{enumerate}
+\end{exs}
+The functors $\calC(A, -) : \calC \to \cat{Set}$ preserve monomorphisms by definition, but not necessarily epimorphisms, so we define 
+\begin{fancydefine}{Projective}
+    We say an object $P$ of a locally small set $\calC$ is \textbf{projective} if $\calC(P, - )$ preserves epimorphisms, i.e. given
+    \begin{center}
+    \begin{tikzcd}
+        & P \arrow[d,"f"]\\
+        Q \arrow[r,"g"] & R
+    \end{tikzcd}
+
+\end{center}
+there exists $h : P \to Q$ with $gh=f$.\gap If this holds for all $g$ in some class $\calE$ of epimorphisms, we say $P$ is $\calE$-\textbf{projective}. (Dually, $P$ is \textbf{injecgive} if it's projective in $\calC^{\text{op}}$).
+We'll consider the class of pointwise epimorphisms in $[\calC, \cat{Set}]$, i.e. those $\alpha$ such that $\alpha_{A}$ is surjective for all $A$.
+\end{fancydefine}
+\begin{corr}{}
+    Objects of the form $\calC(A, - )$ are pointwise projective in $[\calC, \cat{Set}]$.
+\end{corr}
+\proof In the diagram of 2.10, if $P=\calC(A,-)$, then $f$ corresponds to some $\Phi(f) \in \calR A$, but $g_{A}$ is surjective, so there exists $\Phi(h) \in QA$ mapping to $\Phi(f)$. \endproof
+\begin{fancyprop}{}
+    If $\calC$ is small, then $[\calC, \cat{Set}]$ "has enough pointwise projectives," i.e. for any object $F$, there exists a pointwise epimorphism $P \twoheadrightarrow F$ with $P$ pointwise projective.
+\end{fancyprop}
+\proof Take $P= \bigsqcup_{(A,x)}(\calC(A,-))$ where the disjoint union is over all pairs $(A,x)$ with $A \in \ob \calC$ and $x \in FA.$ Then $P$ is pointwise projective, since the $\calC(A,-)$ are. \gap But we have a natural transformation $\alpha : P \to F$ whose $(A,x)^{\text{th}}$ term\footnote{i.e. the term corresponding to $(A,x)$} is $\Psi(x) : \calC(A, - ) \to F$. And this is pointwise epic, since any $x \in FA$ is in the range of $\Psi(x)$. \endproof
+
+
+
+
+
+
+
+
+
+\section{Chapter 3: Adjunctions}
+\begin{fancydefine}{Adjunction}
+    Let $\calC$ and $\calD$ be categories. By an \textbf{adjunction} between $\calC$ and $\calD$, we mean a pair of functors $F : \calC \to \calD$, $G : \calD \to \calC$, together with a bijection between morphisms $FA \to B$ in $\calD$ and $A \to GB$ in $\calC$ which is natural in both $A$ and $B$. \gap (If $\calC$ and $\calD$ are locally small, this means that $\calD(F-, -)$ and $\calC(-, G-)$ are naturally isomorphic functor $\calC^{\text{op}} \times \calD \to \cat{Set}$.)\gap We say that $F$ is \textbf{left-adjoint} to $G$ , or $G$ is \textbf{right-adjoint} to $F$, and write $(F \dashv G)$.
+\end{fancydefine}
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item[(a)] The free group functor $F : \cat{Set} \to \cat{Gp}$ is left-adjoint to the forgetful functor $U: \cat{Gp} \to \cat{Set}$. Since functions $A \to UG$ correspond bijectively to homomorphisms $FA \to G$, one way comes from this being precisely how we defined the free group functor, the other way is just easy\footnote{Says P.T. Johnstone}.
+        \item[(b)] The forgetful functor $\cat{Top} \xrightarrow{U} \cat{Set}$ has a left adjoint $D$ which equips a set with the discrete topology, and has a right-adjoint $I$ which equips a set $A$ with the \textit{indiscrete} topology: $\{\phi, A\}$.
+        \item[(c)] The functor $\ob : \cat{Cat} \to \cat{Set}$ has a left-adjoint $D$ sending $A$ to the discrete category with objects $A$. It also has a right-adjoint sending $A$ to the category with objects $A$ and one morphism $a \to b$ for all $a, b \in A$. $D$ also has a left-adjoint, $\pi_{0}$, where $\pi_{0}\calC$ is the quotient of $\ob \calC$ by the smallest equivalence relation identifying $\dom f$ with $\cod f$ for all $f \in \mor \calC$\footnote{Because a discrete category only has objects and identity morphisms.}
+        \item[(d)] For any set $A$, we have a functor $(-) \times A : \cat{Set} \to \cat{Set}$ with a right-adjoint given by $\cat{Set}(A, - )$, since functions $B \times A \xrightarrow{f} C$ correspond under under $\lambda$-conversion to functions $B \xrightarrow{\bar f} \cat{Set}(A,C)$. where $\bar f (b)(a) = f(b,a)$. \begin{fancydefine*}{Cartesian Closed}We say a category $\calC$ with binary products defined as in 2.6(f) is \textbf{Cartesian closed} if \[ (-) \times A : \calC \to \calC \] has a right-adjoint $[A,-]$ or $(-)^{A}$ for each $A$.
+        \end{fancydefine*}
+        E.g. $\cat{Cat}$ is cartesian closed ,with $[\calC,\calD]$ being the usual functor category.
+        \item[(e)] \newlec Let $\cat{Idem}$ be the category of pairs $(A,e)$ where $A$ isa set and $e: A \to A$ satisfies $ee=e$. We have a functor $F : \cat{Set} \to \cat{Idem}$ sending $A$ to $(A,1_{A})$ and functions to themselves. We also have a functor $G : \cat{Idem} \to \cat{Set}$ sending $(A,e)$ to the set of fixed points of e: $\{ a \in A \, | \, e(a)=a\}$. And $(F \dashv G)$ since any morphism $FA \to (B,e)$ takes value in $G(B,e)$. But we also have $(G \dashv F)$ since any morphism $(A,e) \xrightarrow{f} FB$ satisfies $f(a)=f(ea)$ for all $a$, so it's determined by its effect on $G(A,e)$. But $G$ isn't faithful, so this isn't an equivalence of categories.
+        \item[(f)] Let $\mathbf{1}$ be the discrete category with one object and only one morphism. Then a left adjoint for the unique functor $\calC \to \mathbf{1}$ (if such a functor exists) picks out an \textit{initial object} $I$, i.e. an object for which there's a unique $I \to A$ for any $A \in \ob \calC$. Dually, a right adjoint for $\calC \to \mathbf{1}$ picks out a \textit{terminal object} of $\calC$. Note that, for example, in $\cat{Gp}$, these two coincide, since the trivial group is both initial and terminal. But they don't have to coincide, in $\cat{Set}$, the initial object is the empty set, but the terminal object has one element.
+        \item[(g)] Between posets with the inclusion ordering. Given a function $f: A \to B$, if $A' \subseteq A$, and $B' \subseteq B$, then it's easy to see that $Pf(A') \subseteq B'$ if and only if $A' \subseteq P^{*}f(B')$. So $(Pf \dashv P^{*}f)$ as functors between $PA$ and $PB$.
+        \item[(h)] Given sets $A$ and $B$ and a relation $R \subseteq A \times B$, we define mappings $ (-)^{r} : PA \to PB$ by $(S)^{r} = \{ b \in B \, | \, (\forall a)(a \in S \Rightarrow (a,b) \in R) \}$ and $(-)^{l} : PB \to PA$ by $(T)^{l}=\{ a \in A \, | \, (\forall b)(b \in T \Rightarrow (a,b) \in R)\}$. These are contravariant functors (= order-reversing mappings), and we have that $S \subseteq T^{l} \Leftrightarrow S \times T \subseteq R \Leftrightarrow T \subseteq S^{r}$. We say $(-)^{l}$ and $(-)^{r}$ are $\textbf{adjoint on the right}$\footnote{This is called a Galois connection, since when we take $A$ to be a field and $B$ to be the group of automorphisms of the field, and the relation $R$ is elements of the field being fixed by elements of the automorphism group, and this gives us a bijection between subfields and subgroups.}
+        \item[(i)] The contravariant power-set functor $P^{*}$ is self-adjoint on the right, since functions $A \to PB$ and $B \to PA$ both correspond bijectively to subsets $R \subseteq A \times B$ (i.e. relations).
+        \item[(j)] Similarly $(-)^{*} : \cat{Vect}_{k} \to \cat{Vect}_{k}^{\text{op}}$ is self-adjoint on the right, since linear maps $V \to W^{*}$ and $W \to V^{*}$ correspond to bilinear forms on the product $V \times W$. (Need to check naturality with linear maps $V \to V'$ and $W \to W'$ but not hard to do).
+    \end{enumerate}
+\end{exs}
+\begin{fancythm}{}
+    Given a functor \[ G : \calD \to \calC\] and $A \in \ob \calC$, let $(A \downarrow G)$ be the category whose objects are pairs $(B,f)$ where $B$ is an object of $\calD$, and $f$ is a morphism $f : A \to GB$ in $\calC$, and whose morphisms $(B,f) \to (B',f')$ are morphisms $B \xrightarrow{g} B'$ in $\calD$ which make this diagram:
+    \begin{center}
+    \begin{tikzcd}
+        A \arrow[r,"f"] \arrow[dr,"f'"] & GB \arrow[d,"Gg"] \\
+                                        & GB'
+    \end{tikzcd}
+    \end{center}
+    commute. Then specifying a left-adjoint for $G$ is equivalent to specifying an initial object of $(A \downarrow G)$ for each $A$. (Note: This type of category, $(A \downarrow G)$ is called a comma-category because of the initial (bad) notation $(A,G)$. Now we use a down arrow instead of a comma, since commas can mean anything but the name stuck.)
+\end{fancythm}
+\proof First suppose we have a left-adjoint $(F \dashv G)$. Then we want to produce an object equipped with a mapping from $A$ to $G$(that object). So we look at $\eta_{A}: A \to GFA$ correspond to $1_{FA}$ under the adjunction, then $(FA,\eta_{A})$ is initial in $(A \downarrow G)$, since if we're given $A \xrightarrow{f} GB$ then \begin{center}
+    \begin{tikzcd}
+        A \arrow[r, "\eta_{A}"] \arrow[dr, "f"] & GFA \arrow[d, "Gg"]\\ &GB
+    \end{tikzcd}
+\end{center}
+commutes if and only if $g$ is the morphism corresponding to $f$ under the adjunction. So there's a unique such $g$ for any $f$. Therefore $(FA,\eta_{A})$ must be the initial object. 
+\gap Conversely, suppose we have initial objects for the categories $(A \downarrow G)$ given by $(FA,\eta_{A})$ for each $A \in \ob \calC$. This defines what $F$ will be on objects (picking out the underlying object of this initial object i.e. $FA$). We make $F$ into a functor by saying that, given $f: A \to A'$, $Ff$ is the unique morphism making \begin{center}
+    \begin{tikzcd}
+        A \arrow[r, "\eta_{A}"] \arrow[d,"f"] & GFA \arrow[d,"GFf"] \\
+        A' \arrow[r,"\eta_{A'}"] & GFA'
+    \end{tikzcd}
+\end{center}
+commute. Functoriality of $F$ follows from uniqueness, if we have $A''$  and a morphism $f'$ $A' \to A''$, then we have $(GFf')(GFf)$ is made equal to $GF(f'f)$ where $f'f$ is the composed morphism from $A$ to $A''$. $F$ is left-adjoint to $G$ since the bijection $A \xrightarrow{f} GB$ and $FA \xrightarrow{g} B$ sends $f$ to the unique $g$ satisfying $(Gg)\eta_{A} = f$. Naturality of the bijection in $A$ was built into the definition of $F$ as a functor, and naturality in $B$ is easy. \endproof This gives us a necessary and sufficient condition for the existence of a left adjoint, which we will be using a lot.
+\begin{corr}{}
+    If $F$ and $F'$ are both left-adjoint to $G: \calD \to \calC$, then $F \cong F'$ in $[\calC, \calD]$.
+\end{corr}
+\proof $(FA,\eta_{A})$ and $(F'A, \eta_{A}')$ are both initial in $(A \downarrow G)$. So there's a unique isomorphism $alpha_{A} : (FA, \eta_{A}) \to (F'A, \eta_{A}')$ in this category. And $A \mapsto \alpha_{A}$ is natural, since any morphism from $A$ to $A'$, $f: A \to A'$, we have $alpha_{A'}(Ff)$ and $(F'f)\alpha_{A}$ are both morphisms $(FA, \eta_{A}) \rightrightarrows (F'A', \eta_{A'}'f)$ in $(A \downarrow G)$, so they're equal.
+\endproof
+\begin{fancylem}{}
+    Suppose given \[\calC \mathrel{\mathop{\rightleftarrows}^{\mathrm{F}}_{\mathrm{G}}} \calD \mathrel{\mathop{\rightleftarrows}^{\mathrm{H}}_{\mathrm{K}}} \calE \]
+    with $(F \dashv G)$ and $(H \dashv K)$. Then $(HF \dashv GK)$.
+\end{fancylem}
+\proof We have bijections between morphisms $HFA \to C$. morphisms $FA \to KC$, and then morphisms $A \to GKC$, and they're both natural in $A$ and $C$, and therefore so is their composite. \endproof
+\begin{corr}{}
+    Suppose given a commuting square 
+    \begin{center}
+        \begin{tikzcd}
+            \calC \arrow[r, "F"] \arrow[d, "G"] & \calD \arrow[d, "H"]\\ \calE \arrow[r, "K"] & \calF
+        \end{tikzcd}
+    \end{center}
+    of categories and functors, such that each of $F,G,H,K$ has a left adjoint. Then the square of left adjoints commutes up to natural isomorphism.
+\end{corr}
+\proof The two ways round the square are both left-adjoints to $HF=KG$ by (3.5), so (3.4) tells us that they must be naturally isomorphic. \endproof
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
