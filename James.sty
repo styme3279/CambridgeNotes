@@ -1,0 +1,426 @@
+\ProvidesPackage{James}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{soul}
+
+\usepackage{float}
+%math packages
+\usepackage{csquotes}
+\usepackage{marginnote}
+\usepackage{mathdots}
+\usepackage{tabularx}
+\usepackage{ifthen}
+\usepackage{parskip}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{tikz-cd}
+\usepackage{physics}
+\usepackage{wasysym}
+\usepackage{mathtools}
+%\usepackage{cntr}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+\usepackage{xparse}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{bbm}
+\renewcommand{\bf}{\textbf}
+\renewcommand{\geq}{\geqslant}
+\renewcommand{\leq}{\leqslant}
+\newcommand{\disunion}{\bigsqcup}
+\newcommand{\contradiction}{\#}
+\newcommand{\suchthat}{\text{ } | \text{ }}
+\newcommand{\gap}{\\ \hspace{0.1cm} \\}
+\newcommand{\const}{\text{const}}
+\newcommand{\widecdot}{\, \cdot \,}
+\newcommand{\half}{\frac{1}{2}}
+\newcommand{\littlehalf}{\tfrac{1}{2}}
+\newcommand{\sumfromofto}[3][1]{\sum_{#2=#1}^{#3}}
+\renewcommand{\models}{\vDash}
+\newcommand{\forces}{\Vdash}
+\newcommand{\notmodels}{\nvDash}
+\newcommand{\proves}{\vdash}
+\newcommand{\notproves}{\nvdash}
+\newcommand{\cat}[1]{\textbf{#1}}
+\newcommand{\defeq}{\vcentcolon=}
+%\renewcommand{\endproof}{\flushright $\Box$ \flushleft}
+\newcommand{\idea}{\textit{Idea.} \normalfont}
+\newcommand{\answer}{\normalfont}
+\newcommand{\transpose}{^{\text{T}}}
+\newcommand{\subk}{$_{k}$}
+\newcommand{\opp}{$^{\text{op}}$}
+\newcommand{\say}[1]{\enquote{#1}}
+
+\usepackage{tikz}
+\usetikzlibrary{chains}
+
+\makeatletter
+\DeclareRobustCommand{\rvdots}{%
+  \vbox{
+    \baselineskip4\p@\lineskiplimit\z@
+    \kern-\p@
+    \hbox{.}\hbox{.}\hbox{.}
+  }}
+\makeatother
+
+
+%Lecture Counting
+\reversemarginpar
+\newcommand{\lecnum}[1]{\leavevmode\marginnote{\emph{Lecture #1}}\ignorespaces}
+\newcounter{lecturenumber}
+\newcommand{\newlec}{\stepcounter{lecturenumber}\lecnum{\arabic{lecturenumber}}}
+
+
+%Letters
+\newcommand{\ccILC}{\mathsf{ILC}}
+\newcommand{\cccoRP}{\mathsf{coRP}}
+\newcommand{\ccZPP}{\mathsf{ZPP}}
+\newcommand{\ccBPP}{\mathsf{BPP}}
+\newcommand{\ccDSPACE}{\mathsf{DSPACE}}
+\newcommand{\ccNSPACE}{\mathsf{NSPACE}}
+\newcommand{\ccRP}{\mathsf{RP}}
+\newcommand{\ccAC}{\mathsf{AC}}
+\newcommand{\ccNC}{\mathsf{NC}}
+\newcommand{\ccNL}{\mathsf{NL}}
+\newcommand{\ccL}{\mathsf{L}}
+\newcommand{\ccPpoly}{\mathsf{P/poly}}
+\newcommand{\ccEXPSPACE}{\mathsf{NEXPSPACE}}
+\newcommand{\ccNEXPTIME}{\mathsf{NEXPTIME}}
+\newcommand{\ccP}{\mathsf{P}}
+\newcommand{\ccNP}{\mathsf{NP}}
+\newcommand{\cccoNP}{\mathsf{coNP}}
+\newcommand{\ccPH}{\mathsf{PH}}
+\newcommand{\ccPSPACE}{\mathsf{PSPACE}}
+\newcommand{\ccEXPTIME}{\mathsf{EXPTIME}}
+\newcommand{\ccVP}{\mathsf{VP}}
+\newcommand{\ccVNP}{\mathsf{VNP}}
+
+
+\newcommand{\bbH}{\mathbb{H}}
+\newcommand{\bbA}{\mathbb{A}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbZ}{\mathbb{Z}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbP}{\mathbb{P}}
+\newcommand{\bbp}{\mathbb{P}}
+\newcommand{\bbE}{\mathbb{E}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbO}{\mathbb{O}}
+\newcommand{\bbK}{\mathbb{K}}
+\newcommand{\bbT}{\mathbb{T}}
+\newcommand{\bbone}{\mathbbm{1}}
+
+\newcommand{\scrA}{\mathscr{A}}
+\newcommand{\scrB}{\mathscr{B}}
+\newcommand{\scrC}{\mathscr{C}}
+\newcommand{\scrD}{\mathscr{D}}
+\newcommand{\scrE}{\mathscr{E}}
+\newcommand{\scrF}{\mathscr{F}}
+\newcommand{\scrL}{\mathscr{L}}
+\newcommand{\scrM}{\mathscr{M}}
+\newcommand{\scrN}{\mathscr{N}}
+\newcommand{\scrP}{\mathscr{P}}
+\newcommand{\scrU}{\mathscr{U}}
+\newcommand{\scrX}{\mathscr{X}}
+\newcommand{\scrY}{\mathscr{Y}}
+\newcommand{\scrZ}{\mathscr{Z}}
+\newcommand{\scrT}{\mathscr{T}}
+\newcommand{\scrO}{\mathscr{O}}
+
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calE}{\mathcal{E}}
+
+
+
+\newcommand{\fraksl}{\mathfrak{sl}}
+\newcommand{\frakgl}{\mathfrak{gl}}
+\newcommand{\fraksp}{\mathfrak{sp}}
+\newcommand{\frakso}{\mathfrak{so}}
+\newcommand{\frakg}{\mathfrak{g}}
+\newcommand{\frakh}{\mathfrak{h}}
+\newcommand{\frakb}{\mathfrak{b}}
+\newcommand{\frakn}{\mathfrak{n}}
+\newcommand{\frakm}{\mathfrak{m}}
+\newcommand{\frakt}{\mathfrak{t}}
+\newcommand{\frake}{\mathfrak{e}}
+\newcommand{\frakf}{\mathfrak{f}}
+\newcommand{\frakp}{\mathfrak{p}}
+\newcommand{\frakq}{\mathfrak{q}}
+\newcommand{\fraka}{\mathfrak{a}}
+\newcommand{\fraki}{\mathfrak{i}}
+\renewcommand{\implies}{\Rightarrow}
+
+\newcommand{\sfS}{\mathsf{S}}
+\newcommand{\sfAC}{\mathsf{AC}}
+\newcommand{\sfMC}{\mathsf{MC}}
+\newcommand{\sfWC}{\mathsf{WC}}
+\newcommand{\sfSCC}{\mathsf{SCC}}
+\newcommand{\sfSC}{\mathsf{SC}}
+\newcommand{\sfWorC}{\mathsf{WorC}}
+\newcommand{\sfWor}{\mathsf{Wor}}
+\newcommand{\sfZFC}{\mathsf{ZFC}}
+\newcommand{\sfFST}{\mathsf{FST}}
+\newcommand{\sfI}{\mathsf{I}}
+\newcommand{\sfWI}{\mathsf{WI}}
+\newcommand{\sfZF}{\mathsf{ZF}}
+\newcommand{\sfZC}{\mathsf{ZC}}
+\newcommand{\sfCH}{\mathsf{CH}}
+\newcommand{\sfGCH}{\mathsf{GCH}}
+\newcommand{\sfZ}{\mathsf{Z}}
+\newcommand{\sfIC}{\mathsf{IC}}
+\newcommand{\sfWIC}{\mathsf{WIC}}
+\newcommand{\sfPA}{\mathsf{PA}}
+\newcommand{\sfM}{\mathsf{M}}
+\newcommand{\sfW}{\mathsf{W}}
+\newcommand{\sfKEP}{\mathsf{KEP}}
+\newcommand{\sfSurv}{\mathsf{Surv}}
+\newcommand{\sfSurvC}{\mathsf{SurvC}}
+
+\DeclareMathOperator{\crit}{crit}
+\DeclareMathOperator{\tcl}{tcl}
+\DeclareMathOperator{\ordp}{op}
+\DeclareMathOperator{\up}{up}
+\DeclareMathOperator{\Add}{Add}
+\DeclareMathOperator{\Fn}{Fn}
+\DeclareMathOperator{\func}{func}
+\DeclareMathOperator{\RVM}{RVM}
+\DeclareMathOperator{\Sat}{Sat}
+\DeclareMathOperator{\Def}{Def}
+\DeclareMathOperator{\pred}{pred}
+\DeclareMathOperator{\chr}{char}
+\DeclareMathOperator{\Mat}{Mat}
+\DeclareMathOperator{\Inn}{Inn}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\fin}{Fin}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\id}{Id}
+\DeclareMathOperator{\FP}{FP}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\interior}{interior}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\cl}{cl}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\kerr}{ker}
+\DeclareMathOperator{\spann}{span}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\bil}{Bil}
+\DeclareMathOperator{\Bil}{Bil}
+\DeclareMathOperator{\charr}{char}
+\DeclareMathOperator{\gl}{GL}
+\DeclareMathOperator{\psl}{PSL}
+\DeclareMathOperator{\GL}{GL}
+\DeclareMathOperator{\SL}{SL}
+\DeclareMathOperator{\End}{End}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\ob}{ob}
+\DeclareMathOperator{\mor}{mor}
+\DeclareMathOperator{\cod}{cod}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{Diag}
+\newcommand{\eldiag}{\diag_{\text{el}}}
+\DeclareMathOperator{\rad}{Rad}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\Mod}{Mod}
+\DeclareMathOperator{\Th}{Th}
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\Cone}{Cone}
+\DeclareMathOperator{\Sub}{Sub}
+\DeclareMathOperator{\tp}{tp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\mspec}{mspec}
+\DeclareMathOperator{\PGL}{PGL}
+\DeclareMathOperator{\Col}{Col}
+%\DeclareMathOperator{\sp}{sp}
+\DeclareMathOperator{\SO}{SO}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\scott}{scott}
+\DeclareMathOperator{\Sp}{Sp}
+\DeclareMathOperator{\gr}{gr}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\Cons}{Cons}
+\DeclareMathOperator{\Con}{Con}
+\DeclareMathOperator{\ZFC}{ZFC}
+\DeclareMathOperator{\Ord}{Ord}
+\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\cf}{cf}
+\DeclareMathOperator{\Fr}{Fr}
+\DeclareMathOperator{\Tc}{Tc}
+\DeclareMathOperator{\Trans}{Trans}
+\DeclareMathOperator{\Card}{Card}
+\DeclareMathOperator{\otp}{otp}
+
+%\DeclareMathOperator{\sl}{SL}
+
+\DeclareMathOperator{\syl}{Syl}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\sym}{Sym}
+\DeclareMathOperator{\Sym}{Sym}
+\DeclareMathOperator{\redex}{redex}
+
+\DeclareMathOperator{\normalin}{\triangleleft}
+
+\DeclareMathOperator{\homeo}{Homeo}
+
+\DeclareMathOperator{\Fit}{Fitting} %Fitting ideals
+\DeclareMathOperator{\fit}{Fitting} %Fitting ideals
+\DeclareMathOperator{\Ann}{Ann} %Annihilator
+\DeclareMathOperator{\Aut}{Aut}
+\newcommand{\actson}{\curvearrowright}
+
+\DeclareMathOperator{\dimm}{dim}
+
+\DeclareMathOperator{\Log}{Log}
+
+\theoremstyle{plain} %plain, definition, remark, I think I prefer plain
+\newtheorem{thm}{Theorem}[section]
+\newtheorem*{thm*}{Theorem}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{clm}[thm]{Claim}
+\newtheorem{ax}[thm]{Axiom}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{question}[thm]{Question}
+\newtheorem{corollary}[thm]{Corollary}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{constr}{Construction}
+\newtheorem{algorithm}[thm]{Algorithm}
+\newcommand{\examples}{\large\textbf{Examples}\normalsize}
+\theoremstyle{definition}
+\newtheorem{define}[thm]{Definition}
+\newtheorem*{define*}{Definition}
+\newtheorem{ex}[thm]{Example}
+\newtheorem*{note}{Note}
+\newtheorem*{notes}{Notes}
+\newtheorem{exs}[thm]{Examples}
+\newtheorem*{exs*}{Examples}
+\newtheorem*{ex*}{Example}
+\newtheorem{nonex}[thm]{Non-Example}
+\newtheorem{counterex}[thm]{Counterexample}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem*{remark*}{Remark}
+\newtheorem{remarks}[thm]{Remarks}
+\usepackage{framed} % useful for creating "boxes"
+\setlength{\FrameRule}{0pt}
+\setlength{\FrameSep}{3pt}
+\colorlet{shadecolor}{blue!9} % I like blue-colored boxes.
+
+\newenvironment{ctabular}[1]
+{\begin{center}
+    \begin{tabular}[#1]
+}
+{	
+    \end{tabular}
+    \end{center}	
+}
+\colorlet{shadecolor}{red!10}
+\newenvironment{fancythm}[1]
+{\colorlet{shadecolor}{black!9}
+    \begin{shaded}
+    \begin{thm}[#1]
+}
+{	
+    \end{thm}
+    \end{shaded}	
+}
+\newenvironment{fancythm*}[1]
+{\colorlet{shadecolor}{black!9}
+    \begin{shaded}
+    \begin{thm*}[#1]
+}
+{	
+    \end{thm*}
+    \end{shaded}	
+}
+\colorlet{shadecolor}{blue!8}
+\newenvironment{fancydefine}[1]
+{\begin{shaded}
+    \begin{define}[#1]
+}
+{	
+    \end{define}
+    \end{shaded}	
+}
+\colorlet{shadecolor}{blue!8}
+\newenvironment{fancydefine*}[1]
+{\begin{shaded}
+    \begin{define*}[#1]
+}
+{	
+    \end{define*}
+    \end{shaded}	
+}
+\newenvironment{fancyprop}[1]
+{\colorlet{shadecolor}{red!10}
+\begin{shaded}
+    \begin{prop}[#1]
+}
+{	
+    \end{prop}
+    \end{shaded}	
+}
+
+\newenvironment{fancylem}[1]
+{\colorlet{shadecolor}{green!10}
+\begin{shaded}
+    \begin{lem}[#1]
+}
+{	
+    \end{lem}
+    \end{shaded}	
+}
+
+\newenvironment{corr*}[1]
+{\colorlet{shadecolor}{purple!10}
+\begin{shaded}
+    \begin{cor}[#1]
+}
+{	
+    \end{cor}
+    \end{shaded}	
+}
+\newenvironment{corr}[1]
+{\colorlet{shadecolor}{purple!10}
+\begin{shaded}
+    \begin{corollary}[#1]
+}
+{	
+    \end{corollary}
+    \end{shaded}	
+}
+
+%A box to go around things
+\usepackage[most]{tcolorbox}
+\newtcolorbox{questionboxed}{
+lower separated=true,
+sharp corners,
+boxrule=1pt,
+colback=white,
+colframe=black,
+colbacktitle=black!10,
+coltitle=black,
+enhanced,
+}

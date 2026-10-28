@@ -191,7 +191,6 @@ $\Leftarrow$: Suppose $\beta_{A}$ is inverse to $\alpha_{A}$ for each $A$, then 
         \end{tikzcd}
 \end{center}
 Then $(Ff)\beta_{A} = \beta_{B} \circ \alpha_{B} (Ff)\beta_{A} = \beta_{B}(Gf)\alpha_{A} \circ \beta_{A}=\beta_{B}(Gf).$ So we have that $\beta$ is a natural transformation, and hence an inverse for $\alpha$ in $[\calC, \calD]$. \endproof
-\newpage
 \begin{fancydefine}{Equivalence of categories}
     Let $\calC$ and $\calD$ be categories, by an \textbf{equivalence} between $\calC$ and $\calD$, we mean:
     \begin{itemize}
@@ -222,9 +221,11 @@ Then $(Ff)\beta_{A} = \beta_{B} \circ \alpha_{B} (Ff)\beta_{A} = \beta_{B}(Gf)\a
         f(x), & \text{if $x \in A$ and $f$ defined}\\
         B, & \text{o/w}.
     \end{cases}
-    \] ($\rightharpoondown$ means partial function.) Then $FG = 1_{\cat{Part}}$, since what we're doing is: adding a basepoint, then throwing away that basepoint; changing the function, then throwing away those changes. $GF \neq 1_{\cat{Set$^{*}$}}$, however there is an obvious isomorphism (apparently, need to look this up). There can be no isomorphism between these categories, however, since isomorphisms preserve isomorphism classes within categories, and we have $\{\}$ in \cat{Part} a $1$-object isomorphism class, and no such $1$-object isomorphism class in $\cat{Set$^{*}$}$
+    \] ($\rightharpoondown$ means partial function.) Then $FG = 1_{\cat{Part}}$, since what we're doing is: adding a basepoint, then throwing away that basepoint; changing the function, then throwing away those changes. $GF \neq 1_{\cat{Set$^{*}$}}$, however there is an obvious isomorphism (apparently, need to look this up). 
+    There can be no isomorphism between these categories, however, since isomorphisms preserve isomorphism classes within categories, and we have $\emptyset$ in \cat{Part} a $1$-object isomorphism class, and no such $1$-object isomorphism class in $\cat{Set$^{*}$}$
     \item[(b)] Let \cat{fdVect$_{k}$} be the category of finite dimensuonal vector spaces over $k$. \gap Then \[\cat{fdVect$_{k}$} \simeq \cat{fdVect$_{k}^{\text{op}}$} \] via \[ F = (-)^{*} : \cat{fdVect$_{k}$} \to \cat{fdVect$_{k}^{\text{op}}$}\] and \[ G = (-)^{*} : \cat{fdVect\subk}^{*} \to \cat{fdVect\subk\opp}. \] $\alpha$ and $\beta$ are both the natural transformation of $1.7(a)$.
-    \item[(c)] $\cat{fdVect\subk} \simeq \cat{Mat$_{k}$}$ of $1.3(j)$. via \[ F : \cat{Mat\subk} \to \cat{fdVect\subk} \] which sends $n$ to $k^{n}$ and the matrix to the linear map $k^{n} \to k^{p}$, and \[ G: \cat{fdVect\subk} \to \cat{Mat\subk} \] where we havet o choose a basis for each finite dimensional vector space. Then $G(V) = \dim V$ and $G(V \xrightarrow f W) = \text{ Matrix of $f$ in a chosen basis}$. Then $GF=1_{\cat{Mat\subk}}$ provided we make the choice of the standard basis, and $FG \simeq 1_{\cat{fdVect\subk}}$ since chosen bases define an isomorphism: \[ k^{\dim V} \to V \] which are natural on $V$.
+    \item[(c)] $\cat{fdVect\subk} \simeq \cat{Mat$_{k}$}$ of $1.3(j)$. via \[ F : \cat{Mat\subk} \to \cat{fdVect\subk} \] which sends $n$ to $k^{n}$ and the matrix to the linear map $k^{n} \to k^{p}$ given by the matrix, and \[ G: \cat{fdVect\subk} \to \cat{Mat\subk} \] where we have to choose a basis for each finite dimensional vector space. 
+    Then $G(V) = \dim V$ and $G(V \xrightarrow f W) = \text{ Matrix of $f$ in a chosen basis}$. Then $GF=1_{\cat{Mat\subk}}$ provided we make the choice of the standard basis, and $FG \simeq 1_{\cat{fdVect\subk}}$ since chosen bases define an isomorphism: \[ k^{\dim V} \to V \] which are natural on $V$.
 \end{enumerate}
 \begin{fancydefine}{Properties of Functors}
     Let \[ F : \calC \to \calD\] be a functor.
@@ -295,12 +296,11 @@ This says that any locally small category is equivalent toa full subcategory of 
     If $\calC$ is locally small, a functor \[ F: \calC \to \cat{Set}\] is called \textbf{representable} if it is isomorphic to $\calC(A, -)$ for some $A \in \ob \calC$. \gap By a \textbf{representation} of $F$, we mean a pair $(A,x)$ where $A \in \ob \calC$. and $x \in FA$ is such that $\Psi(x)$ is a natural isomorphism $\calC(A,-) \to F$. ($x$ is called a \textbf{universal element} of $F$).
 \end{fancydefine}
 \corollary If $(A,x)$ and $(B,y)$ are both representations of a functor $F$, then there is a unique isomorphism $f : A \to B$ which is compatible with $F$, i.e. such that \[ Ff(x)=y.\]
-\proof (Ff)(x)=y is equivalent to saying that 
+\proof $(Ff)(x)=y$ is equivalent to saying that 
 \begin{center}
 
     \begin{tikzcd}[column sep=scriptsize]
-        \calC(B, -) \arrow[dr, "\Psi(y)", swap] \arrow[rr, "\calC (f{,} -)"]
-        & & \calC(A, -) \arrow[dl, "\Psi(x)"] \\
+        \calC(B, -) \arrow[dr, "\Phi(y)", swap] \arrow[rr, "\calC (f{,} -)"] & & \calC(A, -) \arrow[dl, "\Psi(x)"] \\
         & F
     \end{tikzcd}
 \end{center}
@@ -357,7 +357,7 @@ The functors $\calC(A, -) : \calC \to \cat{Set}$ preserve monomorphisms by defin
     \end{tikzcd}
 
 \end{center}
-there exists $h : P \to Q$ with $gh=f$.\gap If this holds for all $g$ in some class $\calE$ of epimorphisms, we say $P$ is $\calE$-\textbf{projective}. (Dually, $P$ is \textbf{injecgive} if it's projective in $\calC^{\text{op}}$).
+there exists $h : P \to Q$ with $gh=f$.\gap If this holds for all $g$ in some class $\calE$ of epimorphisms, we say $P$ is $\calE$-\textbf{projective}. (Dually, $P$ is \textbf{injective} if it's projective in $\calC^{\text{op}}$).
 We'll consider the class of pointwise epimorphisms in $[\calC, \cat{Set}]$, i.e. those $\alpha$ such that $\alpha_{A}$ is surjective for all $A$.
 \end{fancydefine}
 \begin{corr}{}
@@ -440,10 +440,361 @@ commute. Functoriality of $F$ follows from uniqueness, if we have $A''$  and a m
     of categories and functors, such that each of $F,G,H,K$ has a left adjoint. Then the square of left adjoints commutes up to natural isomorphism.
 \end{corr}
 \proof The two ways round the square are both left-adjoints to $HF=KG$ by (3.5), so (3.4) tells us that they must be naturally isomorphic. \endproof
+\newlec Given an adjunction $(F \dashv G)$, we saw in the proof of 3.3 that the morphisms $\eta_{A} : A \to GFA$ corresponding to $1_{FA}$ form a natural transformation $1_{\calC} \to GF$. We call $\eta$ the \textbf{unit} of the adjunction. Dually, we have the \textbf{counit} $\varepsilon: FG \to 1_{\calD}$, where $\varepsilon_{\calB} : FGB \to B$ correspond to $1_{GB}$.
+\begin{fancythm}{}
+    Given functors \[ F: \calC \to \calD\] and \[G : \calD \to \calC,\] specifying an adjunction $(F \dashv G)$ is equivalent to specifying natural transformations \[ \eta : 1_{\calC} \to GF\] and \[ \varepsilon: FG \to 1_{\calD}.\] satisfying the triangular identity \begin{center}
+        \begin{tikzcd}
+            F \arrow[r,"F \eta"] \arrow[rd, "1_{F}"]& FGF \arrow[d,"\varepsilon_{F}"]\\
+            & F
+        \end{tikzcd}
+    \end{center}
+    \begin{center}
+        \begin{tikzcd}
+            G \arrow[r, "\eta_{G}"] \arrow[rd, "1_{G}"] & GFG \arrow[d,"G \varepsilon"]\\
+            & G
+        \end{tikzcd}
+    \end{center}
+    This is sometimes taken as the \textit{definition} of an adjunction.
+\end{fancythm}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item[$\Rightarrow$] Given the adjunction, we've seen how to define $\eta$ and $\varepsilon$, so we need to verify the triangular identity. But $\varepsilon_{FA}$ corresponds to $1_{GFA}$, so by naturality $\varepsilon_{FA}(F\eta_{A})$ corresponds to $1_{GFA} \eta_{A} = \eta_{A}$. But $1_{FA}$ corresponds to $\eta_{A}$, so $\varepsilon_{FA}(F \eta_{A}) = 1_{FA}$. The other identity is dual.
+    \item[$\Leftarrow$] Given $\eta$ and $\varepsilon$, we map $A \xrightarrow{f} GB$ to the composite \[ \Phi(f)=FA \xrightarrow{Ff} FGB \xrightarrow{\varepsilon_{B}} B,\] 
+    \item[] and $FA \xrightarrow{g} B$ to the composite \[ \Psi(g) = A \xrightarrow{\eta_{A}} GFA \xrightarrow{Gg} GB.\] $\Phi$ and $\Psi$ are natural in $A$ and $B$ since $\eta$ and $\varepsilon$ are natural, so we need to verify that $\Psi \Phi$ and $\Phi \Psi$ are identities. These are dual so we only need verify one. We have $\Psi \Phi(f)$ is the composite: \[ A \xrightarrow{\eta_{A}} GFA \xrightarrow{GFf} GFGB \xrightarrow{G \varepsilon_B} GB\]
+    \[ = A \xrightarrow{f} GB \xrightarrow{\eta_GB} GFGB \xrightarrow{G \epsilon_B} GB = A \xrightarrow{f} GB.\]
+\end{enumerate}
+The other verification is dual. \endproof
+In 1.9 we had isomorphisms \[ \alpha : 1_{\calC} \to GF\] and \[ beta : FG \to 1_{\calD}.\] Do these satisfy the triangular identity? Well, no, but they can if we choose correctly.
+\begin{fancyprop}{}
+    Suppose we had an equivalence $(F,G,\alpha, \beta)$ as in 1.9, then there exist natural isomorphisms \[ \alpha' : 1_{\calC} \to GF\] and \[ \beta' : FG \to 1_{\calD} \] which \textit{do} satisfy the triangular identities. In particular $(F \dashv G)$ and $(G \dashv F)$.
+\end{fancyprop}
+\proof Actually, we can fix either one of them and only change the other to get the triangular identity. We define $\alpha' = \alpha$, and $\beta'$ to be the composite \[ FG \xrightarrow{(FG \beta)^{-1}} FGFG \xrightarrow{(F \alpha_{G})^{-1}} FG \xrightarrow{\beta} 1_{\calD}.\] Note that $FG \beta = \beta_{FG}$ since \begin{center}
+    \begin{tikzcd}
+        FGFG \arrow[r, "FG \beta"] \arrow[d, "\beta_{FG}"]& FG \arrow[d, "\beta"]\\
+        FG \arrow[r, "\beta"] & 1_{\calD} 
+    \end{tikzcd}
+\end{center}
+commutes by the naturality of $\beta$, and $\beta$ is monic. Dually $GF\alpha = \alpha_{GF}$. For the triangular identities, consider the diagrans
+\begin{center}
+ \Large COMING SOON \normalsize
+\end{center}
+where the squares commute by naturality of $\beta^{-1}$ and $\alpha^{-1}$ respectively. So by (3.7) we have $(F \dashv G)$. But $(\beta')^{-1}$ and $(alpha')^{-1}$ also satisfy the triangular identities, so we have $(G \dashv F)$. \endproof
+\begin{fancylem}{}
+    Suppose given an adjunction $(F : \calC \to \calD \dashv G : \calD \to \calC)$ with counit $\varepsilon: FG \to 1_{\calD}$. Then \begin{enumerate}
+        \item[(i)] $\varepsilon$ is pointwise epic $\Leftrightarrow$ $G$ is faithful.
+        \item[(ii)] $\varepsilon$ is an isomorphism $\Leftrightarrow$ $G$ is full and faithful  
+    \end{enumerate}
+\end{fancylem}
+\proof \hspace{0.1cm} \begin{enumerate} \item[(i)] Given $B \xrightarrow{g} B'$, the composite $g \varepsilon_{B}$ corresponds under the adjunction to \[Gg : GB \to GB'.\footnote{Pops out of the proof of 3.7 apparently}\] \gap
+So $g \mapsto g \varepsilon_{B}$ is injective on morphisms $B \to B'$ iff $G$ is injective. This is true for all $B,B' \Leftrightarrow \varepsilon$ is pointwise epic $\Leftrightarrow G$ is faithful.  
 
+\item[(ii)]Similarly $G$ is full and faithful $\Leftrightarrow g \mapsto g \varepsilon_{B}$ is bijective on morphisms $B \to B'$ for all $B$ and $B'$. This clearly holds if $\varepsilon_{B}$ is an isomorphism for all $B$. \gap
 
+Conversely, if the condition holds, there's a unique $g: B \to FGB$ such that $\varepsilon_{B}g = 1_{B}.$ And $\varepsilon_{B} g \varepsilon_{B} = \varepsilon_{B}$ so $g \varepsilon_{B}$ and $1_{FGB}$ have the same composite with $\varepsilon_{B}$, so they're equal.
+\end{enumerate}
+\endproof
+\begin{fancydefine}{Reflection}
+    We call an adjunction satisfying the conditions of 3.9(ii) a \textbf{reflection}. By a \textbf{reflective subcategory} of $\calC$, we mean a full subcategory $\calD$ for which the inclusion has a left adjoint. \gap 
+    Note: If $(F: \calC \to \calD \dashv G: \calD \to \calC)$ is a reflection, then by 1.12, $G$ induces an equivalence between $\calD$ and the full subcategory of $\calC$ on objects in the image of $G$, and this subcategory is reflexive.
+\end{fancydefine}
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item[(a)] \cat{AbGp} is reflective in \cat{Gp}. The left adjoint to the inclusion sends $G$\footnote{A group, not a functor.} to its \textit{abelianisation} $\frac{G}{G'}$, where $G'$ is the subgroup of $G$ generated by all commutators $[x,y]=x y x^-1 y^-1$.\gap Note that any homomorphism $G \to A$ where $A$ is abelian factors uniquely through \[ G \to \frac{G}{G'}\footnote{The idea is that we're looking for the \say{best possible approximation} to $G$ which exists in the subcategory, and we have one here which is given by the abelianisation.}.\]
+        \item[(b)] Recall that an abelian group $A$ is \textit{torsion} if all its elements have finite order, and \textit{torsion-free} if the only element of finite order is the identity. For a general $A$ the elements of finite order form a subgroup $A_{t}$, and any homomorphism $B \to A$ where $B$ is a torsion group must factor through the inclusion $A_{t} \hookrightarrow A$. So this is a coreflection, and $A \mapsto \frac{A}{A_{t}}$ is a reflection.
+        \item[(c)] \newlec The category \cat{KHaus} of compact Hausdorff spaces is reflective in \cat{Top}, the left-adjoint being the \underline{Stone-\v Cech compactification} functor $\beta$. We'll construct $\beta$ in chapter 4.
+        \item[(d)] Recall that a subset $C$ of a space $X$ is called \textit{sequentially closed} if $x_{n} \in C$ for all $n$, and $x_{n} \to x$ $\Rightarrow x \in C$. We say $X$ is a \textit{sequential space} if all sequentially closed subsets are closed. The full subcategory \cat{Seq} of sequential spaces if reflective in \cat{Top}: Given $X$, let $X_{s}$ denote the same set, but retopologised so that every sequentially closed subset is closed.The identity mapping from $X_{s} \to X$ is the counit of the adjunction.
+        \item[(e)] The category \cat{Preord} of small preorders is reflective in \cat{Cat}. The reflector sends $\calC$ to $\frac{\calC}{\simeq}$, where $\simeq$ is the congruence identifying all paralle pairs in $\calC$.
+        \item[(f)] For any space $X$, the poset $\Omega(X)$ of open subsets of $X$ is corefelctive in $PX$. Since if $U$ is open and $A \subseteq X$ is arbitrary, then $U \subseteq A$ if and only if $U \subseteq A^{0}$ (so $(-)^{0}$ is right-adjoint to $\Omega(X) \hookrightarrow PX$). Dually, the poset of closed subsets is reflective in $PX$. 
+    \end{enumerate}
+\end{exs}
+\section{Limits and Colimits}
+To define (co)limits, we need a formal definition of a diagram in a category.
+\begin{fancydefine}{Diagram}
+    Let $J$ be a category (almost always small, often finite). By a \textbf{diagram} of shape $J$ in $\calC$, we mean a functor \[ D : J \to \calC. \] We call the objects $D(j), j \in \ob J$, \textbf{vertices} of $D$. and the morphisms $D(\alpha)$, $\alpha \in \mor J$, \textbf{edges} of $D$.
+\end{fancydefine}
+For example, let $J$ be the category 
+\begin{center}
+    \begin{tikzcd}
+        \cdot \arrow[r] \arrow[d] \arrow[rd] & \cdot \arrow[d] \\ \cdot \arrow[r] & \cdot 
+    \end{tikzcd}
+\end{center}
+A diagram of shape $J$ in $\calC$ is a commutative square. If $J'$ is 
+\begin{center}
+    \begin{tikzcd}
+        \cdot \arrow[r] \arrow[d] \arrow[rd, shift right =0.5ex] \arrow[rd, shift left=0.5ex] & \cdot \arrow[d] \\ \cdot \arrow[r] & \cdot 
+    \end{tikzcd}
+\end{center}
+Then a diagram of shape $J'$ is a not-necessarily-commutative square.
+\begin{fancydefine}
+    Given a diagram $D : J \to \calC$, a \textbf{Cone over} $\mathbf{D}$ consists of an object $A$ (its \textbf{apex}) together with morphisms $\lambda_{j} : A \to D(j)$ its \textbf{legs} for each $j \in \ob J$, such that \begin{center}
+        \begin{tikzcd}
+            & A \arrow[dl, "\lambda_j"] \arrow[dr, "\lambda_j'"] &\\
+            D(j) \arrow[rr, "D(\alpha)"] & & D(j')
+        \end{tikzcd}
+    \end{center}
+    commutes for each $\alpha \in \mor J$. So it basically overall will look like a cone.
+    \gap
+    \begin{define*}{Morhism of Cones/Limit}
+    A \textbf{morphism of cones} $(A, (\lambda_{j} \, | \, j \in \ob J)) \to (B, (\mu_{j} \, | \, j \in \ob J))$ is a morphism $A \xrightarrow{f} B$ such that \begin{center} \begin{tikzcd}
+        A \arrow[dr, "\lambda_j"] \arrow[rr, "f"] & & B \arrow[dl,"\mu_j"]\\
+        & D(j) &
+    \end{tikzcd}
+    \end{center} commutes for all $j$. We write $\Cone (D)$ for the category of cones over $D$. A \textbf{Limit} for $D$ is a terminal object of $\Cone (D)$, if this exists. Dually, we have the notion of a \textbf{cone under} a diagram, and a \textbf{colimit} for $D$ is an \textit{initial} cone under $D$.\gap 
+    Note that a cone over $D$ with apex $A$ is the same thing as a natural transformation \[ \Delta A \to D \] where $\Delta A$ is the \textbf{Constant diagram} with all vertices $A$ and all edges $1_{A}$. \gap 
+    $\Delta$ is a functor $\calC \to [J,\calC]$ and $\Cone (D)$ is the arrow category $(\Delta, \downarrow, D)$ defined as in (3.3). \gap 
+    So $\calC$ has limits for all diagrams of shape $J$ $\Leftrightarrow$ $\Delta : \calC \to [J, \calC]$ has a right adjoint, by (3.3).
+\end{define*}
+\end{fancydefine}
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item[(a)] If $J = \emptyset$, there's a unique diagram of shape $J$ in any category. This diagram is drawn below: \gap \hspace{0.1cm} \gap \hspace{0.1cm} \gap \hspace{0.1cm} \gap \hspace{0.1cm} \gap A cone over it is just an object of $\calC$ (the apex), so $\Cone(D) \cong \calC$. So a limit for $D$ is a terminal object for $\calC$.
+        \item[(b)] If $J$ is the discrete category with two objects, a diagram of shape $J$ is a pair of objects $A,B$. A cone over it is a \textit{span:} \begin{center}
+            \begin{tikzcd}[column sep = small]
+                & C \arrow[dl] \arrow[dr] &\\
+                A & & B
+            \end{tikzcd}
+        \end{center}
+        A limit cone is a categorical product:
+        \begin{center}
+            \begin{tikzcd}[column sep = small]
+                & A \times B \arrow[dl, "\pi_1"] \arrow[dr, "\pi_2"] &\\
+                A & & B
+            \end{tikzcd}
+        \end{center}
+        as defined in 2.6(f). Dually a colimit for $A,B$ is a coproduct $A+B$.
+        \item[(c)] IF $J$ is any discrete category, a diagram of shape $J$ is a family $(A_{j}| j \in J)$ of objects, and a (co)limit for it is a (co)product: \begin{align*}
+            \Pi_{j \in J} A_{j} & & \sum_{j \in J} A_{j}
+        \end{align*}
+        \item[(d)] If $J$ is \[\cdot \rightrightarrows \cdot,\] a diagram of shape $J$ is a parallel pair $f,g : A \rightrightarrows B$. A cone over this diagram consists of 
+        \begin{center}
+            \begin{tikzcd}[column sep = small]
+                & C \arrow[dl, "h"] \arrow[dr, "k"] &\\
+                A & & B
+            \end{tikzcd}
+        \end{center}
+        satisfying $fh=k=gh$, or equivalently a morphism $C \xrightarrow{h} A$ satisfying $fh=gh$. So a limit for $f,g : A \rightrightarrows B$ is an equalizer for $(f,g)$ as defined in 2.6(g) (and a colimit for it is a coequalizer).
+        \item[(e)] Let $J$ be the category \begin{center}
+            \begin{tikzcd}
+                & \cdot \arrow[d]\\
+                \cdot \arrow[r] & \cdot
+            \end{tikzcd}
+        \end{center}
+        So a diagram of shape $J$ is a \textit{cospan}:
+        \begin{center}
+            \begin{tikzcd}
+                & A \arrow[d, "f"]\\
+                B \arrow[r, "g"] & C
+            \end{tikzcd}
+        \end{center}
+        A cone over it has three legs\begin{center} \begin{tikzcd}
+            D \arrow[r,"h"] \arrow[d, "k"] \arrow[dr, "e"] & A\\
+            B & C
+        \end{tikzcd}
+    \end{center}
+        but $e$ is redundant, since $e=fh=gk$. So it's a span completing $(f,g)$ to a commutative square. A limit is called a \textit{pullback} of $(f,g)$. Dually, colimits for diagrams of shape \begin{center}
+            \begin{tikzcd}
+                \cdot \arrow[r] \arrow[d] & \cdot\\
+                \cdot
+            \end{tikzcd}
+        \end{center}
+            are called \textit{pushouts}. \newlec In any category with binary products and equalizers, we can construct a pullback for \begin{center}
+                \begin{tikzcd}
+                    & A \arrow[d,"f"]\\
+                    B \arrow[r,"g"] & C\\
+                \end{tikzcd}
+            \end{center}
+            by first forming the product $A \times B$ and then forming the equalizer of $f\pi_{1},g\pi_{2} : A \times B \rightrightarrows C$.
+        \item[(f)] Let $M$ be the 2-element monoid $\{1,e\}$ with $e^{2}=e$. A diagram of shape $M$ is an object equipped with an idempotent endomorphism. A cone over it is $B \xrightarrow{f} A$ satisfying $ef=f$. So a limit (resp. colimit) for this diagram is the monic (resp. epic) part of a splitting of $e$ by $2.14$. (I.e. the maps to $A$ to the object forming the cone over this diagram split $e$). Note that in 3.2(e) the functor $F : \cat{Set} \to [M, \cat{Set}]$ is just $\Delta$. So this explains why its left and right adjoints coincide.
+        \item[(g)] Let $\bbN$ be the ordered set of natural numbers. A diagram of shape $\bbN$ is a \textbf{direct sequence} \[ A_{0} \to A_{1} \to A_{2} \to A_{3} \to A_{4} \to A_{5} \to A_{6} \to A_{7} \to A_{8} \to A_{9} \to A_{10} \to A_{11} \to A_{12} \to A_{13} \to A_{14} \to A_{15} \to A_{16} \to A_{17} \to A_{18} \to \]
+        A colimit for it is a \textbf{direct limit} $A_{\infty}$ equipped with morphisms $A_{n} \to A_{\infty}$ for all $n$ compatible with the transition morphisms $A_{n} \to A_{n+1}$ and universal among such. \gap Dually, an \textbf{inverse sequence} is a diagram of shape $\bbN^{\text{op}}$, and a limit for it is an \textbf{inverse limit}. For example, an infinite dimensional CW-complex $X$ can be viewed as the direct limit of its $n$-dimensional skeletons $X_{n}$. \gap Also, the ring of $p$-adic integers is the limit of the inverse sequence of rings \[ \dots \to \frac{\bbZ}{p^{2}\bbZ} \to \frac{\bbZ}{p\bbZ} \to \frac{\bbZ}{\bbZ}. \]
+    \end{enumerate}
+\end{exs}
+\begin{fancylem}{}
+    \begin{enumerate}
+        \item[(i)] If $\calC$ has equalizers and small products, then $\calC$ has all small limits.
+        \item[(ii)] If $\calC$ has equalizers and all finite products, then $\calC$ has all finite limits.
+        \item[(iii)] If $\calC$ has pullbacks and a terminal object, then $\calC$ has all finite limits.
+    \end{enumerate}
+\end{fancylem}
+\proof \hspace{0.1cm}\begin{enumerate}
+    \item[(i) \& (ii)] Suppose given $D: J \to \calC$. Form the products $P = \Pi_{j \in \ob J} D(j)$ and $Q = \Pi_{\alpha \in \mor \calC} D(\cod \alpha)$. We have morphisms \[ f,g : P \rightrightarrows Q\] defined by $\pi_{\alpha}f = \pi_{\cod \alpha}$ and $\pi_{\alpha}g=D(\alpha) \pi_{\dom \alpha}.$ Let $E \xrightarrow{e} P$ be an equalizer for $(f,g)$ and define $\lambda_{j} = \pi_{J}e : E \to D(j)$. 
+    \gap These both form a cone over $D$, since if  $\alpha : j \to j'$, we have \[D(\alpha)\lambda_{j} = D(\alpha)\pi_{j}e = \pi_{\alpha}ge = \pi_{\alpha}fe = \pi_{j'}e = \lambda_{j'}.\] Then given any cone $(A, (\mu_{j} | j \in \ob J))$ over $D$, we have a unique $\mu : A \to P$ with $\pi_{j} \mu = \mu_{j}$ with $\pi_{j}\mu = \mu_{j}$ for all $j$. Then \[ \pi_{\alpha}f\mu = \mu_{\cod \alpha} = D(\alpha) \mu_{\dom \alpha} = \pi_{\alpha} g \mu\] for all $\alpha$, so $\mu$ factors uniquely through $e$.
+    \item[(iii) $\Rightarrow$ (ii)] If $1$ is terminal in $\calC$, the pullback of \begin{center}
+        \begin{tikzcd}
+            & A \arrow[d]\\
+            B \arrow[r] & 1\\
+        \end{tikzcd}
+    \end{center}
+    has the universal property of a product on $A\times B$. Then we can form the product of any finite number of objects $\Pi_{i = 1}^{n} A_{j}$ inductively. Then all that is left is to form the equalizer for $f, g : A \rightrightarrows B$. Consider the pullback of \begin{center}
+        \begin{tikzcd}
+            & A \arrow[d, "(1_{A} {,} f)"]\\
+            A \arrow[r, "(1_{A} {,} g)"] & A \times B
+        \end{tikzcd}
+    \end{center}
+    Any conve over this has its two legs $C \rightrightarrows A$ being equal, so a pullbacj for it is also an equalizer for $(f,g)$.
+\end{enumerate}
+\endproof
+\begin{fancydefine*}{Complete}
+    We say $\calC$ is \textbf{(co)complete} if it has all small (co)limits.
+\end{fancydefine*}
+We know that $\cat{Set}$, $\cat{Gp}$, \cat{Top} are complete and cocomplete.
+\begin{fancydefine}{}\hspace{0.1cm}
+    \begin{enumerate}
+    \item[(a)] We say $G$ \textbf{preserves} limitsof shape $J$ if, given $D: J \to \calD$, and a limit cone $(L, (\lambda_{j} \, | \, j \in \ob J))$ for $D$, the cone $(GL, (G\lambda_{j} \, | \, j \in \ob J))$ is a limit for $GD$.
+    \item[(b)] We say $G$ \textbf{reflects} limits of shape $J$ if, given $D : J \to \calD$, and a cone $(L, (\lambda j))$ such that $(GL, (G\lambda_{j}))$ is a limit for $GD$, then $(L, (\lambda_{j}))$ is a limit for $D$.
+    \item[(c)] We say $G$ \textbf{creates} limits of shape $J$ if, given $D : J \to \calD$ and a limit $(M, (\mu_{j}))$ for $GD$ in $\calC$, there exists a cone $(L, (\lambda_{j}))$ over $D$ such that $(GL, (G\lambda_{j})) \cong (M, (\mu_{j}))$ in $\Cone(GD)$ and any such conve is a limit for $D$\footnote{There is another common definition which requires a unique lifting to limits.}.
+    \end{enumerate}
+    Normally, in $(a)$ we assume that $\calD$ has all limits of shape $J$, and in $(b)$ and $(c)$ we assume $\calC$ has them. With these assumptions \[ \text{$G$ creates limits of shape $J$} \Leftrightarrow \text{$G$ preserves and reflects them, and $\calD$ has them.} \]
+\end{fancydefine}
+\begin{corr}{}
+    In any of the statements of 4.4, we can replace both instances of $\calC$ has by either \say{$\calD$ has and $G: \calD \to \calC$ preserves} or \say{$\calC$ has and $G: \calD \to \calC$ creates.}
+\end{corr}
+\proof Omitted. Not hard.
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item[(a)] The forgetful functor $U$ : \cat{Gp} $\to$ \cat{Set} creates all small limits. It doesn't preserve coproducts or (therefore) colimits.
+        \item[(b)] The forgetful functor $U : \cat{Top} \to \cat{Set}$ preserves all small limits and colimits.
+        \item[(c)] The inclusion $\cat{AbGp} \to \cat{Gp}$ reflects coproducts, but doesn't preserve them (since products in \cat{AbGp} are direct sums, but in \cat{Gp} they are free groups (which are \textit{never} abelian (unless one summand is trivial))). But the coproduct of ${1}$ and $H$ is $H$ in both categories.
+        \item[(d)] Suppose \newlec $\calD$ has limits of shape $J$. Then, for any $\calC$, the functor category $[\calC, \calD]$ has limits of shape $J$, and the forgetful functor $[\calC, \calD] \to \calD^{\ob \calC}$ creates them. Given a diagram $D: J \to [\calC, \calD]$, we can regard it as a functor $J \times \calC \xrightarrow{\calD} \calD$; for each $A \in \ob \calC$, $\calD( - , A)$ is a diagram of shape $J$ in $\calD$, and so has a limit $(LA, (\lambda_{j,A} | j \in \ob J))$. Given any $f: A \to B$ in $\calC$, the composites $LA \xrightarrow{\lambda_{j,A}} \calD(j,A) \xrightarrow{\calD(j,f)} \calD(j,B)$ form a cone over $\calD(-, B)$, and so induce a unique $Lf : LA \to LB$. As usual, uniqueness implies that $L$ is a functor $\calC \to \calD$, and it's the unique lifting of $(LA, A \in \ob \calC)$ to an object of $[\calC, \calD]$ which makes the $\lambda_{j,A}$ into natural transformations. This is a limit conve in $[\calC, \calD]$ because given any cone $(M, (\mu_{j, - } | j \in \ob J))$ over $\calD$ in $[\calC, \calD]$, the $\mu_{j,A}$ form a cone over $\calD(-,A)$, so we get a unique $\nu_{A} : MA \to LA$ such that $\lambda_{j,A}\nu_{A} = \mu_{j,A}$ for all $A$. And the $\nu$'s form a natural transformation $M \to L$ because given any $f: A \to B$ in $\calC$, $\nu_{B}(Mf)$ and $(Lf)\nu_{A}$ are factorizations of the same cone over $\calD(-, B)$ through its limits.
+    \end{enumerate}
+\end{exs}
+\begin{remark}
+    Note that $A \xrightarrow{f} B$ is monic if and only if \begin{center}
+        \begin{tikzcd}
+            A \arrow[r, "1_A"] \arrow[d, "1_A"] & A \arrow[d, "f"]\\
+            A \arrow[r, "f"] & B
+        \end{tikzcd}
+    \end{center}
+    is a pullback. Hence if $\calD$ has pullbacks, any monomorphism in $[\calC, \calD]$ is a pointwise monomorphism, since this pullback must be constructed pointwise by 4.7(d).
+\end{remark}
+\begin{fancylem}{}
+    Suppose $G : \calD \to \calC$ has a left adjoint. Then $G$ preserves all limits which exist in $\calD$.
+\end{fancylem}
+\proof We give two proofs for this, the second proves the claim and the first indicates why we should believe the claim. \gap \textit{Proof 1.} Suppose $\calC$ and $\calD$ both have limits of shape $J$. If $(F \dashv G)$, then the diagram:
+\begin{center}
+    \begin{tikzcd}
+        \calC \arrow[r, "F"] \arrow[d, "\Delta"] & \calD \arrow[d, "\Delta"]\\
+        {[J,\calC]} \arrow[r, "{[J , F]}"] & {[J,\calD]}
+    \end{tikzcd}
+\end{center}
+commutes, But all functors in this diagram have right adjoints, so by (3.6), we know that 
+\begin{center}
+    \begin{tikzcd}
+        {[J,\calD]} \arrow[r, "{[J,G]}"] \arrow[d, "\lim_{J}"] & {[J, \calC]} \arrow[d,"\lim_{J}"]\\
+        \calD \arrow[r,"G"] & \calC
+    \end{tikzcd}
+\end{center}
+commutes up to isomorphism. So $G$ preserves limits of shape $J$. \endproof 
+\textit{Proof 2.} Suppose we are given $D: J \to \calD$ and a limit con $(L, (\lambda_{j} \, | \, j \in \ob J))$ over it. Given a cone over $GD$ with apex $A$ and legs $\mu_{j} : A \to GD(j)$, the $\mu_{j}$ correspond to morphisms $\bar \mu_{j}: FA \to D(j)$, which form a cone over $D$ by naturality of the adjunction. So we get a unique $\bar \mu : FA \to L$ with $\lambda_{j} \bar mu = \bar \mu_{j}$ for all $j$. That is to say, such that $(G \lambda_{j})\mu = \mu_{j}$ for all $j$, where $\mu : A \to GL$ corresponds to $\bar \mu$. \endproof
+Supposing that $\calD$ has all limits, and $G :\ calD \to \calC$ preserves all limits, we'd expect $G$ to have a left adjoint.
+\begin{fancylem}{}
+    Suppose $\calD$ has all limits and $G : \calD \to \calC$ preserves limits of shape $J$. Then for any $A \in \ob \calC$, $(A \downarrow G)$ has limits of shape $J$, and the forgetful functor $U : (A \downarrow G) \to \calD$ creates them.
+\end{fancylem}
+\proof Suppose we are given $D : J \to (A \downarrow G)$, write each $D(j)$ as $(UD(j), f_{j})$ where $f_{j} : A \to G \cup D(j)$. Let $(L,(\lambda_{j} \, | \, j \in \ob J))$ be a limit for $UD$ in $\calD$, then $(GL, (G\lambda_{j} \, | \, j \in \ob J))$ is a limit for $GUD$. But the edges of $D$ are morphisms in $(A \downarrow G)$, so the $f_{j}$ form a cone over $GUD$. So we get a unique $f: A \to GL$ such that $(G \lambda_{j})f = f-{j}$ for all $j$. In other words, we have a unique lifting of $L$ to an object $(L,f)$ of $(A \downarrow G)$ which makes the $\lambda_{j}$'s into a cone over $D$ with apex $(L,f)$. Given any cone over $D$ with apex $(M,g)$, it's a cone over $UD$ with apex $M$, and so we get a unique $h: M \to L$; this is a morphism in $(A \downarrow G)$ since both $(Gh)g$ and $f$ are factorizations through $L$ of the same cone over $UD$. \endproof
+\begin{fancylem}{}
+    Let $\calC$ be a category. Specifying an initial object of $\calC$ is equivalent to specifying a limit for $1_{\calC} : \calC \to \calC$.
+\end{fancylem}
+\proof First suppose $I$ is an initial object. Then the unique morphisms $I \to A$ form a cone over $1_{\calC}$. If $(B, (\lambda_{A} : B \to A))$ is any other cone, then $\lambda_{I}$ is its unique factorization through this one. \gap Conversely, suppose $(I, (\lambda_{A} : I \to A \, | \, A \in \ob \calC))$ is a limit for $1_{\calC}$. Then $I$ is weakly initial. If $f : I \to A$ is any morphism, then $f \lambda_{I}=\lambda_{A}$, so we need to show that $\lambda_{I}$ is the identity morphism on $I$. But in particular, $\lambda_{A} \lambda_{I}=\lambda_{A}$ for all $A$, so $\lambda_{I}$ is a factorisation of the limit cone through itself. But the limit cone has to map uniquely through itself, so $\lambda_{I}$ must be $1_{I}$. \endproof
+These last two lemmas taken together prove the \say{Primitive Adjoint Functor Theorem:} If $\calD$ has all limits and $G : \calD \to \calC$ preserves all limits, then each $(A \downarrow G)$ has all limits by 4.10, so they have initial objects by 4.11, so $G$ has a left-adjoint.
+\begin{fancythm}{General AFT} \newlec Suppose $\calD$ is complete and locally small. Then $G: \calD \to \calC$ has a left-adjoint if and only if $G$ preserves small limits and satisfies the \say{Solution-set condition}, which is that:
+    For any object $A \in \ob \calC$, there's a set $\{ f_{i} : A \to GB_{i} \, | \, i \in I\}$, such that every $f: A \to GB$ factors as \[ A \xrightarrow{f_{i}} GB_{i} \xrightarrow{Gg} GB\] for some $i$ and some $g : B_{i} \to B$.
+\end{fancythm}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item[$\Rightarrow$] If $(F \dashv G)$, $G$ preserves limits by (4.9), by (3.3) we know that the category $(A \downarrow G)$ has an initial object $\{\eta_{A} : A \to GFA\}$, which is a solution set at $A$, for any $A$.
+    \item[$\Leftarrow$] Fix $A \in \ob \calC$, by 4.10, $(A \downarrow G)$ is complete, and is locally small since morphisms $(B,f) \to (B',f')$ in $(A \downarrow G)$ are a subset of $\calD(B,B')$. So we need to show that if $\scrA := (A \downarrow G)$ is complete and locally small, and has a weakly initial set of objects $\{S_{i} \, | \, i \in I\}$, then it has an initial object. \gap First, we form $P = \Pi_{i \in I}S_{i}$, which must be a weakly initial object, since we have morphisms $P \xrightarrow{\pi_{i}} S_{i}$ for all $i$. Now consider the diagram \begin{center}
+        \begin{tikzcd}
+        P \arrow[r, yshift=1ex] \arrow[r, yshift=0.5ex] \arrow[r] \arrow[r, yshift=-0.5ex] \arrow[r, yshift=-1ex] & P
+        \end{tikzcd}
+    \end{center}
+    whose edges are all endomorphisms of $P$ (which is still a set-sized diagram, by local smallness). This diagram must have a limit by assumption, so let $I \xrightarrow{i} P$ be the limit for this diagram. Then $I$ is weakly initial. To show $I$ is initial, suppose there were two morphisms 
+    \begin{tikzcd}
+        I \arrow[r, yshift=0.5ex, "f"] \arrow[r, yshift=-0.5ex, "g", swap] & C
+    \end{tikzcd}, form their equalizer $E \xrightarrow{e} I$ and choose some $P \xrightarrow{h} E$. Now $ieh$ and $1_{P}$ are endomorphisms of $P$, so $iehi = 1_{P}i=i$. But $i$ is monic, so we get $ehi=1_{I}$. But then $e$ must be a split epimorphism, and hence $f=g$.
+\end{enumerate}
+\endproof
+\begin{exs}{}
+    \item[(a)] Consider the forgetful functor $U: \cat{Gp} \to \cat{Set}$, $\cat{Gp}$ is complete and preserves small limits (in fact it creates them, by 4.7(a)), and $\cat{Gp}$ is locally small. Given a set $A$, any function $f: A \to UG$ can be factors as \[ A \rightarrow UG' \rightarrow UG,\] where $G'$ is the subgroup generated by $\{f(a) \, | \, a \in A\}$. And $\card(G') \leq \max(\aleph_{0}, \card A)$, sow e fix a set $B$ of this cardinality. Consider all group structures on subsets $B' \subseteq B$, and all possible functions $A \to B'$, and these form a solution-set at $A$. \gap \textbf{Note.} Cardinality bound on $G'$ contains (most of) what we need to construct free groups explicitly.
+    \item[(b)] Let \cat{CLat} be the category of complete lattices (=posets with all meets and joins). The forgetful functor $\cat{CLat} \to \cat{Set}$ creates limits just like $\cat{Gp} \to \cat{Set}$. But Andrew Hales (1969) proved that there are arbitrarily large 3-generator complete lattices. So $U$ has no solution-set at $A=\{a,b,c\}$. However, note that $U$ \textit{is} representable, so $(1 \downarrow U)$ has an initial object. But \cat{CLat} doesn't have coproducts (not even finite ones), so this doesn't yield initial objects for $(A \downarrow U)$.
+\end{exs}
+\begin{fancydefine}{subobject}
+    By a \textbf{subobject} of an object $A$, we mean a monomorphism \begin{center}\begin{tikzcd}
+        A \arrow[r, rightarrowtail, "m"] & A
+    \end{tikzcd}
+\end{center}
+The subobjects of $A$ in $\calC$ form a preorder $\Sub_{\calC}(A)$ with $m \leq m'$ if and only if $m$ factors through $m'$. We say $\calC$ is \textbf{well-powered} if $\Sub_{\calC}(A)$ is equivalent to a (small) poset for any $A$. Dually $\calC$ can be \textbf{well-copowered} (not cowell-powered\footnote{Not powered by Simon Cowell.})
+\end{fancydefine}
+For example $\cat{Set}$ is well-powered, since every $A' \rightarrowtail A$ is isomorphic to a subset inclusion; \cat{Set} is also well-copowered, since quotients correspond (up to isomorphism) to equivalence relations on $A$.
+\begin{fancylem}{}
+    Given a pullback square \begin{center}
+        \begin{tikzcd}
+                P \arrow[d, "k"] \arrow[r, "h"] & A \arrow[d,rightarrowtail, "f"]\\
+                B \arrow[r, "g"] & C
+        \end{tikzcd}
+    \end{center}
+    with $f$ monic, then $k$ is also monic. (Monomorphisms are stable under pullbacks).
+\end{fancylem}
+\proof Suppose we are given \begin{tikzcd} D \arrow[r, yshift=0.5ex, "l"] \arrow[r, yshift=-0.5ex, "m", swap] & P \end{tikzcd} with $kl=km$,. Then $fhl=gkl =gkm =fhm$, but $f$ is monomorphism, so $hl=hm$. So $l$ and $m$ are both factorisations of $(hl,kl)$ through the pullback, so $l=m$. \endproof
+\begin{fancythm}{Special Adjoint Functor Theorem}
+    Suppose $\calC$ and $\calD$ are both locally small, and that $\calD$ is complete and well-powered, and $\calD$ has a coseparating set of objects. (See 2.7(a)). Then a functor $G: \calD \to \calC$ has a left-adjoint if and only if $G$ preserves small limits.
+\end{fancythm}
+\proof\hspace{0.1cm} \begin{enumerate}
+    \item[$\Rightarrow$] This is easy, this just comes from 4.9.
+    \item[$\Leftarrow$] Fix $A \in \ob \calC$. As before $(A \downarrow G)$ inherits completeness and local smallness from $\calD$. It's also well-powered, since subobjects of $(B,f)$ in $(A \downarrow G)$ are just those \begin{tikzcd} B' \arrow[r, rightarrowtail, "m"] & B \end{tikzcd} in $\calD$ for which $f$ factors through $Gm$. (Note that $(A \downarrow G)$ preserves monomorphisms, since it preserves pullbacks.) \gap 
+    And if $\{S_{i} \, | \, i \in I\}$ is a coseparating set for $\calD$, then the set of all $f: A \to GS_{i}$ with $i \in I$ is coseparating in $(A \downarrow G)$, since given \begin{tikzcd} {(B,g)} \arrow[r,yshift=0.5ex,"h"] \arrow[r,yshift=-0.5ex,"k", swap] & {(B',g')} \end{tikzcd} with $h \neq k$, we can find $B' \xrightarrow{l} S_{i}$ with $lh \neq lk$ and $l$ is a morphism $(B',g') \to (S_{i} \, | \, (Gl)g')$ in $(A \downarrow G)$. \gap It \newlec remains to show that if $\calA$ is complete, locally small, and well-powered, and has a coseparating set \[ \{S_{i} \, | \, i \in I \}, \] then it has an initial object. First form $P = \Pi_{i \in I}S_{i}$. Consider the diagram \begin{center}\begin{tikzcd}
+        \cdot \arrow[dr, rightarrowtail] & \cdot \arrow[d,rightarrowtail]\\
+        \cdot \arrow[r,rightarrowtail] & P \end{tikzcd} \end{center}
+        (but with way more objects mapping to $P$) whose edges are the members of a representative set of subobjects of $P$. If $I$ is the apex of a limit cone for this, the legs of the limit cone are all monic by the argument of (4.15), so in particular $I \to P$ is monic, so it's a least subobject of $P$. IF we had \begin{tikzcd} I \arrow[r, yshift=0.5ex, "f"] \arrow[r, yshift=-0.5ex, "g", swap] & A \end{tikzcd}, their equalizer $E \rightarrowtail I$ would yield a subobject of $P$ contained in $I \rightarrowtail P$, so $E \rightarrowtail I$ would be an isomorphism. \gap Given any object $A$ of $\calA$, form the product $Q = \prod_{(i,f)} S_{i}$ indexed over pairs $(i,f)$ with $i \in I$ and $f:A \to S_{i}$, and define $g: A \to Q$ by $\pi_{(i,f)}g=f$. Since the $S_{i}$ are coseparating, $g$ is monic. We also have $h :  P \to Q$ defined by $\pi_{(i,f)}h=\pi_{i}$, so in the pullback: \begin{center} \begin{tikzcd}
+            B \arrow[r] \arrow[d, rightarrowtail, "k"] & A \arrow[d, rightarrowtail, "g"]\\
+            P \arrow[r, "h"] & Q
+        \end{tikzcd}
+    \end{center}
+    $k$ is monic by (4.15), so it's a subobject of $P$, so we have a factorisation \begin{center}
+        \begin{tikzcd}
+            I \arrow[r, dashrightarrow], \arrow[dr, rightarrowtail] & B \arrow[d, rightarrowtail, "k"]\\
+            & P
+        \end{tikzcd}
+    \end{center}
+    and hence a morphism $I \to A$.
+\end{enumerate}
+\endproof
+\begin{ex}
+    Consider the inclusion functor $I: \cat{KHaus} \to \cat{Top}.$ \cat{KHaus} is closed under products in \cat{Top} by Tychonoff's theorem, and it's closed under equalizers, since the equalizer of 
+    \begin{tikzcd}
+         X \arrow[r, "f", yshift=0.5ex] \arrow[r,"g", yshift=-0.5ex, swap] & Y 
+        \end{tikzcd} 
+        with $Y$ Hausdorff is a closed subspace of $X$, and hence compact if $X$ is. Therefore, by (4.4(i)) \cat{KHaus} is complete, and $I$ preserves small limits.\gap \cat{KHaus} is locally small, and well-powered since subobjects of $X$ are isomorphic to closed subspaces. And \cat{KHaus} has a coseparator $[0,1]$ by Urysohn's Lemma. So by (4.16), $I$ has a left-adjoint.
+\end{ex}
 
-
+\begin{remarks} \hspace{0.1cm}
+    \begin{enumerate}
+        \item[(a)] Cech's construction of $\beta$ was virtually identical to that provided by (4.17). Given $X$, he formed \[ P = \prod_{f:X \to [0,1]} [0,1]\] and $g: X \to P$, defined by $\pi_{f}g=f$. That is to say, he formed the product of all the members of a coseparating set for $(X \downarrow I)$. He then defined $\beta X$ to be the closure of the image of $g$, i.e. the smallest subobject of $(P,g)$ in $(X \downarrow I)$. So (4.16) may have been inspired by Cech's proof.
+        \item[(b)] We could construct $\beta$ using the general adjoint functor theorem. To get a solution-set at a space $X$, observe that any morphism from $X$ to a compact hausdorff space $f: X \to IY$ factors as \[ X \to IY' \to IY\] where $Y'$ is the closure of $X' = \{f(x) \, | \, x \in X \}$. And, if $Y'$ is Hausdorff and $X'$ is dense in it, then $\card Y' \leq 2^{2^{\card X'}}$.
+    \end{enumerate}
+\end{remarks}
+\section{Monads}
+Suppose I have an adjunction \begin{tikzcd} \calC \arrow[r, "F",yshift=0.5ex] & \calD \arrow[l, "G", yshift=-0.5ex] \end{tikzcd} where $\calC$ is familiar, but $\calD$ isn't. How much of this adjunction can we \say{see} in terms of $\calC$.\gap Well, we have the composite $T=GF: \calC \to \calC$, and the unit $\eta : 1_{\calC} \to T$, and also the natural transformtion $\mu = G \varepsilon_{F} : TT \to T$. The triangular identities of 3.7 yield the commutative diagrams \begin{enumerate} \item \begin{center}
+    \begin{tikzcd}
+        T \arrow[r, "T \eta"] \arrow[dr, "1_T"] & TT \arrow[d, "\mu"]\\
+        & T
+    \end{tikzcd}
+\end{center}
+\item \begin{center}
+    \begin{tikzcd}
+        T \arrow[r, "\eta_T"] \arrow[dr, "1_T"] & TT \arrow[d, "\mu"]\\
+         & T
+    \end{tikzcd}
+\end{center}
+and naturality of $\varepsilon$ yields \item \begin{center}\begin{tikzcd}
+    TTT \arrow[d, "\mu_{T}"] \arrow[r,"T_{\mu}"] & TT \arrow[d,"\mu"]\\
+    TT \arrow[r, "\mu"] & T
+\end{tikzcd}
+\end{center}
+\end{enumerate}
+\begin{fancydefine}{Monad}
+    By a \textbf{monad} on a category $\calC$, we mean a triple $\bbT= (T,\eta, \mu)$ where $T$ is a functor $\calC \to \calC$ and $\eta: 1_{\calC} \to T$, $\mu: TT \to T$ are natural transformations satisfying 1-3 above.
+\end{fancydefine}
+\begin
 
 
 

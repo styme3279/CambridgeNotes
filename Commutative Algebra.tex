@@ -1,0 +1,1665 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{James}
+\title{Commutative Algebra}
+\author{James Hindmarch}
+\setcounter{section}{-1}
+\date{October 2023}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\newlec
+\section{Preliminaries}
+\begin{fancydefine}[Ring]
+    In this course a \textbf{ring} will mean a \textit{commutative}, \textit{unital} ring (i.e. a commutative ring with a multiplicative identity). \linebreak
+    There is immediately a non-commutative exception $\End (M) \equiv \{ f : M \to M \suchthat{f \text{ is a group homomorphism}} \}$ with function composition being the multiplication in this ring.
+\end{fancydefine}
+
+\define An $\mathbf{R}$\textbf{-module} M is an abelian group M with a fixed ring homomorphism \[ \rho : R \to \End(M), \] we will write $r \cdot m \equiv \rho(r)(m)$. This multiplication has the distributive properties:
+\begin{enumerate}
+    \item $r(m_{1} + m_{2}) \equiv \rho(r)(m_{1} + m_{2}) = \rho(r)(m_{1}) + \rho(r)(m_{2})$. Since $\rho(r)$ is an endomorphism of $M$.
+    \item $(r_{1} + r_{2})m \equiv \rho(r_{1} + r_{2})(m) = \rho(r_{1})(m) + \rho(r_{2})(m)$. Since $\rho$ itself is a homomorphism of rings.
+\end{enumerate}
+\examples
+\begin{itemize}
+    \item A $k$-module (where $k$ is a field) gives a vector space
+    \item Every abelian group $M$ is a $\bbZ$-module in a unique way, via \[1_{\bbZ} \mapsto \id_{M}\]. This uniquely determines the module structure.
+    \item Every ring $R$ is an $R$-module. \[ R \to R \] \[ r_{0} \mapsto (r \mapsto r_{0}\cdot r)\]
+    \item $R^{\oplus \bbN}$ and $R^{\bbN}$ are $R$-modules. (Distinguished by the fact that the former must be eventually $0$, and the latter need not be).
+\end{itemize}
+\section{Chain Conditions}
+\begin{fancydefine}[Noetherian/Artinian]
+    An $R$-module $M$ is \textbf{noetherian} if one of the following hold:
+    \begin{enumerate}
+        \item Every ascending chain of submodules \[ M_{0} \subseteq M_{1} \subseteq \dots\] stabilises. That is to say, $\exists k \hspace{0.1cm} \forall j \hspace{0.1cm} M_{k+j}=M_{k}$. (We call this ACC)
+        \item Every non-empty set $\Sigma$ of submodules of $M$ has a maximal element
+    \end{enumerate}
+    M is \textbf{artinian} if the same holds, but in $(1)$ chains descend instead of ascend (DCC), and in $(2)$ we take minimal instead of maximal
+\end{fancydefine}
+\lem \hspace{0.1cm} \\ An $R$-module is noetherian $\Leftrightarrow$ Every submodule is finitely generated.\gap
+This means every Noetherian module is finitely generated, but the converse is false, for example $\bbZ[T_{1},\dots]$ as a module over itself is finitely generated (by $1_{R}$), but not Noetherian as a module or a ring (e.g. $\langle T_{1},\dots \rangle $ is not f.g., but is a submodule). \gap
+Proof omitted.
+\define A ring is \textbf{noetherian} (resp. \textbf{artinian}) if $R$ as an $R$-module is noetherian (resp. artinian).
+\ex \hspace{0.1cm}
+\begin{itemize}
+    \item $\bbZ$ is a noetherian module which is non-artinian. Noetherian since it is a PID, and so the ACC must hold. It is non-artinian since $(2) \supseteq (4) \supseteq (8)$, and this never need terminate.
+    \item  $\bbZ [\frac{1}{2} ] / \bbZ = \{ \frac{a}{2^{n}} + \bbZ \suchthat{a \in \bbZ} \}$ is an artinian module over $\bbZ$ which is not noetherian.
+\end{itemize}
+However, A \underline{ring} $R$ is artinian $\Leftrightarrow$ $R$ is noetherian \& has \textit{Krull} dimension $0$. (More on this later).
+\begin{fancydefine}[Exact Sequence]
+    A sequence: \[
+    \dotsc \rightarrow M_{i-1} \xrightarrow{f_{i}} M_{i} \xrightarrow{f_{i+1}} M_{i+2} \rightarrow \dotsc \]
+    of $R$-module homomorphisms is \textbf{exact} if:
+    \[
+    \forall i \hspace{0.1cm}\Im(f_{i}) = \ker(f_{i+1}) \hspace{0.1cm} \]
+    (Slogan: "Two steps get $0$").\gap
+    A \textbf{short exact sequence} is an exact sequence of the form \[
+    0 \rightarrow M' \xrightarrow[\text{injective}]{i} M \xrightarrow[\text{surjective}]{} M'' \rightarrow 0\].
+    This gives \[
+    M'' \simeq \dfrac{M}{i(M')}.\] Where $i$ is some embedding of $M'$ into $M$.
+\end{fancydefine}
+\lem Let \[
+0\rightarrow N \rightarrow M \rightarrow L \rightarrow 0\]
+be a short exact sequence of $R$-modules. Then $M$ is noetherian (artinian) iff $N$ And $L$ are noetherian (artinian).
+\proof $L \simeq \dfrac{M}{N}$. This (apparently) does it. Consider module properties and use the lifting-projections trick (I'm pretty sure this does it).
+\cor If $M_{1}, \dots, M_{n}$ are noetherian/artinian, then so is: \[
+M_{1} \oplus M_{2} \oplus \dots \oplus M_{n}. \] \proof Use the same quotient trick and induct (induce? Do induction.)\\ \hspace{0.1cm} \\
+\large
+\underline{Reminder} \hspace{0.1cm} \\
+\normalsize A module homomorphism \[ M_{1} \oplus M_{2} \oplus \dots \oplus M_{n} \to L \] is precisely a series of module homomorphisms \[ \phi_{i} : M_{i} \to L.\]
+\prop For a noetherian/artinian ring $R$, every finitely generated $R$-module is noetherian
+\proof $M$ finitely generated $\Leftrightarrow \exists n \geq 1, \hspace{0.1cm} \exists \phi : R^{n} \to M$ surjective. \\ \hspace{0.1cm} \\So any quotient of $R^n$ finitely generated ($\Leftarrow$).\\
+If $M$ finitely generated, take generators and build this up to get $\phi : R^{n} \to M$ ($\Rightarrow$). $\Box$
+\begin{fancydefine}[$R$-algebra]
+    An $\mathbf{R}$\textbf{-algebra} is a ring $A$ together with a fixed ring homomorphism \[ \rho : R \to A.\] For example $k \to k[T_{1},\dots, T_{n}]$ where the first $k$ gets mapped to scalars in the polynomial ring.\gap We wrtie $r \cdot a = \rho(r)(a)$, so that $\rho(r) = \rho(r) \cdot 1_{A} = r \cdot 1_{A}$.
+\end{fancydefine}
+We can view this as a module by 'forgetting' information, e.g. in the example above by forgetting how to multiply polynomials, except by scalars. \gap
+In the same way that we talk about modules being finitely generated, we can talk about $R$-algebras being finitely generated, however the condition is slightly different.
+\define An $R$-algebra is \textbf{finitely generated} if \[ \exists n \geq 0 \hspace{0.1cm} \exists \phi : R[T_{1},\dots, T_{n}] \to A, \]
+where $\phi$ is a surjective $R$-algebra homomorphism. What is an $R$-algebra homomorphism, you ask? 
+\define If $\phi : A \to B$ is a map of $R$-algebras, it is an $\mathbf{R}$\textbf{-algebra homomorphism} if $\phi$ is both a ring homomorphism \textit{and} \[ \phi(r \cdot 1_{A}) = \phi(r \cdot 1_{B}). \] That is to say, the map 'does not touch scalars.'
+
+
+
+
+
+
+%LECTURE 2
+\newlec
+
+\begin{fancythm}[Hilbert's Basis Theorem]
+    Every finitely generated algebra over a noetherian ring is noetherian. For example \[
+    k[T_{1},\dots, T_{n}]. \]
+\end{fancythm}
+    \proof Suffices to prove for $R[T_{1}, \dots, T_{n}]$, since every finitely generated algebra is a quotient of the polynomial ring by (1.9). Moreover, suffices to prove for $R[T]$, since 
+    \[ 
+    R[T_{1}, \dots , T_{n}] \cong R[T_{1}, \dots, T_{n-1}][T_{n}]\] so the claim will follow by induction.
+    Let $A$ be an ideal of $R[T]$. \[
+    \forall i \, \, A(i) = \{C_{0} \, | \, C_{0}T^{i} + \dots + C_{i}T^{0} \in A, \, C_{0},\dots, C_{i} \in R \}. \]
+    Now, each $A(i) \subseteq R$ is an ideal of $R$, since it is closed under addition, and under multiplication by elements in $R$, Moreover, we have \[ A(i) \subseteq A(i+1) \] so this gives an ascending chain. Then since $R$ is noetherian, we know that each $A(i)$ must be a finitely generated ideal, and that the ascending chain of ideals $A(i)$ must eventually stabilise: \[
+    \exists m \, \, \forall m' \geq m , \, A(m')=A(m) \] Then we write
+    \[ A(i) = (b_{i,1}, \dots, b_{i,n_{i}}), \, \, b_{i,j} \in R\]
+    Take $f_{i,j} = b_{i,j} \cdot T^{i} + \text{terms of degree $< i$}$. Now we define a new ideal $B$ of $R[T]$: \[
+    B= (f_{i,j})_{\substack{i\leq m \\ j \leq n_{i}}}. \] Then by construction, we can define $B(i)$ similarly to $A(i)$ and obtain that \[ \forall i, \, B(i) = A(i). \] Also by construction, $B \subseteq A$, since each of the generators of $B$ is contained in $A$. So now, assume for contradiction that $A \nsubseteq B$. Take $f \in A\setminus B$ of minimal degree $i$.\gap It must be the case that $B(i)=A(i)$, so we must be able to find a $g \in B$ such that the leading term of $g$ is the same as $f$. Then take $f-g$ which has degree $<i$, so this must be in both $B$ and $A$ by the minimality of $i$. Therefore
+    \[ f = (f-g) + g \in B \, \, \,\contradiction \]
+    \flushright $\Box$
+    \flushleft
+    We can conclude that if $R$ is noetherian, then we have \[ S \subseteq \frac{R[T_{1}, \dots T_{n}]}{I} \] Then \[ (S) = (S_{0}),\]
+    where $S_{0}$ is a finite subset of $S$\footnote{We could also have proved this using something called Groebner Bases, but there will be more about those later (I think)}.
+\section{Tensor Products}
+\subsection{Tensor Products of $R$-modules}
+Let $M$, $N$ be $R$-modules, then the informal definition of the tensor product is \[ M \bigotimes_{R} N= \{\sum_{i=1}^{l} m_{i} \otimes n_{i} \, | \, m_{i} \in M, \, n_{i} \in N \}\]
+along with some distributive properties:
+\begin{itemize}
+    \item $(m_{1} + m_{2}) \otimes n = m_{1} \otimes n + m_{2} \otimes n$
+    \item $m \otimes (n_{1} + n_{2}) = m \otimes n_{1} + m \otimes n_{2}$
+    \item $(rm) \otimes n = r(m \otimes n) = m \otimes (rn)$
+\end{itemize}
+\ex \hspace{0.1cm}
+\begin{itemize}
+    \item Consider \[\frac{\bbZ}{2\bbZ} \bigotimes_{\bbZ} \frac{\bbZ}{3\bbZ}\]
+has that \[ x \otimes y = (3x) \otimes y = x \otimes (3y) = x \otimes (0\cdot 0) = 0. \] So in this case, everything collapses down to nothing, and we have that \[ \frac{\bbZ}{2\bbZ} \bigotimes_{\bbZ} \frac{\bbZ}{3\bbZ} = \{ 0 \}\]
+\item We have that \[ \bbR^{n} \bigotimes_{\bbR} \bbR^{l} \simeq \bbR^{n\cdot l}\] See later for more.
+\end{itemize}
+Recall the definition of bilinearity. When $M,\, N,\, L$ all $R$-modules \[ f: M \times N \to L \] is $R$-bilinear if
+\begin{align*}
+    \forall m_{0}, \, \, \, n &\mapsto f(m_{0},n)\\
+    \forall n_{0}, \, \, \, m &\mapsto f(m, n_{0})\\
+\end{align*}
+are both $R$-linear.
+\begin{fancydefine}[Tensor Product of Modules]
+    Let $M,N$ be $R$-modules. \begin{align*} \calF &= R^{\bigoplus(M \times N)} \\ &= \spann_{R}\{e_{(m,n)} | (m,n) \in M\times N\}.\end{align*}
+    This is an absolutely \textit{huge} set, with a basis vector for each element of the cartesian product of $M$ and $N$, so we need to quotient by something. We define $K \subseteq \calF$ to be the subset generated by \begin{align*} &\{(m,n_{1})+(m,n_{2}) - (m,n_{1}+n_{2}) \, | \, m \in M, \, \, n_{1},n_{2} \in N \}\\
+    \cup & \{(m_{1},n) + (m_{2},n) - (m_{1} + m_{2}, n) \, | \, \dots \}\\
+    \cup & \{r \cdot (m,n) - (rm,n) | \dots \}\\
+    \cup & \{r \cdot (m,n) - (m,rn) | \dots \}
+    \end{align*}
+    Then we define \[ M \bigotimes_{R} N \defeq \frac{\calF}{K}.\]
+    And this gives us an $R$-bilinear map
+    \begin{align*}
+        i_{M \otimes N} : M \times N &\to M \otimes_{R} N\\
+        (m,n) &\mapsto (m \otimes n)
+    \end{align*}
+    We call the elements of the form $m \otimes n$ \textit{pure tensors}. The pure tensors generate $M \otimes N$, but not every element is pure (in general).
+\end{fancydefine}
+\begin{fancyprop}[The universal property of a tensor product] The tensor product \[ \left(M \bigotimes_{R} N, i_{M\otimes N} \right) \]
+satisfies the property that for all $R$-modules $L$, and $R$-bilinear maps $f: M \times N \to L$, there is exactly one $R$-linear $h: M \otimes N \to L$ such that $f=h \circ i_{M \otimes N}$, i.e. such that the following diagram commutes: 
+\begin{center} 
+\begin{tikzcd}
+M \times N \arrow[r, "i_{M\otimes N}"] \arrow[dr, swap, "f"]
+& M \otimes N \arrow[d, "h"]\\
+& L
+\end{tikzcd}
+\end{center}
+\end{fancyprop}
+\proof  We want to show that 
+\[
+    h \circ i_{M \otimes N} = f
+\]
+These are two bilinear maps, so let us plug in $(m,n)$. \[ h(i_{M\otimes N} (m,n)) = f(m,n) \]
+So we are 'solving' for $h$, however we already know that there can be at most one option for $h$, because \[\{m \otimes n\}_{(m,n) \in M \times N} \]
+generate $M\otimes N$ as an $R$-module. \gap
+But why does $h(m\otimes n)=f(m,n)$ extend to an $R$-linear map \[ h : M \otimes N \to L ? \]
+Because \begin{align*}R^{\oplus(M\times N)} &\to L \\ e_{(m,n)} &\mapsto f(m,n)\end{align*}
+must vanish on $K$ (because $L$ is an $R$-module, so we have $R$-linearity; and moreover this gives us an $h$ from $M \otimes N$ by how we defined the tensor product). Therefore $h$ must exist. \newline \flushright $\Box$ \flushleft
+\prop Take $M$, $N$ to be $R$-modules and a pair $(T,\, j)$ where $T$ is an $R$-module and $j$ is an $R$-bilinear map, $j : M\times N \to T$ which satisfies the univeral property from 2.3. Then $\exists!$ R-linear isomorphism \[ \phi : M \otimes_{R} N \to T\]
+such that $\phi \circ i_{M\otimes N} = j$.
+\gap
+\newpage
+\proof We have \gap
+\begin{center}
+
+\begin{tikzcd}[column sep = small]
+    & M \times N \arrow[dr, "j"] \arrow[dl, swap, "i_{M\otimes N}"] & \\
+    M \otimes N  \arrow[rr, dotted, shift left, "\phi"]  &                 & \arrow[ll, dotted, shift left,  "\psi"] T
+\end{tikzcd}
+\end{center}
+We 'challenge' $M\otimes N$ with the existence of $j$ to get $\phi$ from the universal property of tensor products.\gap Then we challenge $T$ with $i_{M\otimes N}$ to get $\psi$, since $T$ also has the univeral property. We obtain \[ \psi \circ \phi \circ i_{M \otimes N} = i_{M\otimes N}.\] Therefore $(\psi \circ \phi)$ is the solution we obtain when we challenge $M \otimes N$ with $i_{M \otimes N}$. But so is $\id_{M\otimes N}$ so it must be the case that $ \psi \circ \phi = \id_{M \otimes N}$
+\flushright $\Box$ \flushleft
+
+
+\newlec
+
+
+So we have proved that for $M,N$ being $R$-modules, for all $R$-modules $L$, and where $i_{M\otimes N} : M \times N \to M \otimes_{R} N$: \begin{align*} \bil_{R}(M \times N, L) &\xrightarrow{\sim} \Hom(M\otimes_{R} N, L)\\
+    h \circ i_{M \otimes N} &\mapsfrom h \end{align*}
+\prop If $M,N$ $R$-modules, then \begin{align*}
+    \sum m_{i} \otimes n_{i} = 0 \Longleftrightarrow &\forall R\text{-module } L,\\ &\forall R\text{-bilinear } f:M \times N \to L, \\ &\sum f(m_{i},n_{i})=0.
+\end{align*}
+\proof Assume $\sum m_{i} \otimes n_{i} = 0$. Then $f$ factors through \begin{center} 
+    \begin{tikzcd}
+    M \times N \arrow[r, "i_{M\otimes N}"] \arrow[dr, swap, "f"]
+    & M \otimes N \arrow[d, "h"]\\
+    & L
+    \end{tikzcd}
+    \end{center}
+So therefore $\sum f(m_{i},n_{i})$ can be written as \begin{align*}
+    &\sum h(i_{M \otimes N}(m,n))\\
+    =&\sum h(m\otimes n)\\
+    =&h\left(\sum m_{i} \otimes n_{i}\right) \tag{by linearity}\\
+    =&0
+\end{align*}
+If $\sum m_{i} \otimes n_{i} \neq 0$, then \[ \sum i_{M \otimes N}(m_{i},n_{i}) = 0\] since $i_{M \otimes N}(m_{i},n_{i})=0$. \endproof
+
+\ex \hspace{0.1cm} \\ Consider $k^{m} \otimes k^{l}$, where $k$ is a field. $k^{m}$ has a basis given by \[ \{e_{1}, \dots, e_{m} \} \] and $k^{l}$ has a basis given by \[ \{ f_{1}, \dots, f_{l} \}. \] Then \begin{align*}k^{m} \otimes k^{l} &= \spann_{k}\{v \otimes w \, | \, v \in k^{m}, \, w \in k^{l}\}\\
+    &= \spann \{ e_{i} \otimes f_{j} \, | \, i \leq m, \, j \leq l \} \end{align*}
+    So $\{e_{i} \otimes f_{j}\}$ forms a basis for $k^{m} \otimes k^{l}$.
+    \proof Assume $\sum_{i,j} \alpha_{ij} \cdot (e_{i} \otimes f_{j})=0$. Then $\forall a \leq m, \, \forall b \leq l$,
+    \begin{align*}
+        T_{a,b} : k^{m} \times k^{l} \to k\\
+        T_{a,b}((v_{i})_{i=1}^{m},(w_{j})_{j=1}^{l}) = v_{a} \cdot w_{b} \tag{$k$-bilinear}
+    \end{align*}
+    So these maps just map vectors to their multiplied $a^{\text{th}}$ and $b^{\text{th}}$ coordinates. Then by the proposition above $\sum \alpha_{i,j} \cdot T_{a,b}(e_{i},f_{j})= \sum \alpha_{i,j} \cdot (e_{i} \otimes f_{j}) = 0$ for each $a,b$. But then \[ \sum \alpha_{i,j} \cdot T_{a,b}(e_{i},f_{j})= \alpha_{a,b} = 0. \] So the $e_{i} \otimes f_{j}$ do indeed form a basis.
+    \endproof
+    \ex \hspace{0.1cm}\\
+    Consider $\bbR^{2} \otimes_{\bbR} \bbR^{2}$, this has infinitely many pure tensors, and has a basis given by: \[ e_{1} \otimes f_{1}, \, e_{1} \otimes f_{2}, \, e_{2} \otimes f_{1}, \, e_{2} \otimes f_{2}. \]
+    A pure tensor in $\bbR^{2} \otimes \bbR^{2}$ looks like \[ (\alpha e_{1} + \beta e_{2}) \otimes (\gamma f_{1} + \delta f_{2}). \] But then, when we expand brackets, we get \[ (\alpha \gamma) e_{1} \otimes f_{1} + (\alpha \delta) e_{1} \otimes f_{2} + (\beta \gamma) e_{2} \otimes f_{1} + (\beta \delta) e_{2} \otimes f_{2}\].
+    These coefficients are \textit{not} generic, since there are linear dependencies between $(\alpha \gamma, \alpha \delta, \beta \gamma, \beta \delta)$. For example\[ 1 e_{1} \otimes f_{1} + 2 e_{1} \otimes f_{2} + 3 e_{2} \otimes f_{1} + 4 e_{2} \otimes f_{2}\] is \textit{not} a pure tensor (but if we took other numbers, it might be pure, even though it wouldn't \textit{look} pure, we can manipulate it until it does).
+    \ex (Warning)\\
+    Consider $\bbZ \otimes_{\bbZ} \frac{\bbZ}{2\bbZ}$: $2 \otimes (1+ 2\bbZ) = 1 \otimes (2+ 2\bbZ) = 0$. However, if we consider:
+    \[ 2\bbZ \otimes \frac{\bbZ}{2\bbZ}\] as a submodule, then this submodule contains an element which looks like $2 \otimes (1+2\bbZ)$. However, this element is \textit{not} $0$. Why? \gap 
+    Indeed, define \begin{align*} b: (2\bbZ) \times \frac{\bbZ}{2\bbZ} &\to \frac{\bbZ}{2\bbZ}\\
+        b(2n,x+2\bbZ) &= nx + 2\bbZ\\
+        b(2,1+2\bbZ) &= 1 + 2\bbZ\\ 
+    \end{align*}
+    It is notationally tempting to think that the 'natural' embedding of $2\bbZ \otimes \frac{\bbZ}{2\bbZ}$ (and submodules of tensor products in general) is injective, but clearly it is not injective, and there are often things that can be $0$ when considered as elements in the first module, which are not $0$ in the submodule. \gap \underline{But} if $M' \subseteq M$, $N' \subseteq N$ are $R$-modules and \[\sum m_{i} \otimes n_{j} = 0 \in M' \otimes N',\] then \[\sum m_{i} \otimes n_{j} = 0 \in M \otimes N.\] So it \textit{does} go the other way.
+    \prop If $\sum m_{i} \otimes n_{i}=0$ in $M \otimes_{R} N$ then there are finitely generated $R$-submodules $M' \subseteq M$, $N' \subseteq N$, such that \[ \sum m_{i} \otimes n_{i} = 0 \in M' \otimes_{R} N'.\]
+    \idea First of all, when we write the expression above, we assume that it is meaningful. The idea of the proof is that if it is $0$, then there is a finite proof by playing with the bilinear relationship, so we only see finitely many elements on the left side of the tensor product, and on the right side of the tensor product. So take those elements to generate.
+    \proof Let \[ \sum m_{i} \otimes n_{i} = 0 \] in  \[ M \bigotimes_{R} N = \frac{R^{\otimes(M \times N)}}{K}. \] I.e. this sum lies in $K$, the quotient we use in the construction of $M \otimes N$. Then we know that \[ \sum e_{(m_{i},n_{i})} \in K. \] But $K$ is defined with some set of generators, so this is a finite sum: \[ \sum \alpha_{i}k_{i}, \] take the $m_{1}', \dots, m_{n}'$ which appear in the $k_{i}$ as generators for $M'$, and similarly for $N'$ to construct these $M'$ and $N'$.
+    \cor Let $A$ and $B$ be torsion-free abelian groups. Then \[A \bigotimes_{\bbZ} B\]is torsion-free as well.
+    \proof Assume that \[ n \cdot (\sum a_{i} \otimes b_{j} = 0) \] for some $n \in \bbN$. Then by the proposition, there must be a finitely generated subgroup\footnote{The proposition talks about submodules, but here we are talking about subgroups because they are abelian groups, so deal with it.} given by $A' \subseteq A$ and $B' \subseteq B$ such that \[ n( \sum a_{i} \otimes b_{j}) = 0 \in A' \otimes B'.\] But $A'$ and $B'$ are finitely generated abelian groups, and since $A$ and $B$ are torsion-free, $A'$ and $B'$ must also be torsion-free, but they are finitely generated, so we know the only torsion-free, finitely generated abelian groups are $\bbZ^{n}$, so we have \[ A' \otimes B' = \bbZ^{m} \otimes \bbZ^{l} \simeq \bbZ^{ml}. \] This is torsion-free, so $\sum a_{i} \otimes b_{j} = 0 \in A' \otimes B' \Rightarrow \sum a_{i} \otimes b_{j} = 0 \in A \otimes B.$ \endproof 
+    \note $\bbC^{2} \otimes_{\bbC} \bbC^{3} \simeq_{\bbC} \bbC^{6} \simeq_{\bbR} \bbR^{12}$. ($\simeq_{R}$ means isomorphic as $R$-modules). \gap But $\bbC \otimes_{\bbR} \bbC^{3} \simeq_{\bbR} \bbR^{4} \otimes \bbR^{6} \simeq \bbR^{24}$.
+    \begin{fancyprop}[Tensor Product Laws] \[M \otimes N \xrightarrow{\simeq} N \otimes M.\] That is to say, they are isomorphic as $R$-modules. The isomorphism is obvious, we just swap. Moreover \[ (M \otimes N) \otimes P \simeq M \otimes (N \otimes P).\] One way to prove this is to prove that both of these are isomorphic to $M \otimes N \otimes P,$ and also to define what this means (tri-linear maps, and quotients, et cetera et cetera). \gap Another thing: \[ \left(\bigoplus_{i} M_{i}\right) \otimes P \simeq \bigoplus( M_{i} \otimes P).\] Yet \textit{another} thing(!):
+    \[ R \bigotimes_{R} M \simeq M\] \[ r \otimes m \mapsto rm\].
+    \proof Example sheet, distributive law is proved in lecture notes.
+    \end{fancyprop}
+    \cor We have another proof of the tensor-product of free-modules. We will now do it for general $R$ and not just fields (even though our previous proof worked just fine).
+    \proof \[ R^{m} \otimes_{R} R^{l} = \left(\bigoplus_{i=1}^{m} R^{i} \right) \otimes \left( \bigoplus_{j=1}^{l} R^{j} \right). \]
+    \[ \simeq \bigoplus_{i,j} R \simeq R^{ml}. \] \endproof
+    \subsection{Tensor Products of $R$-linear maps}
+    \prop For $R$-linear maps \begin{align*}
+        f:M \to M' & & g: N \to N'
+    \end{align*}
+    There is a unique $R$-linear map \[ f\otimes g : M \otimes N \to M' \otimes N' \] such that \[ (f \otimes g)(m \otimes n) = f(m) \otimes g(n).\]
+    \proof Easy using the universal property. Define an $R$-bilinear map: \begin{align*} T: M \times N &\to M' \otimes N' \\ T(m,n) \mapsto f(m) \otimes g(n) \end{align*}
+    Then we are immediately done by the universal property of $M \otimes N$, since this gives us $f \otimes g$ as in the statement. \endproof
+    
+
+
+    % LECTURE 4
+
+
+\newlec
+
+    Let \[ f : M \to M'\] \[ g: N \to N' \]
+    be $R$-linear maps, then we define $f \otimes g$ as: \begin{align*}
+        f \otimes g : M \otimes N &\to M' \otimes N'\\
+        (f \otimes g)(m \otimes n) &= f(m) \otimes g(n)
+    \end{align*}
+    \textbf{Exercise: } Show that $(f \otimes g) \circ (h \otimes i) = (f \circ h) \otimes (g \circ i)$ \gap
+    \textbf{Example:} Consider \begin{align*}
+        T : k^{a} &\to k^{b}\\
+        S : k^{c} &\to k^{d}.
+    \end{align*}
+    Then \begin{align*}
+        T \otimes S : k^{a} \otimes k^{c} &\to k^{b} \otimes k^{d}\\
+                      k^{ac} &\to k^{bd},
+    \end{align*}
+    This is characterised on the basis of $k^{ac}$ via \begin{align*}
+        (T \otimes S)(e_{i} \otimes e_{j}) &= T(e_{i}) \otimes S(e_{j})\\
+        &= \sum_{l,t} \left[T \right]_{l,i} \left[ S \right]_{t,j}(f_{l} \otimes f_{t}).
+    \end{align*}
+    We order the basis of $k^{a} \otimes k^{c}$:\[
+    \begin{matrix}
+        e_{1} \otimes e_{1}, & \dots & e_{1} \otimes e_{c},\\
+        e_{2} \otimes e_{1}, & \dots & e_{2} \otimes e_{c},\\
+        \vdots & & \vdots\\
+        e_{a}\otimes e_{1}, & \dots & e_{a}\otimes e_{c}.
+    \end{matrix}\]
+    And we order the range similarly. Then we can write \[ \left[T \otimes S \right] = \begin{pmatrix}
+        [T]_{1,1}S & [T]_{1,2}S & \dots & [T]_{1,a} S\\
+        \vdots & \vdots & & \vdots\\
+        [T]_{b,1}S & [T]_{b,2}S & \dots & [T]_{b,a}S
+    \end{pmatrix}
+    \]
+    This is called the Kronecker product of matrices.
+    \prop Let \[ f:M \to M'\] \[g : N \to N'\] be $R$-linear functions, then \begin{enumerate}
+        \item If $f,g$ are isomorphims, so is $f \otimes g$.
+        \item If $f,g$ are surjective, so is $f \otimes g$.
+    \end{enumerate}
+    \proof \hspace{0.1cm} \begin{enumerate}
+        \item $f^{-1} \otimes g^{-1}$ is a two-sided invese for $f \otimes g$. (Just apply the result from the exercise)
+        \item We have that $\Im(f \otimes g)$ contains every pure tensor of $M' \otimes N'$. Then $f \otimes g$ is surjective, and we are done.
+    \end{enumerate}
+    \endproof
+    There can be no injectivity claim here, as we saw before (but will repeat here), we have:
+    \begin{align*}
+        f: \bbZ &\xrightarrow{ \cdot p} \bbZ\\
+        g: \frac{\bbZ}{p \bbZ} &\xrightarrow{\id} \frac{\bbZ}{p \bbZ}
+    \end{align*}
+    Then \begin{align*}
+        (f \otimes \id_{\frac{\bbZ}{p \bbZ}})(a \otimes b) &= pa \otimes b\\
+        &= p(a\otimes b)\\
+        &= a \otimes pb\\
+        &=a \otimes 0
+    \end{align*}
+    So this is the zero map, but the ring is not the zero ring, so this map is not injective, despite each of its tensor components being injective.
+    \subsection{Tensor Products of $R$-algebras}
+    Let $B,C$ be $R$-algebras (rings with a fixed ring homomorphism). \begin{align*}
+        \phi_{B} : R &\to B\\
+        \phi_{C} : R &\to C
+    \end{align*}
+We can forget structure, and make $B$ and $C$ into $R$-modules, if we want to. Then we can consider \[ B \otimes_{R} C \] as a tensor product of modules, and try to make it into a ring, and then into an algebra.\gap First of all, we want: \[ (b \otimes c) \cdot (b' \otimes c') = (b \cdot b') \otimes (c \cdot c')\]
+We need to check that this is indeed well-defined:\gap 
+Fix $(b,c) \in B \times C$, then we have an $R$-bilinear map: \begin{align*}
+    B \times C &\to B \otimes C\\
+    (b',c') \mapsto (bb')\otimes(cc')
+\end{align*}
+Then from the universal property of tensor products, this $R$-bilinear map gives rise to an $R$-linear map: \begin{align*}
+    B \otimes C &\to B \otimes C\\
+    b' \otimes c' &\to bb' \otimes cc'.
+\end{align*}
+So this multiplication is well-defined. \endproof
+Showing that this satisfies the ring axioms is an easy check. Then the $R$-algebra structure given by \begin{align*}
+    R &\to B \otimes C\\
+    r &\mapsto (r \cdot 1_{B}) \otimes 1_{C}\\
+    &\mapsto 1_{B} \otimes (r \cdot 1_{C})\\
+    &\mapsto r \cdot (1_{B} \otimes 1_{C})
+\end{align*}
+Gives us the fixed ring homomorphism. \gap \textbf{Example: }
+There exists an isomorphism, $\varphi$, with: \[ \varphi : R[X_{1}, \dots, X_{n}] \otimes R[T_{1}, \dots, T_{r}] \xrightarrow \sim R[X_{1},\dots, X_{n}, T_{1}, \dots, T_{r}]. \]
+(N.B. We denote the tensor product of algebras the same way as the tensor product of modules, just remember that there is extra structure when we tensor algebras).
+\proof First of all, we have a basis for the left-hand side, given by \[ \{a \otimes b \}\] such that $a \in R[X_{1}, \dots X_{n}]$, $b \in R[T_{1}, \dots, T_{r}]$, where $a$ and $b$ are both monomials. \gap Moreover, we also have a basis for the right-hand side, given by \[ \{ ab \, | \, a \text{ a monomial}, \, b \text{ a monomial} \}.\] Now, define $\varphi(a,b)=ab$, which gives an $R$-module isomorphism. So we need to check that this is an $R$-algebra homomorphism. \[ \varphi(r \otimes 1) = r\cdot 1 \in R[X_{1}, \dots, X_{n},T_{1},\dots,T_{r}] \] gives a ring homomorphism. Then we need to check that we have a module homomorphism: \begin{align*}
+    \varphi\left((\sum_{i} p_{i}\otimes q_{i})(\sum_{j}h_{j}\otimes g_{j})\right) &= \varphi \left( \sum_{i,j} p_{i}h_{j} \otimes q_{i}g_{j} \right)\\ &= \sum_{i,j} (p_{i}h_{j}) \cdot (q_{i}g_{j})\\
+    &= \sum_{i,j}(p_{i}q_{i})(h_{j}g_{j})\\
+    &= \left[ \sum_{i} \varphi(p_{i} \otimes q_{i}) \right] \cdot \left[ \sum_{j} \varphi(h_{j} \otimes g_{j}) \right]\\
+    &= \varphi\left( \sum_{i} p_{i} \otimes q_{i} \right) \cdot \varphi \left( \sum_{j} h_{j} \otimes g_{j} \right).
+\end{align*}
+In general \begin{align*}
+    \frac{R[X_{1}, \dots, X_{n}]}{I} \bigotimes \frac{R[T_{1}, \dots, T_{r}]}{J} & = \frac{R[X_{1}, \dots, X_{n}] \otimes R[T_{1}, \dots, T_{r}]}{L}\\
+\end{align*}
+where $L$ is some ideal that we can construct somehow (unspecified), however, when working with $R$-algebras, we have that these things are \[ \simeq \frac{R[X_{1},\dots,X_{n},T_{1},\dots,T_{r}]}{(I^{e} + J^{e})}.\] where $I^{e}$ is the extension of $I$, that is to say, the ideal generated by elements of $I$ but considered as an ideal of the larger ring.\gap \textbf{Example:} Consider \[ \frac{\bbC[X,Y,Z]}{(f,g)} \bigotimes_{\bbC} \frac{\bbC[W,U]}{(h)}\]
+This is isomorphic, as a $\bbC$-algebra, to \[ \frac{\bbC[X,Y,Z,W,U]}{(f,g,h)}.\]
+\begin{fancyprop}[Universal property of tensor product of algebras]
+    Let $A,B$ be $R$-algebras, then
+    \begin{enumerate}
+        \item For all $R$-algebras $C$, for all algebra maps \[ f_{1}:A \to C\] \[f_{2}: B \to C, \] there exists a \textit{unique} \[ h : A \otimes B \to C \] such that \begin{center}
+        \begin{tikzcd}[column sep=tiny]
+            & A \ar[dr, "i_A"] \ar[drr, "j_1", bend left=20]
+            &
+            &[1.5em] \\
+            &
+            & A \otimes_{R} B \ar[r, dashed, "\exists ! h"]
+            & C \\
+            & B \ar[ur, "i_B"]\ar[urr, "f_2"', bend right=20]
+            &
+            &
+            \end{tikzcd}
+        \end{center}
+        commutes, i.e. $f_{1} = h \circ i_{A}$, and $f_2 = h \circ i_B$.
+        \item This characterises $(A \otimes B, i_A, i_B)$ uniquely. (But we won't prove this).
+    \end{enumerate}
+\end{fancyprop}
+\proof $A \otimes B$ is an $R$-algebra, which is generated by the set: \[ \{ a \otimes 1 \, | \, a \in A \} \cup \{ 1 \otimes b \, | \, b \in B\}.\] This would not generate $A \otimes B$ as an $R$-module, but since we have the additional structure of an algebra, we can multiply elements together to obtain everything else. This immediately implies the \textit{uniqueness} of $h$, because $h$ \underline{must} send these elements 'where they get sent' (so long as $h$ exists).\gap
+To show existence consider the $R$-bilinear map: \begin{align*}
+    A \times B &\to C\\
+    (A,B) \mapsto f_{1}(a)f_{2}(b)
+\end{align*}
+Then we use the universal property of tensor products of $R$-modules to guarantee that there exists an $R$-linear \[ h: A \otimes B \to C \]. Then we need only check $h$ is a homomorphism, just as we did with $\varphi$ earlier. \endproof \textbf{Example:} In the case of the algebra given by the polynomial ring: 
+\begin{center}
+    \begin{tikzcd}[column sep=tiny]
+        & R[X_{1}, \dots, X_{n}] \ar[dr, ] \ar[drr, "f_1", bend left=20]
+        &
+        &[1.5em] \\
+        &
+        & R[X_{1}, \dots, X_{n}, T_{1}, \dots, T_{r}] \ar[r, dashed, "\exists ! h"]
+        & C \\
+        & R[T_{1}, \dots, T_{r}] \ar[ur, ]\ar[urr, "f_2"', bend right=20]
+        &
+        &
+    \end{tikzcd}
+\end{center}
+Where \begin{align*}
+    R[X_{1}, \dots X_{n}, T_{1}, \dots, T_{r}] &\simeq R[X_{1}, \dots, X_{n}] \otimes R[T_{1},\dots, T_{r}]\\
+    \text{product of monomials} &\mapsfrom \text{monomial } \otimes \text{ monomial}.
+\end{align*}
+
+
+
+
+
+
+
+\newlec
+
+
+
+
+
+
+Two comments:
+\begin{enumerate}
+    \item[(1)] If \[ f: A \to A'\] and \[ g: B \to B'\] are $R$-algebra homormorphisms, then \[ f \otimes g : A \otimes B \to A' \otimes B'\] is an $R$-algebra homomorphism.
+    \item[(2)] $R$-algebra homomorphisms: \[ \frac{R}{I} \otimes \frac{R}{J} \simeq \frac{R}{I+J}\] \[ A \otimes B \simeq B \otimes A\] \[ A \otimes (B \times C) \simeq (A \otimes B) \times (A \otimes C)\] \[ \Rightarrow A \otimes B^{n} \simeq (A \otimes B)^{n}\] \[ (A \otimes B) \otimes C \simeq A \otimes (B \otimes C).\] Just like in the example sheet, but check that they satisfy the ring homomorphism property.
+\end{enumerate}
+\section{Restriction and extension of scalars}
+\subsection{Modules}
+We have two rings $R$ and $S$ in the background, and some specific ring homormophism: \[ f : R \to S.\] Then if $M$ is an $S$-module, then it is also an $R$-module. (The example to have in mind is that a vector space over $\bbC$ is a vector space over $\bbR$ with double the dimension).\gap Consider \[ r \cdot m = f(r) \cdot m \, \, r \in R,\, m \in M.\] How do we verify this gives us the structure of a module, well we have a map \[ R \xrightarrow f S \to \End M.\] Then because of our definition of a module, we know that $M$ must be an $S$ module, and don't need to start checking distributivity and other annoying axioms.
+\begin{ex}
+    If \[ f: \bbR \hookrightarrow \bbC\] then $\bbC^{n}$ is a $\bbC$-module means that it is also an $\bbR$-module: \[ \bbC^{n} \simeq \bbR^{2n}.\]
+\end{ex}
+\subsection{Extension of scalars}
+We still have $f: R \to S$ a ring homomorphism, and $M$ an $S$-module which is also an $R$-module, and we have $N$ which is an $R$-module. Then from this, we can form \[ M \bigotimes_{R} N \] which is an $R$-module, since we forget the action of $S$ on $M$ in order to form this tensor product. The restriction of scalars tells us that $M \otimes_{R} N$ is \textit{also} an $S$-module. \gap We define \[ s \cdot (m \otimes n) := (sm) \otimes n.\] Is this well-defined? Yes. We take an $R$-bilinear map:
+\begin{align*}
+    M \times N &\to M \otimes N\\
+    \text{via} \, \, (m,n) &\mapsto (sm) \otimes n
+\end{align*}
+Then by the universal proprty, we obtain an \[ h_{s} : M \otimes_{R} N \to M \otimes_{R} N\] such that $h_{s}(m \otimes n) = (sm) \otimes n$. To check that this is in fact a module, I define a function 
+\begin{align*}
+    \phi : S &\to \End(M \otimes_{R} N)\\
+    \phi(s)&=h_{s}
+\end{align*}
+Check that $h_{s} \in \End(M \otimes_{R} N)$ and that $\phi$ is a ring homomorphism. \gap Then, if we start treating $M \otimes_{R} N$ as an $S$-module "out of nowhere," then this is the default construction we will be using.
+\begin{exs}
+    \begin{enumerate}
+    \item[(1)] We have that \[ S \otimes_{R} R \simeq S\] as $R$-modules. This sends \[ s \otimes r \mapsto s \cdot f(r)\] where $f$ is the ambient homomorphism we're working with. This is also $S$-linear, and it's enough to check this on pure tensors:
+    \begin{align*}
+        s'(s \otimes r) &\mapsto (s's\cdot)\\
+        =(s's)\otimes r &= s'(s \cdot f(r))
+    \end{align*}
+    So $s'(s \cdot f(r))$ is the image of $s \otimes r$ under this map. Therefore, the clear example is that $\bbC \otimes_{\bbR} \bbR \simeq \bbC$ as $\bbC$-modules.
+
+    \item[(2)] If $M$ is an $S$-module and $N_{i}$ are $R$-modules, then \[ M \otimes (\bigoplus_{i} N_{i}) = \bigoplus_{i}(M\otimes N_{i})\] as $S$-modules. (We turn each of the $M \otimes N_{i}$ into $S$-modules, and then direct sum over $S$-modules).\gap
+    The concrete example would be that \[ \bbC \otimes \bbR^{n} \cong \bbC^{n}\] as $\bbC$-modules.
+
+    \item[(3)]Take $\bbC^{n}$ as a $\bbC$-module, then restrict to $\bbR$, and get: \[ \bbC^{n} \cong \bbR^{2n}\] as $\bbR$-modules. Then extend to $\bbC$ and get \[ \bbC \otimes \bbR^{2n} \cong \bbC^{2n}.\] So we do lose information by going to $\bbR$, since $\bbC \otimes \bbC^{n}$ does not give us this, so these operations are not inverse.
+
+    \item[(4)] Let $\bbR^{n}$ be an $\bbR$-module, then we can extend and get \[ \bbC \otimes_{R} \bbR^{n} \cong \bbC^{n} \] over $\bbC$. Or we can restrict and get \[ \bbC^{n} \cong \bbR^{2n}\] over $\bbR$.
+    \item[(5)] Let $\bbZ^{n}$ be a $\bbZ$-module, and take \[ f: \bbZ \to \frac{\bbZ}{2\bbZ}.\] Then extend this to $\frac{\bbZ}{2\bbZ}$, and get \[ \frac{\bbZ}{2\bbZ} \otimes_{\bbZ} \bbZ^{n} \cong \left(\frac{\bbZ}{2\bbZ}\right)^{n}.\] This is also called an \textit{extension of scalars}, even though it might not look like an extension. \end{enumerate}
+\end{exs}
+\begin{ex}
+    Take $\bbC^{n} \otimes_{\bbR} \bbR^{l}$, then this is, in one way:
+    \[ \bbC^{n} \otimes_{R} \bbR^{l} \cong \bbR^{2n} \otimes_{\bbR} \bbR^{l} \cong \bbR^{2nl} \cong \bbC^{nl}\] all as modules over $\bbR$, where the last isomorphism comes from equality of dimensions.\gap \textbf{Another way: } We can also view 
+    \begin{align*} 
+        \bbC^{n} \otimes_{\bbR} \bbR^{l} &\cong \bbC \otimes_{\bbC} (\bbC \otimes_{\bbR} \bbR^{l})\\
+        &\cong \bbC^{n} \otimes_{\bbC} \bbC^{l}\\
+        &\cong \bbC^{nl}
+    \end{align*}
+    So, when we prove the proposition we are about to prove, the construction will go like: \begin{align*}
+        v \otimes u \mapsto v \otimes (1 \otimes u) \mapsto v \otimes u
+    \end{align*}
+    This is strange, because we are getting 'more room' on the pure tensors, but the key point is that when we tensor over $\bbC$ we get more non-pure tensors than we had originally. So it is wrong to only look at pure tensors.
+\end{ex}
+\begin{fancyprop}{}
+    If $M$ is an $S$-module, and $N$ is an $R$-module, then we have \[ M \otimes_{R} N \cong M \otimes_{S} (S \otimes_{R} N)\] as $S$-modules, via \begin{align*}
+        m \otimes n &\mapsto m \otimes (1 \otimes n)\\
+        (sm) \otimes n \mapsfrom m \otimes (s \otimes n)
+    \end{align*}
+\end{fancyprop}
+\proof In example sheet, or lecture notes.
+\begin{fancyprop}{}
+    Let $M$, $M'$ be $S$-modules, and $N$, $N'$ be $R$-modules, then we have: \begin{enumerate} 
+        \item An $S$-module isomorphism: \[ M \otimes_{R} N \cong N \otimes_{R} M\] via \[m \otimes n \leftrightarrow n \otimes m\]
+        \item  An $S$-module isomorphism: \[ (M \otimes_{R} N) \otimes_{R} N' \cong M \otimes_{R} (N \otimes N').\] So we get associativity, on the LHS we extend to $S$-modules twice (inside and outside the brackets) and on the RHS we need to extend to an $S$-module only once.
+        \item Similarly to above, we have \[(M \otimes_{R} N) \otimes_{S} M' \cong M \otimes_{S} (N \otimes_{R} M')\] 
+        \item We also have the distributive property: \[ M \otimes_{R} (\bigoplus_{i} N_{i}) \cong \bigoplus_{i} \left( M \otimes N_{i}\right)\]
+    \end{enumerate}
+\end{fancyprop}
+\newpage
+\proof \hspace{0.1cm} We will prove only the third claim, since all the proofs are very similar. We have \[ (M \otimes_{R} N) \otimes_{R} M' \cong \left( M \otimes_{S} (N \otimes_{R} S)\right) \otimes_{S} M'.\] Now this is just a tensor product of $3$ $S$-modules, so we can just use ordinary tensor product associativity to get \[ M \otimes_{S} \left((N \otimes_{R} S) \otimes_{S} M'\right).\]
+But then, we don't need to "prepare" the module $N$ in this expression, just like the first expression, so we get \[ M \otimes _{S} (N \otimes_{R} M').\] 
+\endproof
+For a concrete example, we have \begin{align*} 
+    &\bbC \otimes_{\bbR} (\bbR^{l} \otimes{\bbR} \bbR^{n})\\
+    \cong & (\bbC \otimes_{\bbR} \bbR^{l}) \otimes_{\bbC} (\bbC \otimes_{\bbR} \bbR^{n}).\\
+    \cong & \bbC^{l} \otimes_{\bbC} \bbC^{n} \cong \bbC^{nl}
+\end{align*}
+\begin{corr}{}
+    Let $N$, $N'$ be $R$-modules, then \[ S \otimes_{R} (N \otimes_{R} N') \cong (S \otimes_{R} N) \otimes_{S} (S \otimes_{R} N')\]
+\end{corr}
+\proof "One line\footnote{Lecturer "lines" to real life lines apparently have a 1 to 2 conversion rate, although to be fair, he \textit{just} managed to fit it on one.}":
+ \begin{align*}
+    S \otimes_{R} (N \otimes_{R} N') &\cong (S \otimes_{R} N) \otimes_{R} N' \tag{\text{by 2. in prop 3.5}}\\
+    &\cong (S \otimes_{R} N) \otimes_{S} (S \otimes_{R} N') \tag{doing the "preparation"}
+\end{align*}
+\endproof
+\newlec So for example, we have \begin{align*}
+    \bbC \otimes_{\bbR} (\bbR^{m} \otimes_{\bbR} \bbR^{l}) &\cong (\bbC \otimes_{\bbR} \bbR^{m}) \otimes_{\bbC} (\bbC \otimes \bbR^{l})\\
+    &\cong \bbC^{m} \otimes \bbC^{l} \cong \bbC^{ml}
+\end{align*}
+By induction with the corollary, we can conlude that \[ S \otimes_{R} (N_{1} \otimes_{R} \dots \otimes_{R} N_{l}) \cong (S \otimes_{R} N_{1}) \otimes_{S} \dots \otimes_{S} (S \otimes_{R} N_{l}). \] And, in the example sheet it is proved that we can basically move the brackets around, since the tensor product is associative.
+\subsection{Extension of scalars on morphisms}
+Let $f:N \to N'$, be $R$-linear, and let $N$, $N'$ be $R$-modules, and let $M$ be an $S$-module. then: \[ \id_{M} \otimes f : M \otimes_{R} N \to M \otimes_{R} N', \] where this map is, by construction, an $R$-linear map. But in fact it is also $S$-linear, which we will verify:
+\begin{align*}
+    (\id_{M} \otimes f)(s(m \otimes n)) &= (id_{M} \otimes f)((sm) \otimes n)\\
+    &= (sm) \otimes f(n)\\
+    &= s((\id_{M} \otimes f)(m \otimes n))
+\end{align*}
+If we have \[ T: \bbR^{n} \to \bbR^{l}\] an $\bbR$-linear map, where $\bbR^{n}$ has basis $\{ e_{1}, \dots, e_{n}\}$, and $\bbR^{l}$ has basis $\{f_{1}, \dots, f_{l} \}$. Then if we consider \[ \id_{\bbC} \otimes T : \bbC \otimes_{\bbR} \bbR^{n} \to \bbC \otimes_{\bbR} \bbR^{l}\] where these modules have bases given by $1 \otimes e_{i}$ and $1 \otimes f_{j}$ respectively. Then we want to see what this map does on basis elements, and so we write: \begin{align*} 
+    (\id_{\bbC} \otimes T)(1 \otimes e_{i}) &= (1 \otimes T(e_{i}))\\
+    &= 1 \otimes (\sum_{j=1}^{l} [T]_{ji}\cdot f_{j})\\
+    &= \sum_{j=1}^{l}[T]_{ji} \cdot (1 \otimes f_{j})
+\end{align*}
+So $[\id_{\bbC} \otimes T]$ is the same as $[T]$ as a matrix\footnote{So don't be afraid of the extension of scalars on morphisms.}
+\subsection{Extension of scalars on algebras}
+Let $A,B$ be $R$-algebras, then we have the construction of the tensor product of algebras $A \otimes_{R} B$ is an $R$-algebra. Now, it is quite easy to see that $A \otimes_{R} B$ is both an $A$-algebra and a $B$ algebra, by sending \begin{align*}
+    A &\to A \otimes_{R} B\\
+    a &\mapsto a \otimes 1\\
+\end{align*}
+\hspace{0.1cm}\\
+\begin{align*}
+    B &\to A \otimes_{R} B\\
+    b &\mapsto 1 \otimes b\\
+\end{align*}
+\begin{ex}
+    If we have our ambient function $f: R \to S$, and $R[X_{1}, \dots, X_{n}]$ is a polynomial ring over $R$, then \[ S \otimes R[X_{1}, \dots, X_{n}] \cong S[X_{1}, \dots, X_{n}],\] both $S$-algebras. 
+\end{ex}
+\proof We already have an isomorphism between these as $S$-modules, which is given by 
+\begin{align*} 
+    \varphi(s \otimes p) &= sp\\
+    \varphi(1 \otimes 1) &= 1
+\end{align*}
+Now we just need to verify that multiplication is preserved (we won't do it, but you argue that multiplication is preserved for pure tensors, and then argue that this is enough for the whole algebra).\gap We can do something a little more complicated, and have \[ S \otimes \left( \frac{R[X_{1}, \dots, X_{n}]}{I} \right) \cong \frac{S[X_{1}, \dots, X_{n}]}{I^{e}}\]
+where $I^{e}$ is the ideal of $S[X_{1}, \dots, X_{n}]$ generated by $f(I)$. \gap 
+Two more propositions which we aren't going to prove:
+\begin{fancyprop}{}
+    If $A$ is an $R$-algebra, and $B$ is an $S$-algebra, then \begin{align*}
+        A \otimes_{R} B \cong (A \otimes_{R} S) \otimes_{S} B
+    \end{align*}
+    as $S$-algebras. This is what we called previously the \say{preparation}.
+\end{fancyprop}
+\proof We already know this for modules, so just check that the identity is sent to the identity, and multiplication is preserved. Use the ring homomorphism $f$ from $R$ to $S$ which we have been assuming exists.
+\begin{fancyprop}{}
+    Let $A$ and $B$ be $R$-algebras, then \[ S \otimes_{R} (A \otimes_{R} B) \cong (S \otimes_{R} A) \otimes_{S} (S \otimes_{R} B)\] as $S$-algebras.
+\end{fancyprop}
+\proof Just as above, we know it for modules, and then check it works for algebras too.
+\section{Exactness}
+\subsection{Exactness properties of the tensor products of a fixed module}
+Let $M$ be an $R$-module, we will define $T_{M}(N)=M \otimes_{R} N$ where $N$ is any $R$-module. If $f: N \to N'$ is $R$-linear homomorphism of $R$-modules, then we also have \[ T_{M}(f) = \id_{M} \otimes f\] so $T_{M}$ is defined not just on modules, but also on homomorphisms. \gap Our first goal is to show that if \[ A \xrightarrow f B \xrightarrow g C \rightarrow 0 \] is an exact sequence of $R$-modules (i.e. $g$ is surjective, and $f$ has image the kernel of $g$, but does not need to be injective since we don't have the starting $0$). Then \[ M \otimes_{R} A \xrightarrow{T_{M}(f)} M \otimes_{R} B \xrightarrow{T_{M}(g)} C \rightarrow 0.\] is also exact. $T_{M}$ acts on both the objects and the morphisms of the category, and preserves composition and identity, so it is a functor from $\cat{Module$_{R}$}$ to $\cat{Module$_{R}$}$.
+\begin{fancydefine*}{Right Exact}
+     The property of preserving these sorts of exact sequences (with a $0$ at the end but not at the start) is called being \textbf{right exact}. $T_{M}$ therefore is right exact.
+    \gap Left exactness is exactly what you would think, and they are not identical concepts, and in fact $T_{M}$ is \textit{not} left exact.
+\end{fancydefine*}
+\begin{fancydefine}{The $\Hom$ functor}
+    If $Q$ and $P$ are $R$-modules, then \[ \Hom_{R}(Q,P) = \{ f: Q \to P \, | \,  f \, \text{ is $R$-linear } \}.\] In fact, $\Hom_{R}(Q,P)$ is itself an $R$-module via 
+    \begin{align*}
+        (r \cdot \varphi)(q) = r \cdot (\varphi(q)).
+    \end{align*}
+    Then we can generate two \textbf{Hom functors} from this construction: \[ \Hom_{R}(Q, \widecdot) \] and \[ \Hom_{R}(\widecdot, P),\] where $Q$ and $P$ are both \textit{fixed} $R$-modules in these definitions. 
+    \gap
+    If $f: N' \to N$ is an $R$-linear map, then we can apply the $\Hom$ functor to both of them, and also to $f$, to get 
+    \begin{align*} 
+        \Hom_{R}(Q,N') &\xrightarrow{\Hom_{R}(Q,f)} \Hom_{R}(Q,N)\\
+        \varphi &\longmapsto f \circ \varphi := f_{*}(\varphi)
+    \end{align*}
+    Obviously, we have the other $\Hom$ functor, which works like: 
+    \begin{align*}
+        \Hom_{R}(N,P) &\xrightarrow{\Hom_{R}(f,P)} \Hom_{R}(N',P)\\
+        \varphi \mapsto \varphi \circ f := f^{*}(\varphi)
+    \end{align*}
+\end{fancydefine}
+
+\begin{fancyprop}{}\hspace{0.1cm}
+    \begin{enumerate}
+        \item If \[ 0 \rightarrow A \xrightarrow{f} B \xrightarrow{g} C \] is exact, then so is
+        \[ 0 \rightarrow \Hom_{R}(Q,A) \rightarrow \Hom_{R}(Q,B) \rightarrow \Hom_{R}(Q,C)\] with the right morphisms defined.
+        \item If \[ A \xrightarrow{f} B \xrightarrow{g} C \rightarrow 0 \] is exact, then so is \[ 0 \rightarrow \Hom_{R}(C,P) \rightarrow \Hom_{R}(B,P) \rightarrow \Hom_{R}(A,P).\]
+    \end{enumerate}
+    Both of these are \textit{Left exact} because at the end, they start with a $0$, but for claim 2, we need to start with a $0$ on the right, since the second functor is order-reversing.
+\end{fancyprop}
+\proof In example sheets, but there is only one thing you can really do, you do it, and then it works.
+\begin{fancylem}{Using Hom functors to prove exactness}
+    Consider some sequence of $R$-modules (not necessarily exact), \[ A \xrightarrow{f} B \xrightarrow{g} C, \tag{*} \] and assume that for all $R$-modules $P$, we have \[ \Hom_{R}(C,P) \rightarrow \Hom_{R}(B,P) \rightarrow \Hom_{R}(A,P) \] is exact. Then so is (*).
+\end{fancylem}
+\proof \hspace{0.1cm} \underline{Step 1:} Take $P=C$, then we get \[ \Hom_{R}(C,C) \rightarrow \Hom_{R}(B,C) \rightarrow \Hom_{R}(A,C) \] which we know is exact, so we can take \[ id_{C} \mapsto \id_{C} \circ g = g \mapsto \id_{C} \circ g \circ f = g \circ f. \] But then $g \circ f = 0$, since going two steps in an exact sequence always gives $0$. Therefore $\im(f) \subseteq \ker(g)$.
+\gap \underline{Step 2:} Take $P=\frac{B}{\im f}$\footnote{What we call the \textit{Cokernel} of $f$.}. Then we have \[ \Hom_{R}(C, \frac{B}{\im f}) \rightarrow \Hom_{R}(B, \frac{B}{\im f}) \rightarrow \Hom_{R}(A, \frac{B}{\im f}).\] Then we use the other property of exactness, which is that if we start somewhere that goes to $0$, then it has a preimage. So take \[ h: B \to \frac{B}{\im f}\] to be the canonical quotient map of $B$ to the quotient of $B$ by $\im f$. Then we get, starting at the middle, \[ h \mapsto h \circ f = 0, \] since $f$ takes you first to $\im f$, and then $h$ sends you to $0$. So we have a preimage of $h$ which we call $e$, and we have: \[ e \mapsto e \circ g = h.\] So $e \circ g = h$, so $\ker g \subseteq \ker h$. So $\ker(g) \subseteq \im(f)$. \endproof
+\hspace{0.1cm} \gap
+Now, consider that \[ 
+    \Hom_{R}(M \otimes_{R} N, L) \leftrightarrow \Bil(M\times N, L)\] 
+by the universal property. Then we can also say 
+\[ \Hom_{R}(M \otimes_{R} N, L) \leftrightarrow \Bil(M \times N, L) \leftrightarrow \Hom_{R}(N, \Hom_{R}(M,L))\]
+Where the inner $\Hom$ functor is $R$-linear, and then the outer $\Hom$ functor must be $R$-linear, since for every fixed $m$ we need to make sure we get a $R$-linear map in $N$, and then this assignment from $m$ to these maps is \textit{itself} $R$-linear. \newlec This map is given by \[ \varphi \mapsto (n \mapsto (m \mapsto \varphi (m \otimes n))). \] Then we claim the following 
+\begin{fancyprop}{}
+    Let $M$ be an $R$-module, then \[ M \otimes_{R} ( \widecdot ) = T_{M}(\widecdot) \] is right exact.
+\end{fancyprop}
+\proof Take an exact sequence \[A \xrightarrow{f} B \xrightarrow{g} C \rightarrow 0, \] and take an arbitrary $R$-module $P$. Then apply the functor $\Hom_{R}(\widecdot, P)$, and \textit{then} apply the functor $\Hom_{R}(M, \widecdot)$. Doing this, we obtain first \[ 0 \rightarrow \Hom_{R}(M,\Hom_{R}(C,P)) \rightarrow \Hom_{R}(M,\Hom_{R}(B,P)) \rightarrow \Hom_{R}(M,\Hom_{R}(A,P)).\]
+Which is exact, since $\Hom$ functors are left exact. But then we have the bijection between $\Hom$ applied to the tensor product and the $\Hom$ functor applied twice (see above), and therefore have \[ 0 \rightarrow \Hom(M \otimes_{R} C, P) \rightarrow \Hom_{R}(M \otimes_{R} B, P) \rightarrow \Hom_{R}(M \otimes_{R} A, P).\]
+And moreover, the bijections between these two short exact sequences form a commutative diagram, so this second exact sequence is exact. Now recall lemma 4.3, and apply this twice to the sequence above (since $P$ was arbitray). Therefore we know that \[ 0 \rightarrow M \otimes_R C \rightarrow M \otimes_R B \rightarrow M \otimes_R A.\] \endproof 
+\textbf{Warning: } We proved that \[ A \rightarrow B \rightarrow C (\rightarrow 0) \] remains exact when we tensor on the right with $M$, but that does \textit{NOT} imply that \[A \rightarrow B \rightarrow C\] remains exact when we tensor. For example, we could take \[ 0 \rightarrow \bbZ \xrightarrow{\times 2} \bbZ\] and tensor with $\bbZ/2\bbZ$, to get \[ 0 \rightarrow \bbZ / 2\bbZ \otimes \bbZ \xrightarrow{\times 2} \bbZ / 2\bbZ \otimes \bbZ,\] which is isomorphic to \[ 0 \rightarrow \bbZ / 2\bbZ \xrightarrow{\times 2} \bbZ /2\bbZ, \] which is not exact.
+\subsection{Flat Modules - A first encounter}
+\begin{fancydefine}{Flat Module}
+    An $R$-module $M$ is \textbf{Flat} if, whenever we have \[ f: N \to N' \] an $R$-linear injective map, then \[ \id_{M} \otimes f : M \otimes_{R} N \to M \otimes_{R} N'\] is injective.
+\end{fancydefine}
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item $\bbZ / 2\bbZ$ is not a flat $\bbZ$-module, as we just saw.
+        \item Free modules are \textit{always} flat. To see this, consider \[f : N \to N',\] an injective $R$-linear map. Then we tensor with $R^{\oplus I}$ where $I$ is some indexing set, to get \begin{center}
+            \begin{tikzcd}[column sep = 1in,row sep = 0.5in]
+                R^{\oplus I} \otimes_{R} N \arrow[r, "\id_{R^{\oplus I}} \otimes f"] \arrow[d, "\simeq"] & R^{\oplus I} \otimes_{R} N' \arrow[d, "\simeq"]\\
+
+                N^{\oplus I} \arrow[r, "(n_i)_{i \in I} \mapsto (f(n_{i}))_{i \in I}"] & N'^{\oplus I}
+            \end{tikzcd}
+        \end{center}
+        The bottom  arrow is injective, since we apply an injective map coordinate by coordinate. We also have that the diagram commutes, so the top arrow is also injective, and therefore $R^{\oplus I}$ is flat.
+        \item The base ring matters! $\bbZ / 2\bbZ$ is a free $\bbZ / 2 \bbZ$-module. Therefore it is a flat $\bbZ/ 2\bbZ$-module.
+        \item An $R$-module $M$ is torsion-free if: $\forall r \in R \, : \, r \nmid 0$; $\forall m \in M \, : \, m \neq 0$ we have $rm \neq 0 $. Then we have \gap 
+        \textbf{Claim: } Flat modules are torsion-free.\gap
+        \proof Take $M$ not torsion free, then \[ \exists r_{0} \in R \, : \, r \nmid 0\] \[ \exists m \in M \, : \, m\neq 0.\] And therefore $r_{0}m_{0} \neq 0$. But now we have a map 
+        \begin{align*} 
+            f: R &\to R\\
+            r &\mapsto r_{0}r.
+        \end{align*} 
+        Then $\ker(f)=\{0\}$, since $r_{0}$ not a zero-divisor. Therefore $f$ is injective. Then we have \begin{center}
+            \begin{tikzcd}[column sep = 0.4in, row sep=0.2in]
+                M \otimes_{R} R \arrow[r, "\id_{M} \otimes f"] \arrow[d, "\simeq"] & M \otimes_{R} R  \arrow[d, "\simeq"]\\
+                M \arrow[r, "m \mapsto r_{0}m"] & M
+            \end{tikzcd}
+        \end{center}
+        commutes. Then the bottom map has $0 \neq m_{0}$ in the kernel, so the top arrow cannot be injective.
+        \item Special Case: Let $R$ be an integral domain (A non-zero ring with no zero-divisors, or equivalently the $0$ ideal is prime) and let $0 \neq I$ be an ideal of $R$. Then \[ R/I \text{  not flat.}\] \proof If $I=R$ then $R/I = 0$ which is not flat. \gap Now assume that $I \subsetneq R$. Take $x \in I$, then \[ R/I \xrightarrow{\cdot x} R/I\] is the zero-map. But $R/I$ is not the zero-module, so there is some non-zero element which is multiplied by $x$ which is not a zero divisor, so $R/I$ is not torsion-free, and therefore not flat. \endproof
+    \end{enumerate}
+\end{exs}
+\begin{fancyprop}{Characterisation of flatness}
+    The following are equivalent: \begin{enumerate}
+        \item $T_{M}$ preserves exactness of \textit{all} exact sequences.
+        \item $T_{M}$ preserves exactness of \textit{short} exact sequences.
+        \item $T_{M}$ is flat, (i.e. it preserves injectivity)
+        \item If $f: N \to N'$ is $R$-linear, injective, and $N$ and $N'$ are finitely-generated $R$-modules, then \[ \id_{M} \otimes f : M \otimes N \to M \otimes N'\] is injective.
+    \end{enumerate}
+\end{fancyprop}
+\proof The easy part of this proof goes $(1) \Rightarrow (2) \Rightarrow (3) \Rightarrow (4)$. For $(1) \Rightarrow (2)$, short exact sequences are a subset of all exact sequences. For $(2) \Rightarrow (3)$, consider that preserving injectivity is the same as preserving exact sequences like \[ 0 \rightarrow N \rightarrow M,\] and that we can always \say{complete} this kind of sequence to a short exact sequence via \[ 0 \rightarrow N \rightarrow M \rightarrow M/N \rightarrow 0.\] This is preserved, since it is a short exact sequence, so the \say{injective} exact sequence is also preserved. And for $(3) \Rightarrow (4)$, clearly flatness implies flatness for finitely generated modules. \gap Now we need to do the \say{hard work.} \begin{enumerate}
+    \item[$(2) \Rightarrow (1)$] Assume \[ A \xrightarrow{f} B \xrightarrow{g} C\] is exact. Then \[ 0 \rightarrow A/ \ker(f) \xrightarrow{\bar f} B \xrightarrow{g} \im(g) \rightarrow 0\] is short-exact (where $\bar f$ is the induced map by the quotient). Then we have \[ 0 \rightarrow M \otimes A/ \ker(f) \xrightarrow{\id_{M} \otimes \bar f} M \otimes B \xrightarrow{\id_{M} \otimes g} M \otimes \im(g) \rightarrow 0\] is exact by hypothesis. So we know that $\ker(\id_{M} \otimes g) = \im(\id_{M} \otimes \bar f) = \im(\id_{M} \otimes f)$. Therefore \[ M \otimes A \rightarrow M \otimes B \rightarrow M \otimes C\] is exact.
+    \item[$(4) \Rightarrow (3)$] We won't do the whole proof of this, but we can get the flatness of general modules, since if anything were $0$, then there would be a finitely generated submodule, and we would be able to reduce to $(4)$, and then we would get a contradiction. There's more detail in his notes.
+    \item[$(3) \Rightarrow (2)$] $T_{M}$ is right exact, flatness means that you preserve the left side, and then since the map preserves the right side as well, we are done.
+\end{enumerate}
+\endproof
+\begin{fancyprop}{}
+    Let \[ f:R \to S\] be a ring homomorphism, and $M$ be a flat $R$-module. Then $S \otimes_{R} M$ is a flat $S$-module.
+\end{fancyprop}
+\proof Take $g : N \to N'$, an injective $S$-linear map. Then \begin{center}
+    \begin{tikzcd}[column sep =0.7in]
+        (S \otimes_{R} M) \otimes_{S} N \arrow[r, "\id_{S \otimes M} \otimes g"] \arrow[d] & (S \otimes_{R} M) \otimes_{S} N' \arrow[d]\\
+        M \otimes N \arrow[r, "\id_{M} \otimes g"] & M \otimes N'
+    \end{tikzcd}
+\end{center}
+the diagram commutes, and the bottom arrow is thus injective since $M$ is flat, therefore the top arrow must be injective, and so $S \otimes_{R} M$ is a flat $S$-module.
+\subsection{Further Examples of Tensor Products}\newlec
+\begin{ex} Consider \[ x \otimes y \in \bbQ \otimes_{\bbZ} \bbZ / n \bbZ.\] We can also write this as \[ x \otimes y = n \cdot \frac{x}{n} \otimes y = \frac{x}{n} \otimes ny = 0\]
+So $\bbQ \otimes_{\bbZ} \bbZ/n\bbZ = 0$ for any $n$. We used the fact that $\bbQ$ is a divisible group, i.e. \[ \forall x \in \bbQ, \, \, \forall n \geq 1, \,\, \exists y \in \bbQ \, : \, n \cdot y = x,\] as well as the fact that $\bbZ/n\bbZ$ is a torsion group, i.e. all elements are of finite order. In fact, any divisible group tensored with any torsion group must be $0$. In particular \[ \bbQ/\bbZ \otimes \bbQ/ \bbZ = 0.\] But (from the last question of example sheet 1), for any $R$-module $M\neq 0$, if $M$ finitely generated, then $M \otimes_{R} M \neq 0$\footnote{Luckily for us $\bbQ/\bbZ$ is not finitely generated. Phew, maths has survived another seeming inconsistency.}
+\end{ex}
+\begin{ex}
+    Let $V$ be a $\bbQ$-vector space, then we have 
+    \begin{align*}
+         \bbQ \otimes_{\bbQ} V &\xrightarrow{\sim} V\\
+         x \otimes v &\mapsto xv
+    \end{align*}
+    But also, we have 
+    \begin{align*}
+        \bbQ \otimes_{\bbZ} V &\xrightarrow{\sim} V\\
+         x \otimes v &\mapsto xv
+    \end{align*}
+    \proof Every tensor is pure, take 
+    \begin{align*} 
+        \sum \frac{a_i}{b_i} \otimes v_i &= \sum \frac{1}{b_i} \otimes a_i v_i\\
+        &= \sum \frac{1}{b_{i}} \otimes (b_{i} \cdot \frac{a_{i}}{b_i}v_i)
+    \end{align*}
+    where $a_i,b_i \in \bbZ$, $v_i \in V$. Then we can rewrite this as 
+    \begin{align*}
+        \sum 1 \otimes \frac{a_i}{b_i}v_i = 1 \otimes \sum \frac{a_i}{b_i}v_i
+    \end{align*}
+    so every tensor must be pure. Then have
+    \begin{align*}
+        1 \otimes v \to v
+    \end{align*}
+    so this map is surjective. And to show injective, it is enough to show it is injective on pure tensors:
+    \begin{align*}
+        x \otimes v \mapsto xv = 0 &\Rightarrow \, x=0 \text{ or } v=0\\
+        &\Rightarrow x \otimes v =0
+    \end{align*}
+\end{ex}
+\begin{ex}
+    \begin{align*}
+        M \otimes_{R} (\bigoplus_{i} N_{i}) &\xrightarrow{\sim} \bigoplus_{i} (M\otimes N_{i})\\
+        m \otimes (n_{i})_{i \in I} \mapsto (m \otimes n_{i})_{i \in I}.
+    \end{align*}
+    We also have a map
+    \begin{align*}
+        M \otimes \Pi_{i \in I} N_{i} \rightarrow \Pi_{i \in I} (M \otimes N_{i}),
+    \end{align*}
+    however, we have not put the isomorphism sign here, because it is not in general an isomorphism. An example where this is not an isomorphism is: 
+    \begin{align*}
+        \bbQ \otimes_{\bbZ} \Pi_{n\geq 1} \frac{\bbZ}{2^{n}\bbZ}
+    \end{align*}
+    is not isomorphic to \begin{align*}
+        \Pi_{n \geq 1} \bbQ \otimes_{\bbZ} \frac{\bbZ}{2^{n}\bbZ}
+    \end{align*}
+    This second expression is zero, since $\bbQ$ is division, and each $\bbZ / 2^{n}\bbZ$ is torsion, so we are tensoring a bunch of $0$ modules, and so the overall product is $0$.\gap However, in the first expression, if we take an element of infinite order: \[ g := (1,1,1,\dots) \in \Pi_{n \geq 1},\] and no matter how many times you add this element to itself, it will never vanish. Therefore, the order of this element is infinite, so the group that it generates is isomorphic to $\bbZ$. Then \[ \bbQ \otimes_{\bbZ} \langle g \rangle \cong \bbQ. \] But, there is an injective map \[\langle g \rangle \hookrightarrow \Pi_{n \geq 1} \bbZ/2^{n}\bbZ\] Then we can tensor with $\bbQ$ to get \[ \bbQ \otimes \langle g \rangle \hookrightarrow \bbQ \otimes_{\bbZ} \Pi_{n \geq 1} \bbZ / 2^{n}\bbZ.\] The question, then, is why does this preserve injectivity? Well, $\bbQ$ is a flat $\bbZ$-module. The proof of this is postponed for now, but we will see it later.
+\end{ex}
+\begin{ex}
+    Let's look at $\bbC \otimes_{\bbR} \bbC$ as a $\bbC$-algebra.
+    First, what is $\bbC \otimes_{\bbR} \bbC$ as a $\bbC$-module. Well, first we identify the second $\bbC$ with $\bbR^{2}$. and then we extend scalars from $\bbR$ to $\bbC$ by tensoring the first $\bbC$.\gap 
+    So we get \[\bbC \otimes_{\bbR} \bbC \cong \bbC \otimes \bbR^{2} \cong \bbC^{2}. \]
+    Now, let's think about it as a $\bbC$-algebra. We do the same thing as before, by identifying $\bbC \otimes_{\bbR} \bbC$ with $\bbC \otimes_{\bbR} \bbR^{2}$. To make the algebra more explicit, we do this as:
+    \[ \bbC \otimes_{\bbR} \bbC \cong \bbC \otimes_{\bbR} \frac{\bbR[T]}{(T^{2}+1)}\]
+    But this is congruent to \[ \frac{\bbC[T]}{(T^{2}+1)} \cong \frac{\bbC}{(T-i)} \times \frac{\bbC}{(T+i)} \cong \bbC \times \bbC \] Then if we follow an element through these maps, we get \begin{align*}
+        (a+bi)\otimes(c+di) &\mapsto (a+bi) \otimes (c + dT + (T^{2}+1)\bbR[T])\\ &\mapsto (a+bi)(c+dT) + (T^{2}+1)\bbC[T]\\ &\mapsto ac + bdiT + (ibc + Tad) := p\\
+        p &\mapsto (p + (T-i)\bbC[T],p+(T+i)\bbC[T])\\ &\mapsto ((ac-bd)+i(bc+ad), ac + bd + i(bc-ad)) = (xy,x \bar y)
+    \end{align*}
+    So $x \otimes y \mapsto (xy, x \bar y)$.
+\end{ex}
+\section{Localization}
+\subsection{Localization of Rings and Modules}
+\begin{fancydefine}{Multiplicative Set}
+    A \textbf{multiplicative subset} $S$ of $R$ is a subset such that \begin{itemize}
+        \item $1 \in S$
+        \item If $a,b \in S$ then $a,b \in S$.
+    \end{itemize}
+    If $U \subseteq R$ is any set, then the multiplicative closure $S$ of $U$ is the intersection of all multiplicative subsets of $R$ containing $U$, also definable as \[ \{ \Pi_{i=1}^{n} u_{i} \,|\, n \geq 0, \, u_{i} \in U \} \]
+\end{fancydefine}
+\begin{exs}\hspace{0.1cm}
+    \begin{enumerate}
+        \item If $R$ is an integral domain, then $S = R \setminus \{0\}$ is multiplicative.
+        \item If $P$ is a prime ideal of $R$, then $S = R \setminus P$ is multiplicative.
+        \item If $x \in R$, then $S= \{ x^{n} \, | \, n \geq 0\}$ is multiplicative.
+    \end{enumerate}
+\end{exs}
+\begin{ex}
+    $\bbQ$ is obtained from $\bbZ$ by \say{adding inverses} for the elements of the multiplicative subset $\bbZ \setminus \{ 0 \}$, and we have a ring homomorphism \[ \bbZ \hookrightarrow \bbQ\]
+    Localization wil let us generalize to general $R$, not just $\bbQ$, and general multiplicative subsets, but we will generally not have injectivity of the ring homomorphism.
+\end{ex}
+\begin{fancydefine}{Localization}
+    Let $S \subset R$ be a multiplicative set, and $M$ an $R$-module, then consider $M \times S$. We define \[ (m_{1},s_{1}) \sim (m_{2},s_{2}) \] if there exists a $u$ in $S$ such that $u(s_{2}m_{1}-s_{1}m_{2})=0$. This defines an equivalence relation. Reflexivity and symmetry are obvious, and transitivity follows from $S$ being multiplicative.\gap Then we write \[\frac{m}{s} := \left[ \frac{m}{s} \right]_{\sim}\]
+    \[ S^{-1}M = \left\{ \frac{m}{s} \, | \, (m,s) \in M \times S \right\}. \] Also have
+    \[ \frac{m_{1}}{s_{1}} + \frac{m_{2}}{s_{2}} = \frac{s_{2}m_{1}+s_{1}m_{2}}{s_{1}s_{2}}\] defines a well-defined abelian group. We define $S^{-1}R$ defined by thinking of $R$ as an $R$-module, and then we make $S^{-1}R$ into a ring by \[ \frac{m_{1}}{s_{1}} \cdot \frac{m_{2}}{s_{2}} = \frac{m_{1}m_{2}}{s_{1}s_{2}}.\]
+    Then we can obtain an $S^{-1}R$-module structure on $S^{-1}M$, in the obvious way.\gap
+    We also have a localization map \begin{align*}
+        R &\to S^{-1}R\\
+        r &\mapsto \frac{r}{1}
+    \end{align*}
+    and on the module: \begin{align*}
+        M &\to S^{-1}M\\
+        m &\mapsto \frac{m}{1}
+    \end{align*}
+    which are $R$-linear.
+\end{fancydefine}
+We will show that $\sim$ is an equivalence relation. \gap \proof It is clearly reflexive and symmetric, and for transitivity, we have: \begin{align*}
+    (m_{1},s_{1}) &\sim (m_{2},s_{2})\\
+    (m_{2},s_{2}) &\sim (m_{3},s_{3}) 
+\end{align*}
+Then there are $u,v \in S$ such that: \begin{align*}
+    u(s_{2}m_{1} - s_{1}m_{2})&=0\\
+    v(s_{3}m_{2} - s_{2}m_{3})&=0
+\end{align*}
+If we multiply the first thing by $v \cdot s_{3}$ and the second thing by $u \cdot s_{1}$, then add them, we cancel to get \[ uv(s_{2}(s_{3}m_{1}-s_{1}m_{3})) = 0 \]
+and $uvs_{1} \in S$ since $S$ is a multiplicative set. \endproof
+\begin{fancyprop}{Universal property of $S^{-1}R$}
+    If $U \subseteq R$ any subset, and $S \subseteq R$ the multiplicative closure of $U$. And also \[ f: R \to B \] a ring homomorphism to any ring $B$ such that $f(u)$ is a \textit{unit} for all $u \in U$. Then \[ \exists! h: S^{-1}R \to B\] such that \begin{center}
+        \begin{tikzcd}
+            R \arrow[r, "r \mapsto \frac{r}{1}"] \arrow[dr, "f",swap] & S^{-1}R \arrow[d, dashrightarrow, "h"]\\
+            & B
+        \end{tikzcd}
+    \end{center}
+    commutes. So we have \[ \Hom_{\text{Ring}}(S^{-1}R,B) \leftrightarrow \left\{ \phi \in \Hom_{\text{Ring}}(R,B) \, | \, \phi(U) \subseteq B^{\times} \right\}. \]
+\end{fancyprop}
+\proof Take some $f : R \to B$ a ring homomorphism such that $f(U) \subseteq B^{\times}$. Then immediately, we know $f(S) \subseteq B^{\times}$. Then we want $h: S^{-1}R \to B$ such that $f(r) = h\left(\frac{r}{1}\right)$, for all $r \in R$. \gap Then $h$ must satisfy \[ 1=h(1)=h\left(\frac{1}{s} \cdot \frac{s}{1}\right) = h\left(\frac{1}{s}\right)f(s).\]
+This means that $h\left(\frac{1}{s}\right) = f(s)^{-1}$. So \[ h\left(\frac{r}{s}\right)=h\left(\frac{1}{s}\right)h\left(\frac{r}{1}\right)=f(s)^{-1}f(r).\] So we have an $h$ which is defined, but is it \textit{well}-defined. If we have \[ \frac{r_{1}}{s_{1}}=\frac{r_{2}}{s_{2}}\] then there is some $t$ such that \[ t(r_{1}s_{2}-r_{2}s_{1}) = 0.\] Therefore $ts_{2}r_{1}=ts_{1}r_{2}$, now we apply $f$ to get \[ f(t)f(s_{2})f(r_{1})=f(t)f(s_{1})f(r_{2}) \] Then if we multiply by $f(t)^{-1}f(s_{1})^{-1}f(r_{2})^{-1}$, we get \[ \frac{f(r_{1})}{f(s_{1})}=\frac{f(r_{2})}{f(s_{2})}.\]
+So $h$ is well-defined, and then also gives a ring homomorphism. \endproof
+\begin{fancyprop}{}
+    If $(A,j)$ has the same universal property as $(S^{-1}R, \iota_{S^{-1}R})$ where $\iota$ maps $r$ to $\frac{r}{1}$, then we have \begin{align*}
+        S^{-1}R &\xrightarrow{\sim} A\\
+        \frac{r}{s} &\mapsto j(s)^{-1}j(r)
+    \end{align*}
+\end{fancyprop}
+\proof In notes, exact same idea as for the one in tensor products. \endproof \newpage
+\textbf{Facts:} \begin{enumerate}
+    \item Take $\frac{r}{s} \in S^{-1}R$, then \[ \frac{r}{s} = \frac{0}{1} \Leftrightarrow \exists u \in S, \, ur=0.\]
+    \item So $S^{-1}R = 0 \Leftrightarrow 0 \in S$ (this can be a useful way to analyse multiplicative subsets, i.e. show that the localised ring is the zero ring).
+    \item $\ker(\iota_{S^{-1}R}) = \{ r \in R \, | \, \exists u \in S \, \text{ s.t. } ur = 0\}$
+    \item $\iota_{S^{-1}R} : R \to S^{-1}R$ is injective $\Leftrightarrow$ $S$ doesn't contain any zero divisors.
+    \item $\iota$ is always an epimorphism, but usually not surjective. 
+    \begin{ex*}
+        $\iota: \bbZ \hookrightarrow \bbQ$ is an epimorphism. If $f, g : \bbQ \to A$ such that \[ f \circ \iota = g \circ \iota \] then $f=g$. But $\iota$ is clearly not surjective.
+    \end{ex*}
+\end{enumerate}
+\begin{ex}\hspace{0.1cm}
+    \begin{enumerate}
+        \item $f \in R$, $S = \{ f^{n} \, | \, n \geq0\}$ Then we write \[ R_{f} = S^{-1}R.\] For example, $R= \bbZ$, $f= 2$. Then \[ R_{2} = \left\{ \frac{a}{2^{n}} \, | \, a \in \bbZ, \, n \geq 0 \right\} \cong \bbZ\left[ \frac{1}{2} \right]. \]
+        There is a minor notational problem, we write \[ \bbZ / n\bbZ \text{ for the finite ring} \] and \[ \bbZ_{2} \text{ for the $2$-adic integers} \] in this course. Usually it won't matter because we won't care too much about the $p$-adics.
+        \item $p \in \spec R$ (where $\spec R$ is the set of prime ideals of $R$). Then $S=R\setminus p$ is a multiplicative set, and \[ R_{p} = (R\setminus p)^{-1}R.\] Take $R = \bbZ$ and $p=(3)$, then \[ \bbZ_{(3)}=\left\{ \frac{a}{b} \, | \, b,a \in \bbZ, \, 3 \nmid b \right\} \]
+    \end{enumerate}
+\end{ex}
+\begin{fancyprop}{}
+    Let $M$ be an $R$-module, $S \subseteq R$ a multiplicative set, then 
+    \begin{align*}
+        S^{-1}R \otimes_{R} M &\to S^{-1}M\\
+        \frac{r}{s} \otimes m &\mapsto \frac{rm}{s}
+    \end{align*}
+\end{fancyprop}
+\proof We can define a bilinear map \begin{align*}
+     S^{-1}R \times M &\to S^{-1}M\\
+     \left( \frac{r}{s}, m \right) \mapsto \frac{rm}{s}
+\end{align*} which is $R$-bilinear. Therefore, from the universal property of the tensor product, we have an $S^{-1}R$-linear map \begin{align*}
+    \varphi : S^{-1}R \otimes_{R} M &\to S^{-1}M\\
+    \frac{r}{s} \otimes m &\mapsto \frac{rm}{s}
+\end{align*}
+$\varphi$ is surjective, obviously. ($\frac{1}{s} \otimes m \mapsto \frac{m}{s}$.) \gap For injectivity, note that every term \[ \sum_{i} \frac{r_{i}}{s_{i}} \otimes m_{i} \in S^{-1}R \otimes_{R} M \] is pure. Let \[ s= \Pi_{i} s_{i} \] and \[ t_{j} = \prod_{i \neq j} s_{i} \] Then \[ \sum_{i} \frac{r_{i}}{s_{i}} \otimes m_{i} = \sum \frac{1}{s_{i}} \otimes r_{i}m_{i} = \sum \frac{t_{i}}{s} \otimes r_{i}m_{i}\] 
+Then the $t_{i}$ can be moved across, since it is an element of $R$, so we obtain \[ \sum \frac{1}{s} \otimes t_{i}r_{i}m_{i} = \frac{1}{s} \sum t_{i}r_{i}m_{i} \] Then if \[\varphi\left(\frac{1}{s} \otimes m \right) = \frac{0}{1},\] we must have some $u \in S$ such that \[u(1\cdot m - 0 \cdot s)=0, \] so $um=0$. Then \[ \frac{1}{s} \otimes m = \frac{u}{us} \otimes m = \frac{1}{us} \otimes um = 0\] so $\varphi$ is injective. \gap $S^{-1}R \otimes (\widecdot)$ acts on modules and on morphisms. And $S^{-1}(\widecdot)$ acts on modules, but we can show that it acts on morphisms too via the universal property. \newlec If $f: N \to N'$ is an $R$-linear map, we can produce the following commutative diagram \begin{center}
+    \begin{tikzcd}[column sep = 0.8in, row sep = 0.7in]
+        S^{-1}R \otimes_{R}N \arrow[r,"\id_{S^{-1}R} \otimes f"] \arrow[d,swap, "\frac{1}{s} \otimes n \mapsto \frac{n}{s}"] & S^{-1}R \otimes_{R} N' \arrow[d, "\frac{1}{s} \otimes n' \mapsto \frac{n'}{s}"]\\
+        S^{-1}N \arrow[r, dashrightarrow, "S^{-1}f"] & S^{-1}N' 
+    \end{tikzcd}
+\end{center}
+which commutes if we define $(S^{-1}f)(\frac{n}{s}) = \frac{f(n)}{s}$, i.e. $S^{-1}f$ lets $f$ act only on the numerator, and not the denominator. \gap Then, just to spell out what this means, $S^{-1}R \otimes_{R} (\widecdot) \cong S^{-1}(\widecdot)$ is a natural isomophism (respecting both the objects and the $R$-linear maps).
+\begin{remark*}
+    If $A$ is an $R$-algebra, then \[ S^{-1}R \otimes_{R} A \simeq S^{-1}A \] is an $R$-linear isomorphism between these structures as modules. But this is also an isomorphism between the structures as algebras (just verify that multiplication is preserved).
+\end{remark*}
+\begin{fancylem}{}
+    Let $M$ be an $S^{-1}R$-module. Then define $S^{-1}M$ to be the module obtained by restricting scalars from $S^{-1}R$ to $R$ on $M$, and then apply $S^{-1}M$. Then 
+    \begin{align*} 
+        S^{-1}M &\cong M\\
+        \frac{m}{s} &\mapsto \frac{1}{s}m
+    \end{align*} as $S^{-1}R$-modules. Equivalently 
+    \begin{align*}
+        M &\cong S^{-1}R \otimes_{R} M\\
+        m \mapsto \frac{1}{1} \otimes m
+    \end{align*}
+    as $S^{-1}R$-modules.
+\end{fancylem}
+\proof We have \begin{align*}
+    M &\to S^{-1}M\\
+    m &\mapsto \frac{m}{1}
+\end{align*}
+is $S^{-1}R$-linear. This is surjective, since $\frac{1}{s}m \mapsto \frac{m}{s}$. Injectve, since $\frac{m}{1} = \frac{0}{1}$ means that there exists a $u \in S$ such that $um=0$ So $m=0$. \endproof
+\textbf{Recall: }Last time we saw there is a bijection: \[ \Hom_{\text{Rings}}(S^{-1}R,B) \xleftrightarrow{\sim} \{f \in \Hom_{\text{Rings}}(R,B) \, | \, f(S) \subseteq B^{\times} \} \] 
+Now, we are going to show that for $M$ a fixed $R$-module, and $L$ any $S^{-1}R$-module \[ \Hom_{R}(M,L) \xleftrightarrow{\sim} \Hom_{R}(S^{-1}M,L).\] Now let's state this formally:
+\begin{fancyprop}{}
+    Let $M$ be an $R$-module, $L$ an $S^{-1}R$-module, and \[ f: M \to L \] is an $R$-linear map. Then: \[ \exists! h : S^{-1}M \to L\] which is $S^{-1}R$-linear, such that $f = h \circ \iota_{s^{-1}M}$. I.e. $f(m)=h(\frac{m}{1})$.
+\end{fancyprop}
+\proof We know that \[ S^{-1}(\widecdot) \cong S^{-1}R \otimes_{R} (\widecdot)\] Then we have $\iota$ defined as 
+\begin{align*}
+    \iota : M \to S^{-1}R &\otimes_{R} M\\    
+    m &\mapsto \frac{1}{1} \otimes m
+\end{align*}
+So now take $f: M \to L$ which is $R$-linear, and to begin we seek \[h: S^{-1}R \otimes_{R} M \to S^{-1}R \otimes_{R} L\]. So let \[ h= \id_{S^{-1}R} \times f.\] However, we want the range to be $L$, not $S^{-1}R \otimes_{R} L$. But luckily we have the previous lemma which tells us that \say{unnecessary localisation} is just like doing nothing. So write \begin{align*}
+    h\left(\frac{r}{s} \otimes m\right) = \frac{r}{s} f(m)
+\end{align*}
+So $h(1\otimes m) = f(m)$. And the uniqueness of $h$ comes from the fact that $\{ 1\otimes m\}_{m \in M}$ generate $S^{-1}R \otimes M$ as an $S^{-1}R$-module, so once we're defined on these elements, we're defined on all of $S^{-1}R \otimes_{R} M$. \endproof
+\begin{fancythm}{$S^{-1}(\widecdot)$ is exact}
+    If \begin{center}
+        \begin{tikzcd}
+            A \arrow[r, "f"] & B \arrow[r, "g"] & C 
+        \end{tikzcd}
+    \end{center}
+    is an exact sequence of $R$-modules, then \begin{center}
+        \begin{tikzcd}
+            S^{-1}A \arrow[r, "S^{-1}f"] & S^{-1}B \arrow[r, "S^{-1}g"] & C
+        \end{tikzcd}
+    \end{center}
+    is an exact sequence of $S^{-1}R$ modules. And therefore, since it preserves all exact sequences of length $3$, it preserves all exact sequences of any length.
+\end{fancythm}
+\proof 
+First, we will show that the image is contained in the kernel. \[ (S^{-1}g) \circ (S^{-1}f) = S^{-1}(g \circ f) = 0\]
+So $\im(S^{-1}f) \subseteq \ker(S^{-1}g)$.\gap 
+Now we need to show that the kernel is contained in the image. So take $\frac{b}{s} \in \ker(S^{-1}g)$, then $\frac{g(b)}{s} = \frac{0}{1}$. Therefore, we have \[ \exists u \in S. \, u \cdot g(b) =0,\] but then, since $g$ is $R$-linear, we have \[ g(ub)=0.\] SO $ub \in \ker(g) = \im(f)$ So \[ \exists a. \, f(a) = ub.\] Then \[ \frac{b}{s} = \frac{ub}{us} = \frac{f(a)}{us} = (S^{-1}f)\left( \frac{a}{us} \right). \] Therefore $\frac{b}{s} \in \im(S^{-1}f)$. Equivalently, $S^{-1}R$ is  flat $R$-module \endproof
+This gives a proof that $\bbQ$ is a flat $\bbZ$-module, since $\bbQ$ is a field of fractions, and hence a localisation of $\bbZ$.
+Now, since $S^{-1}(\widecdot)$ is exact, if $N \leq M$ as $R$-modules, then \begin{align*}
+    N &\xrightarrow{\iota} M\\
+    S^{-1}N &\xrightarrow{S^{-1}\iota} S^{-1}M\\
+    \frac{n}{s} \mapsto \frac{n}{s}
+\end{align*}
+\begin{fancyprop}{}
+    Let $M$ be an $R$-module, and $N$, $P$ be submodules of $M$. Then \begin{enumerate}
+        \item $S^{-1}(N+P) = S^{-1}N + S^{-1}P$
+        \item $S^{-1}(N \cap P) = S^{-1}N \cap S^{-1}P $
+        \item $S^{-1}M / S^{-1}N \xrightarrow{\sim} S^{-1}(M/N)$ via \[ \frac{m}{s} + S^{-1}N \mapsto \frac{m+N}{s} \]
+    \end{enumerate}
+\end{fancyprop}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item There is not much to say, we have \[ \frac{n+p}{s} = \frac{n}{s} + \frac{p}{s} \in S^{1}N + S^{-1}P,\] and we have \[ \frac{n}{s_{1}} + \frac{p}{s_{2}} = \frac{s_{2}n + s_{1}p}{s_{1}s_{2}} \in S^{-1}(N+P). \]
+    \item $\subseteq$ is clear.\gap For $\supseteq$, take $x \in S^{-1}N \cap S^{-1}P$, then \[ x= \frac{n}{s_{1}}=\frac{p}{s_{2}}.\] This means that there must exist some $u \in S$ such that:
+    \begin{align*}
+        us_{0}n=us_{1}p=w
+    \end{align*}
+    Then $us_{0}n \in N$ and $us_{1}p \in P$, so $w \in N \cap P$. Now, take the element \[ x=\frac{n}{s_{1}} = \frac{us_{2}n}{us_{1}s_{2}} = \frac{w}{us_{1}s_{2}}.\] Then $w \in N \cap P$ and the denominator is in $S$, so $x \in S^{-1}(N \cap P)$.
+    \item \begin{center}
+        \begin{tikzcd}
+            0 \arrow[r] & N \arrow[r, "\iota"] & M \arrow[r, "\pi"] & M / N \arrow[r] & 0 
+        \end{tikzcd}
+    \end{center}
+    is exact, so \begin{center}
+        \begin{tikzcd}
+            0 \arrow[r] & S^{-1}N \arrow[r, "S^{-1}\iota"] & S^{-1}M \arrow[r, "S^{-1}\pi"] & S^{-1} \left( M / N \right) \arrow[r] & 0 
+        \end{tikzcd}
+    \end{center}
+    $(S^{-1}\iota)(S^{-1}N) = S^{-1}N$. Then $S^{-1}\pi\left(\frac{m}{s}\right) = \frac{m+N}{s}$. So we have the required isomorphism, it comes basically immediately from exactness.
+\end{enumerate}
+\begin{fancyprop}
+    If $M,N$ are $R$-modules, then: \[ S^{-1}M \otimes_{S^{-1}R} S^{-1}N \cong S^{-1}(M \otimes_{R} N)\]
+\end{fancyprop}
+\proof Need to show that: \[(S^{-1}R \otimes_{R} M) \otimes_{S^{-1}R} (S^{-1}R \otimes_{R} N) \cong S^{-1}R \otimes_{R} (M \otimes_{R} N).\]
+We already know that this statement is true from our discussion of extension of scalars for the tensor product. \endproof 
+We have the special case where, if $\frakp$ is a prime ideal of $R$, then \[ M_{\frakp} \otimes_{R_{\frakp}} N_{\frakp} \cong (M \otimes N)_{\frakp}.\]
+\subsection{Extension and contraction of ideals along $R \to S^{-1}R$}
+If $f: A \to B$ is a ring homomorphism, then if we take the preimage of an ideal $\frakb$ of $B$, then $f^{-1}(\frakb)$ is called a contracted ideal of $A$. And if we take an ideal $\fraka$ of $A$, then $(f(\fraka))$ is an extended ideal of $B$. We already saw on example sheet $1$ that \[ \{\, \text{contracted ideals of $A$} \, \} \leftrightarrow \{ \, \text{extended ideals of $B$} \, \}. \]
+Now, we will look at this in the special case of the localization map: \begin{align*}
+    R &\to S^{-1}R\\
+    r &\mapsto \frac{r}{1}
+\end{align*}
+We have the \textbf{extension map} from ideals of $R$ to ideals of $S^{-1}R$ \begin{align*}
+    \fraka &\mapsto \fraka^{e} = S^{-1}\fraka\\
+\end{align*}
+and the \textbf{contraction map}:
+\begin{align*}
+    \frakb &\mapsto \frakb^{c}
+\end{align*}
+We claim that: \[ \fraka^{e} = \left\{ \frac{a}{s} \, | \, a \in \fraka, \, s \in S \right\}.\]
+To prove this,\newlec we realise that $\fraka^{e}$ is generated by $\left\{ \frac{a}{1} \, | \, a \in \fraka \right\}$, and these are obtained under the map.\gap 
+Then also, we claim: \[ \fraka^{ec}= \cup_{s \in S} (\fraka \, : \, s),\] where $(I \, : \, x) = \{ r \in R \, : \, rs \in \fraka\}$. \gap \proof Take $r \in \cup_{s \in S} (\fraka \, : \, s)$, so $rs=a$ in $R$, so in $S^{-1}R$, we have: \[ \frac{rs}{1}=\frac{a}{1} \Longrightarrow \frac{r}{1}=\frac{a}{s}\] Therefore $r \in \fraka^{ec}$, since the elements of $\fraka^{e}$ are those of the form $\frac{a}{s}$, and so $r$ gets sent to this element under the extension, so is in the contraction of the extension.\gap 
+Now assume that $r \in \fraka^{ec}$, then \begin{align*}
+    &\Rightarrow \frac{r}{1} = \frac{a}{s}\\
+    &\Rightarrow \exists u \in S, \, \,\, u(rs-a)=0\\
+    &\Rightarrow rus=ua\\
+    &\Rightarrow r \in (\fraka \, : \, us)
+\end{align*}
+and $us \in S$.
+\endproof
+Now, to consider contraction, if $\frakb$ is an ideal of $S^{-1}R$, then $\frakb^{c} = \left\{ r \in R \, | \, \frac{r}{1} \in \frakb \right\}$. \gap 
+\textbf{Claim:} $\frakb^{ce} = \frakb$. 
+\proof We've proved on example sheet 1 that $\subseteq$ always holds. \gap To prove the reverse inclusion, take $\frac{r}{s} \in \frakb$ (for some $r \in R, s \in S$). Then $\frac{r}{1} \in \frakb$ by multiplying by $\frac{s}{1}$. So $r \in \frakb^{c}$, and so $\frac{r}{1} \in \frakb^{ce}$, and so $\frac{r}{s} \in \frakb^{ce}$ since, again, ideals are multiplicatively closed.
+\begin{fancyprop}{}
+    Consider \begin{align*}
+        R &\to S^{-1}R\\
+        r &\mapsto \frac{r}{1}
+    \end{align*}
+    Then \begin{enumerate}
+        \item Every ideal of $S^{-1}R$ is extended.
+        \item An ideal $\fraka$ of $R$ is contracted if and only if the image of $S$ in $R/ \fraka$ contains no zero divisors of $R/\fraka$.
+        \item $\fraka^{e}=R$ if and only if $\fraka \cap S \neq \emptyset$.
+        \item We have a bijection: 
+        \begin{align*} 
+            \{ \frakp \in \spec R \, | \, \frakp \cap S = \emptyset\} &\leftrightarrow \spec S^{-1}R\\ 
+            \frakp &\mapsto \frakp^{e}\\
+            \frakq^{c} &\mapsfrom \frakq
+        \end{align*}
+    \end{enumerate}
+\end{fancyprop}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item True since $\frakb^{ce}=\frakb$ for all ideals $\frakb$ of $S^{-1}R$.
+    \item One inclusion was proved on example sheet 1, so we have that $\fraka$ is contracted $\Leftrightarrow$ $\fraka^{ec} = \cup_{s \in S} (\fraka \, : \, s) \subseteq \fraka$. So \[ \text{$\fraka$ is contracted} \, \Leftrightarrow \, \forall r \in R (Sr \cap \fraka \neq \emptyset \Rightarrow r \in \fraka) \tag{*}\] Since if $Sr \cap \fraka \neq \emptyset$ but $r \notin \fraka$, then we have an element in this union which is not contained in $\fraka$. \gap 
+    But $r \in \fraka$ means that $r+ \fraka = 0 + \fraka \in R/\fraka$, and $Sr \cap \fraka \neq \emptyset$ means that $0+\fraka \in S \cdot (r + \fraka)$. So (*) is true is true if and only if the image $\bar S$ of $S$ in $R/\fraka$ contains no zero divisors. (Because if it does contain a zero divisor $s$, then $s \cdot r_{0}\in \fraka$ in $R$, for some $r_{0} \notin \fraka$).
+    \item Assume that $\fraka \cap S \neq \emptyset$, then we can take some element $x \in \fraka \cap S$, and \[\frac{x}{x} \in \fraka^{e}\] since $x \in \fraka$, and $x \in S$. But \[ \frac{x}{x}=1, \] so $\fraka^{e} = S^{-1}R$. \gap 
+    Conversely, if $\frac{1}{1} \in \fraka^{e} = R$, then $\frac{1}{1} = \frac{a}{s}$ for some $a \in \fraka$, some $s \in S$. Therefore $\exists u \in S, \, u(s-a)=0 \Rightarrow us = ua \in S \cap \fraka$.
+    \item Look at the following contraction map: \begin{align*}
+        \{ \frakp \in \spec R \, | \, \frakp \cap S = \emptyset \} \leftarrow \spec S^{-1}R
+    \end{align*}
+    Then we have: \begin{enumerate}
+        \item A contraction of a prime ideal is always prime.
+        \item $\frakp \subseteq R$ is contracted $\Leftrightarrow$ the image of $\bar S$ in $R / \frakp$ contains no zero divisors. But then, $R/\frakp$ is an integral domain, so this is equivalent to $0 \notin \bar S$, i.e. $S \cap \frakp = \emptyset$.
+    \end{enumerate}
+    So we have shown that $\{ \frakp \in \spec R \, | \, \frakp \cap S = \emptyset \}$ is the set of contracted prime ideals.\gap Finally, this map is injective, since: \begin{align*}
+        \frakq^{c} \mapsfrom \frakq
+    \end{align*}
+    and then $\frakq^{ce}=q$, since this is true for any ideal in the localisation map. \gap
+    Now we need to show the other direction, for $\frakp \in \spec R$ such that $\frakp \cap S = \emptyset$, we have shown that $\frakp$ is contracted, so $\frakp^{ec}=\frakp$. But we still need to show that such a $\frakp$ (which is disjoint from $S$) is in $\spec S^{-1}R$, i.e. is a prime ideal. \gap 
+    \textbf{Want:} $S^{-1}R/ \frakp^{e}$ is a domain. We know that $\frakp^{e} \neq S^{-1}R$, by (3) above, and the fact that $\frakp \cap S = \emptyset$. So we just need to show that $S^{-1}R/\frakp^{e}$ has no zero divisors. To do this, we will embed $S^{-1}R/\frakp^{e}$ in $\Frac(R/\frakp)$:
+    \proof Consider the map 
+    \begin{align*}
+        R \twoheadrightarrow R/ \frakp \hookrightarrow \Frac{R/\frakp}
+    \end{align*}
+    has the property that all elements of $S$ are sent to units (since $S \cap \frakp = \emptyset$). Then by the universal property of $S^{-1}R$, we have a map \begin{align*}
+        \varphi: S^{-1}R &\to \Frac{R/\frakp}\\
+        \frac{r}{s} &\mapsto \frac{r+\frakp}{s+\frakp}.
+    \end{align*}
+    It suffices to show that $\ker \varphi = \frakp^{e}$. Take $\frac{r}{s} \in \ker \varphi$, then \[\frac{r+\frakp}{s+\frakp} = \frac{0}{1}.\] (in $\Frac(R/\frakp)$.) Now $\im \varphi \subseteq \bar S^{-1}(R/\frakp)$ where $\bar S$ is the image of $S$ in $R/\frakp$. Then we can restrict $\varphi$ to get \begin{align*}
+        \varphi: S^{-1}R &\to \bar S^{-1}(R/\frakp)\\
+        \frac{r}{s} &\mapsto \frac{r+\frakp}{s+\frakp}
+    \end{align*}
+    So $\varphi \left( \frac{r}{s}\right) = \frac{0}{1} \Rightarrow \exists u + \frakp \in \bar S$ such that \begin{align*}
+        (u+\frakp)(r+\frakp)&=0\\
+        ur + \frakp &=0
+    \end{align*}
+    Therefore $ur \in \frakp$, and $u \in S$. Therefore, we can write \[ \frac{r}{s} = \frac{ur}{us} \in \frakp^{e}\] since $ur \in \frakp$ and $us \in S$. \gap 
+
+    For the other direction, take $x \in \frakp^{e}$, then $x=\frac{p}{s}$ for $p \in \frakp$, and $s \in S$. Then \[ \varphi(x) = \frac{p+\frakp}{s+\frakp}=0.\] Therefore $x \in \ker \varphi$.
+    
+    \endproof 
+\end{enumerate}
+\textbf{Application:} If $I$ is an ideal of $R$, then the radical of $I$: \[ \sqrt{I} = \{ r \in R \, | \, \exists n \geq 1, \, r^{n} \in I \} \]
+($I \subseteq \sqrt{I}$).
+\begin{fancyprop}{}
+    \[ \sqrt{I} = \bigcap_{I \subseteq \frakp \in \spec R} \frakp\]
+\end{fancyprop}
+\proof Take $x \in \sqrt{I}$. Then $x^{n} \in I$, so for every $\frakp \in \spec R$, if $I \subseteq \frakp$, then $x^{n} \in \frakp$, so $x \in \frakp$. \gap
+
+Conversely, take $x \in R$, $x \notin \sqrt{I}$, so $I \neq R$, and therefore $R/I \neq 0$. Let $\bar x$ be the image of $x$ in $R/I$. Then consider \[ (R/I)_{\bar x},\] the localisation of $R/I$ at $\bar x$ i.e. $\{\bar x^{n} | n \geq 1\}^{-1}(R/I)$. This is \textit{not} the zero ring, because we did not invert $0$, because $x \notin \sqrt{I}$ by assumption. Therefore $(R/I)_{\bar x}$ has a prime ideal, because it has a maximal ideal. This prime ideal corresponds to a prime ideal of $R/I$ which does not contain $\bar x$, and \textit{this} prime ideal corresponds to a prime ideal of $R$ which contains $I$ and does not contain $x$.
+
+\subsection{Local Properties}
+\begin{fancydefine}{Local ring}
+    A ring \newlec $R$ is \textbf{local} if \[ |\mspec R| = 1.\] That is, the set of all maximal ideals of $R$ contains only one object. \gap 
+    Then we can also write $(R,\frakm)$, when we want to give a name to the unique maximal ideal of $R$.
+\end{fancydefine}
+\begin{ex}
+    We obtain local rings by taking any ring and localising at a prime ideal. Let $\frakp \in \spec R$, then there is a bijection 
+    \begin{align*}
+        \{\frakn \in \spec R \, | \, \frakn \subseteq \frakp \} &\xleftrightarrow{\sim} \spec R_{\frakp} \\
+        \frakn &\mapsto \frakn^{e}\\
+        \frakq^{c} &\mapsfrom \frakq 
+    \end{align*}
+    so, we can see that all prime ideals of $R_{\frakp}$ are contained in $\frakp R_{\frakp}$. So $(R_{\frakp},\frakp R_{\frakp})$ is a local ring.
+\end{ex}
+\begin{ex}
+    Recall that \[\bbZ_{(2)} = \{ \frac{a}{b} \, | \, a,b \in \bbZ, \, 2 \nmid b\}.\] Then this ring is local with unique maximal ideal: \[ (2)\bbZ_{(2)}=\{\frac{2a}{b} \, | \, a,b \in \bbZ, \, 2 \nmid b\} \]
+\end{ex}
+
+\begin{fancyprop}{}
+    For $M$ an $R$-module, the following are equivalent: \begin{enumerate}
+        \item $M=0$.
+        \item $M_{\frakp} = 0$ $\forall \frakp \in \spec R$.
+        \item $M_{\frakm}=0$ $\forall \frakm \in \mspec R$.
+    \end{enumerate}
+    This is a \say{local property}.
+\end{fancyprop}
+\proof 1. $\Rightarrow$ 2. $\Rightarrow$ 3. is clear. \gap Now, assume 3, and that $M\neq 0$. Take $0 \neq m_0 \in M$. Consider the annihilator $\Ann_{R}(m_0) = \{ r \in R \, | \, rm_0 = 0\}$, which is an ideal of $R$. It is a proper ideal (because it does not contain $1$, since $m_0 \neq 0$). \gap 
+We want to show that some localisation of $M$ is nonzero at some maximal ideal to get a contradiction, so take $\frakm \in \mspec R$ such that $\Ann_{R}(m_0) \subseteq \frakm$. Then $\frac{m_0}{1} \in M_{\frakm} = 0$, since every element in $M_{\frakm}$ is $0$ because we assumed 3. Then this means explicitly that: \[ \frac{m_{0}}{1} = \frac{0}{1} \in M_{\frakm}.\]
+This means, therefore that $um_{0} = 0$ for some $u \in R \setminus \frakm$ (since this is the multiplicative set). But then an element not in $\frakm$ is \textit{not} in the annihilator, but we've shown that this element annihilates $m_{0}$. Contradiction. \endproof
+\begin{fancyprop}
+    TFAE: \begin{enumerate}
+        \item $f$ is injective.
+        \item $f_{\frakp} : M_{\frakp} \to N_{\frakp}$ is injective $\forall \frakp \in \spec R$.
+        \item $f_{\frakm} : M_{\frakm} \to N_{\frakm}$ is injective $\forall \frakm \in \mspec R$.
+    \end{enumerate}
+    Similarly for surjective instead of injective.
+\end{fancyprop}
+\proof First, recall that $f_{\frakp}\left( \frac{m}{s} \right) = \frac{f(m)}{s}$. \begin{enumerate}
+    \item[$(1) \Rightarrow (2)$] Localising at $\frakp$ is an exact functor (so it preserves injectivity and surjectivity).
+    \item[$(2) \Rightarrow (3)$] Every maximal ideal is prime.
+    \item[$(3) \Rightarrow (1)$] We assume 3, and have the following exact sequence \[ 0 \rightarrow \ker f \xrightarrow{\iota} M \xrightarrow{f} N.\] 
+    So now we apply localisation and get \[ 0 \rightarrow (\ker f)_{\frakm} \rightarrow M_{\frakm} \xrightarrow{f_{\frakm}} N_{\frakm} \tag{*}\] is exact, since localisation is an exact functor. But (*) is exact precisely means that $\ker(f_{\frakm})=(\ker f)_{\frakm}$. 
+    But $\ker(f_{\frakm})=0$ by assumption of 3. So we have proved that $(\ker f)_{\frakm}=0$ for every maximal ideal, so the kernel itself must be $0$, because of our previous proposition (being $0$ is a local property).
+\end{enumerate}
+\begin{fancyprop}
+    Let $M$ be an $R$-module, then TFAE: \begin{enumerate}
+        \item $M$ is a flat $R$-module 
+        \item $M_{\frakp}$ is a flat $R_{\frakp}$ module $\forall \frakp \in \spec R$
+        \item $M_{\frakm}$ is a flat $R_{\frakm}$ module $\forall \frakm \in \mspec R$.
+    \end{enumerate}
+\end{fancyprop}
+\proof\hspace{0.1cm} \begin{enumerate}
+    \item[$(1) \Rightarrow (2)$] We know that flatness is localisable, since $M_{\frakp} \cong R_{\frakp} \otimes M$ is an $R_{\frakp}$-linear isomorphism, and this is an extension of scalars.
+    \item[$(2) \Rightarrow (3)$] Since every maximal ideal is prime. 
+    \item[$(3) \Rightarrow (1)$] Take $f : N \to P$, this is $R$-linear and injective, now take some maximal ideal $\frakm \in \mspec R$, then $f_{\frakm} : N_{\frakm} \to P_{\frakm}$ is injective, by the proposition above. But then, we also have that \[ N_{\frakm} \otimes_{R_{\frakm}} M_{\frakm} \xrightarrow{f_{\frakm} \otimes \id_{M_{\frakm}}} P_{\frakm} \otimes M_{\frakm}\] is injective, by 3. But then, localizing and then tensoring, is the same as tensoring and then localizing (which follows from extension of scalars). So we have a commuting diagram:
+    \begin{center}
+        \begin{tikzcd}[column sep = 0.7in]
+            N_{\frakm} \otimes_{R_{\frakm}} M_{\frakm} \arrow[r, "f_{m} \otimes \id_{M_{\frakm}}"] \arrow[d, "\sim"] & P_{\frakm} \otimes_{R_{\frakm}} M_{\frakm} \arrow[d, "\sim"]\\
+
+            (N \otimes_{R} M)_{\frakm} \arrow[r, "(f \otimes \id_{M})_{\frakm}"] & (P \otimes_{R} M)_{\frakm}
+        \end{tikzcd}
+    \end{center} 
+    since this commutes, $(f \otimes \id_{M})_{\frakm}$ is injective for all $\frakm \in \mspec R$. So by the previous proposition $(f \otimes \id_{M})$ is injective, so $M$ is flat. \endproof 
+\end{enumerate}
+\begin{fancydefine}{Locally free}
+    An $R$-module $M$ is \textbf{locally free} if $M_{\frakp}$ is a free $R_{\frakp}$-module $\forall \frakp \in \spec R$.
+\end{fancydefine}
+\begin{ex}
+This property is not localizable, take $R=\bbC \times \bbC$. Then \[ \spec R = \{\bbC \times \{0 \}, \{ 0 \} \times \bbC \}\]
+If we have a map \begin{align*}
+    \bbC \times \bbC &\to \bbC\\
+    (a,b) &\mapsto b
+\end{align*}
+This sends $\bbC \times \bbC \setminus \bbC \times \{0\}$ to units. Therefore we can localise by the universal property, to get \begin{align*}
+    (\bbC \times \bbC)_{\bbC \times \{0\} } &\to \bbC\\
+    \frac{(a,b)}{(c,d)} \mapsto \frac{b}{d}\\
+\end{align*}
+which is clearly surjective since $\frac{(0,b)}{(0,1)} \mapsto b$, but also this is injective (very clear since $b$ must be $0$, and then check that the overall tuple is $0$ in the localization, but it's also in notes).
+So $(\bbC \times \bbC)_{\bbC \times \{0\}} \cong \bbC$ and $(\bbC \times \bbC)_{\{0\} \times \bbC} \cong \bbC$. So for every $\bbC \times \bbC$-module $M$ and every $\frakp \in \spec \bbC \times \bbC$, $M_{\frakp}$ is a $\bbC$-module, so it's a vector space, and therefore it must be free. 
+\textit{But} not every module over $\bbC \times \bbC$ is free, for example, take $M=\bbC \times \{0\}$ as a $\bbC \times \bbC$-module, now prove that $M$ is not free of rank 0 (not the zero module), and also that it is not free of rank $\geq 1$ (any element is linearly dependent by itself, so cannot be part of a basis). So $M$ is locally-free, but not free.
+\end{ex}
+\subsection{The localization of a ring as a quotient}
+Let $U \subseteq R$ be a subset, and let $S \subseteq R$ be the multiplicative closure of $U$. Now define \[ R_{U} := \frac{R[\{T_{u}\}_{u \in U} ]}{(\{u \cdot T_{u}-1\}_{u \in U})} \]
+Then the claim is that $R_{U} \cong S^{-1}R$ as rings, also as $R$-algebras. The isomorphism is given by: \[ T_{u} \mapsto \frac{1}{u},\] and in the other direction \[ r \cdot T_{u_{1}} \cdots \cdot T_{u_{l}} + I_{U} \mapsfrom \frac{r}{u_{1} \cdots u_{l}}\]
+\proof The idea is to show that $R_{U}$ has the universal property of $S^{-1}R$: \begin{center}
+    \begin{tikzcd}
+    R \arrow[r] \arrow[dr, "f"] & R_{U} \arrow[d, dashrightarrow, "\exists ! h"] \\ & A
+    \end{tikzcd}
+\end{center} 
+where $A$ is any ring and $f$ is any ring homomorphism. Then $A$ is an $R$-algebra via $f$, and the diagram commutes if and onlt if $h$ is an $R$-algebra homomorphism. 
+\[\Hom_{R-\text{alg}}(R_{U},A) \cong \{ \varphi : U \to A \, | \, f(u) \cdot h(u) =1 \}. \]
+Special case: $R$ localised at a single element $x$ for some $x \in R$ is isomorphic to $R[T]/(xT-1)$.
+\section{Nakayama's Lemma}
+\begin{fancyprop}{Cayley-Hamilton}
+    Let $M$ be a finitely generated $R$-module, and $f:M \to M$ an $R$-linear map. $\fraka \subseteq R$ an ideal of $R$.\gap If $f(M) \subseteq \fraka M$, then there exists $a_{i}$ such that \[ f^{n} + a_{1}f^{n-1} + \dots + a_{n}f^{0} = 0\]
+    where $a_{i} \in \fraka$. ($f^{n}$ means $f$ applied $n$ times.) 
+\end{fancyprop}
+Write $M = \spann_{R}\{m_{1}, \dots, m_{n}\}$. Then $\fraka M = \spann_{\fraka}\{m_{1}, \dots, m_{n}\}$. So we can write \[ \begin{pmatrix}
+    f(m_{1})\\
+    \vdots\\
+    f(m_{n})
+\end{pmatrix} = P \cdot \begin{pmatrix}
+    m_{1}\\ 
+    \vdots\\
+    m_{n}
+\end{pmatrix}\] 
+where $P$ is an $n\times n$ matrix with coefficients in $\fraka$. If we take $\rho : R \to \End M$ to be the structure ring homomorphism of $M$ as an $R$-module. Then have \begin{align*}
+     R[T] &\to \End(M)\\ 
+     T &\mapsto f
+\end{align*} a map compatible with $\rho$. Then \[ T \cdot \begin{pmatrix}
+    m_{1}\\
+    \vdots\\
+    m_{n}
+\end{pmatrix} = P \cdot \begin{pmatrix}
+    m_{1}\\
+    \vdots\\
+    m_{n}
+\end{pmatrix},\]
+or by rearranging: \[ Q \cdot \begin{pmatrix}
+    m_{1}\\
+    \vdots\\
+    m_{n}
+\end{pmatrix} = 0,\]
+where $Q = T\cdot I_{n} -P$. Then we can multiply by the adjugate of $Q$ to get \[ (\det Q) \cdot \begin{pmatrix}
+    m_{1}\\
+    \vdots\\
+    m_{n}
+\end{pmatrix} = 0\] 
+So $(\det Q) \cdot m = 0$ for every $m \in M$, since these elements generate $M$. This means that $m \mapsto (\det Q) \cdot m$ is the zero of the endomorphism ring. But $m \mapsto (\det Q) \cdot m$, is the function which takes $\det Q$ (which is a polynomial in $T$) and substitutes $T=f$, and moreover $\det Q$ is a monic polynomial with coefficients in $\fraka$. \endproof
+\begin{corr}{}
+    Let $M$ be a finitely generated $R$-module, and $\fraka \subseteq R$ an ideal.\gap 
+    If $\fraka M = M$, then there is some $a \in \fraka$ such that $am=m$ $\forall m \in M$.
+\end{corr}
+\proof Apply Cayley-Hamilton with $f=\id_{M}$. All the conditions are met, and Cayley-Hamilton gives us $(1+a_{1}+ \dots + a_{n})\cdot \id_{M} = 0$. Take $a = -a_{1}-a_{2}-\dots -a_{n}$, and we are done.
+\endproof
+
+\begin{fancydefine}{Jacobson Radical}
+    The \textbf{Jacobson radical} $J(R)$ is given by: \[ J(R) = \cap_{m \in \mspec R} \frakm\]
+\end{fancydefine}
+\begin{ex}
+    \hspace{0.1cm}
+    \begin{enumerate}
+        \item $(R, \frakm)$, a local ring, has $J(R)=\frakm$.
+        \item $J(\bbZ)=\{0\}$.
+    \end{enumerate}
+\end{ex}
+\begin{fancyprop}{}
+    For $x \in R$, we have \[ x \in J(R) \Leftrightarrow 1-xy \text{ is a unit of $R$, } \forall y \in R\]
+\end{fancyprop}
+\proof Assume $x \in J(R)$ and assume (for contradiction) that $1-xy$ is not a unit for some $y \in R$. Then if $1-xy$ is not a unit, then $R \neq (1-xy)$, so there is a maximal ideal containing $(1-xy)$. We know $x \in J(R)$, so $x$ is in every maximal ideal, therefore $1-xy \in \frakm$, and $xy \in \frakm$. So $1-xy +xy \in \frakm$.\gap 
+For the converse, assume $x \notin J(R)$, then there is a $\frakm$ such that $x \notin \frakm$. Then $\frakm + (x)$ is the entire ring. Therefore, we have $t \in \frakm$ and $y \in R$, such that $t+xy=1$, or equivalently $1-xy = t$ for $t \in \frakm$. So $1-xy$ cannot be a unit, otherwise $\frakm$ would contain a unit and be $R$.
+\endproof
+\begin{fancylem}{Nakayama's Lemma}
+    If $M$ is a finitely generated $R$-module, and $\fraka \subseteq J(R)$ is an ideal of $R$ such that $\fraka M = M$. Then $M = 0$.
+\end{fancylem}
+\proof By the corollary we had, there is $a \in \fraka$ such that $am = m$ $\forall m \in M$. So $(1-a)m = 0$. But we know by the above proposition that $1-a$ is a unit of $R$. Therefore $m=0$ for any $m \in M$. \endproof
+\begin{corr}{}
+    Let $M$ be a finitely generated $R$-module, and $N \subseteq M$ an $R$-submodule, and $\fraka \subseteq J(R)$ an ideal.\gap If $N + \fraka M = M$, then $N=M$.
+\end{corr}
+\proof \[\fraka \cdot (M/N) = \fraka M/N = (\fraka M + N)/N = M/N.\] Then by Nakayama $M/N = 0$ so $N=M$.
+\endproof
+\section{Integral and finite extensions Part I}
+\begin{fancydefine}{Integral}
+    Let $A$ be an $R$-algebra, and $x \in A$. $x$ is \textbf{integral} over $R$ (or $R$-integral) if \[ \exists f \in R[T], \, f \text{ monic s.t. } f(x)=0.\]
+\end{fancydefine}
+\begin{ex}
+    \hspace{0.1cm}
+    \begin{enumerate}
+        \item $K$ a field, $A$ a $K$-algebra, $X \in A$. $X$ is $K$-integral iff $X$ is $K$-algebraic.
+        \item We will show later that: \begin{enumerate}
+            \item[1.] The $\bbZ$-integral elements of $\bbQ$ is just $\bbZ$.
+            \item[2.] The $\bbZ$-integral elements of $\bbQ[\sqrt{2}]$ are $\bbZ[\sqrt{2}]$.
+            \item[3.] The $\bbZ$-integral elements of $\bbQ[\sqrt{5}]$ is $\bbZ\left[\frac{1+\sqrt{5}}{2}\right]$ \footnote{\say{Sometimes it's what you expect, and sometimes it's what you expect if you have just a \textit{bit} more experience.}}.
+        \end{enumerate}
+    \end{enumerate}
+\end{ex}
+\begin{fancydefine}{Faithful module}
+    An $R$-module $M$ is \textbf{faithful} if the structure ring homomorphism from $R$ to the ring of endomorphisms of $M$ is injective. \gap
+    That is to say, for every $0 \neq r \in R$, there is an $m \in M$ such that $rm \neq 0$.
+\end{fancydefine}
+\begin{ex}
+    $R \subseteq A$ rings ($A$ an $R$-algebra), so $A$ is an $R$-module in the natural way. And in fact, $A$ \textit{must} be faithful, because if $r \neq 0 \in R$, then $r \cdot 1_{A} = r \neq 0$.
+\end{ex}
+
+\begin{fancyprop}{}
+    $R \subseteq A$ are rings, $x \in A$, then $R[x] \subseteq A$. 
+    This means that $A$ is an $R[x]$ module. Then $x$ is $R$-integral if and only if there exists $M \subseteq A$ such that \begin{enumerate}
+        \item $M$ is a faithful $R[x]$-module
+        \item $M$ is f.g. as an $R$-module.
+    \end{enumerate}
+    The first condition means that $M$ is an $R$-submodule of $A$, $xM \subseteq M$, and $M$ is faithful over $R[x]$.
+\end{fancyprop}
+\proof First, assume that conditions $1$ and $2$ hold. Then $xM \subseteq M$, and we have an $R$-linear map \begin{align*}
+    f: M &\to M\\
+    m \mapsto xm
+\end{align*}
+$M$ is a finitely generated $R$-module, so by Cayley-Hamilton, we have that \[f^{n} + r_{1}f^{n-1} + \dots + r_{n}f^{0}=0\] in $\End_{R}(M)$. Now, evaluate this at some $m \in M$, we obtain that \[ (x^{n} + r_{1}x^{n-1} + \dots + r_{n}x^{0})m = 0 \, \,\, \forall m \in M.\] Then, since $M$ is a faithful $R[x]$-module, we conclude that $x^{n} + r_{1}x^{n-1} + \dots + r^{0}=0$, and so $x$ is integral over $R$.\gap 
+For the other direction, assume $x$ is $R$-integral, then \[x^{n} + r_{1}x^{n-1} + \dots + r_{n}x^{0}=0\] for $r_{i} \in R$. Then \[M = \spann_{R}\{x^{0},\dots,x^{n-1}\}\] satisfies $xM \subseteq M$ (since $x \cdot x^{n-1} = -r_{1}x^{n-1} - \dots - r_{n}x^{0}$). So $M$ is clearly finitely generated, and is faithful over $R[x]$ since $1_{A} = x^{0} \in M$. \endproof
+\begin{fancydefine}{Integral/Finite algebra}
+    Let \newlec $A$ be an $R$-algebra, then \begin{enumerate}
+        \item A is \textbf{integral} over $R$ if every element of $A$ is $R$-integral.
+        \item $A$ is \textbf{finite over} $R$ if $A$ is finitely generated as an $R$-module.
+    \end{enumerate}
+\end{fancydefine}
+\begin{fancyprop}{}
+    Let $A$ be an $R$-algebra, then TFAE: \begin{enumerate}
+        \item $A$ is a finitely generated integral $R$-algebra
+        \item $A$ is generated as an $R$-algebra by a finite set of integral elements.
+        \item $A$ is finite over $R$.
+    \end{enumerate}
+\end{fancyprop}
+\proof \hspace{0.1cm}\begin{enumerate}
+    \item[(1) $\Rightarrow$ (2)] Trivial. Generated by a finite set and all elements are integral.
+    \item[(2) $\Rightarrow$ (3)] $A$ is generated by $\alpha_{1}, \dots, \alpha_{m}$ (all $R$-integral) as an $R$-algebra. Then $\alpha_{i}$ integral means that \[\alpha_{i}^{n_{i}} + r_{i,1}\alpha_{i}^{n_{i}-1} + \dots + r_{i,n_{i}}\alpha_{i}^{0} = 0.\] So $\alpha_{i}^{n_{i}} \in \spann_{R}\{\alpha_{i}^{0}, \dots, \alpha_{i}^{n_{i}-1}\}$. Then for all $e_{1}, \dots, e_{n} \geq 0$ such that $\alpha_{1}^{e_{1}} \dots \alpha_{m}^{e_{m}} \in \spann_{R}\{ \alpha_{1}^{f_{1}}, \dots \alpha_{m}^{f_{m}}\}$ where $0 \leq f_{i} \leq n_{i}-1$. This is a finite set which generates $A$ as an $R$-module. (We do this by reducing the powers in the monomial in the left until we get something which is in the span of the right hand side.)
+    \item[(3) $\Rightarrow$ (1)] $A$ is f.g. as an $R$-module $\Rightarrow$ $A$ is f.g. as an $R$-algebra. \gap Now, to prove that it is integral over $R$, take $\alpha \in A$, and we want to prove that $\alpha$ is $R$-integral. Let $\rho : R \to A$ be the structure ring homomorphism of $A$ as an $R$-algebra. Then $\rho(R) \subseteq A$, and $(\rho(R))[\alpha] \subseteq A$. $A$ is a $\rho(R)[\alpha]$-module, but also must be faithful, because $1_{A} \subseteq A$. Also $A$ is a finitely-generated $\rho(R)[\alpha]$-module. So by proposition 7.5, we must have $\alpha$ is $\rho(R)$-integral. So $\alpha$ is $R$-integral.
+\end{enumerate}
+\endproof
+\begin{fancyprop}{}
+    $A$ is an $R$-algebra, $O = \{ a \in A | a \text{ is $R$-integral} \}$, then $O$ is an $R$-subalgebra of $A$.
+\end{fancyprop}
+\proof Take $x,y \in O$. Then $\{x,y\}$ is a finite set of $R$-integral elements, so it must generate an integral $R$-subalgebra of $A$. $x+y$, $x \cdot y$, $x - y$ are all, therefore, in $O$. Also $O$ contains the image of $R$, since $(T-r)|_{T=r\cdot 1_{A}} = 0$ so $r\cdot 1_{A} \in O$.  \endproof
+\begin{fancyprop}{}\hspace{0.1cm}
+    \begin{enumerate}
+        \item If $C$ is finite over $B$, $B$ is finite over $A$, then $C$ is finite over $A$.
+        \item If $C$ is integral over $B$, $B$ is integral over $A$, then $C$ is integral over $A$.
+    \end{enumerate}
+    
+\end{fancyprop}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item $C = \spann_{B} \{\gamma_{1}, \dots, \gamma_{n}\}$. $B = \spann_{A}\{ \beta_{1}, \dots, \beta_{l}\}$, then easy to see that $C$ is the $A$-span of all the products $\gamma_{i}\beta_{j}$.
+    \item Let $c \in C$. We want to show that $c$ is $A$-integral. We know that $c$ is $B$-integral. So $f(c)=0$ for $f= T^{n} + b_{1}T^{n-1} + \dots + b_{n}T^{0} \in B[T]$. Then $f \in (A[b_{1},\dots, b_{n}])[T]$. Call $A[b_{1}, \dots, b_{n}] := A'$. Then $A \subseteq A' \subseteq A'[c]$, and both of these extensions are generated by finitely many integral elements (over $A$ and then over $A'$ respectively). This tells us that both extensions are finite. Then by 1., $A \subseteq A'[c]$ is finite. Then $A \subseteq A'[c]$ is integral, so $c$ is $A$-integral. So integrality is transitive.
+\end{enumerate}
+\endproof
+\begin{fancydefine}{Integral Closure}
+    \hspace{0.1cm}
+    \begin{enumerate}
+        \item $A \subseteq B$ rings. \begin{enumerate}
+            \item The \textbf{integral closure} of $A$ in $B$ is $\bar A = \{ b \in B \, | \, b \text{ is } $A$\text{-integral}.\}$
+            \item $A$ is integrally closed in $B$ if $\bar A = A$.
+        \end{enumerate} 
+        \item $A$ is an integral domain. Then \begin{enumerate}
+            \item The \textbf{integral closure} of $A$ (with no other ring defined) is the integral closure of $A$ in $\Frac A$.
+            \item $A$ is \textbf{integrally closed} if $A$ is integrally closed in $\Frac A$.
+        \end{enumerate}
+    \end{enumerate}
+\end{fancydefine}
+\begin{ex}
+    \begin{enumerate}
+    \item $\bbZ[\sqrt{5}]$ is not integrally closed, since \[\alpha = \frac{1 + \sqrt{5}}{2} \in \bbQ[\sqrt{5}] \setminus \bbZ[\sqrt{5}].\] We have $\alpha^{2} - \alpha -1=0$, so $\alpha$ \textit{is} $\bbZ[\sqrt{5}]$-integral.
+    \item $\bbZ$ and $k[T_{1}, \dots, T_{n}]$ are integrally closed.
+    \end{enumerate}
+\end{ex}
+\begin{fancyprop}{}
+    If $A$ is a UFD then $A$ is integrally closed.
+\end{fancyprop}
+\proof Let $X \in \Frac (A) \setminus A$. Then $X = \frac{a}{b}$ where $a \in A$, $b \in A$. Reduce until there is some $p \mid b$ but $p \nmid a$ for some $p$ a prime element of $A$. If $x$ is $A$-integral, then we can write: \[ \left(\frac{a}{b}\right)^{n} + a_{1} \left(\frac{a}{b}\right) + \dots + a_{n} \left(\frac{a}{b}\right) = 0\] Then we can mutiply through by $b^{n}$ to get \[ a^{n} = -b(a_{1}b^{1}a^{n-1} + + a_{2}b^{2}a^{n-2} + \dots + a_{n}b^{n}) \] But then $p \mid b$, so $p \mid a^{n}$ so $p \mid a$. Contradiction. \endproof
+\begin{fancylem}{}
+    If $A$ and $B$ are rings, and $\bar A$ is the integral closure of $A$ in $B$, then $\bar A$ is integrally closed in $B$.
+\end{fancylem}
+\proof This follows from the transitivity of integrality. If $x \in B$ is integral over $\bar A$, then $A \subseteq \bar A \subseteq \bar A[x]$. Each of these extensions is integral. So $A \subseteq \bar A[x]$ must be integral. So $x$ is $A$ integral, and so $x \in \bar A$.
+\begin{fancyprop}{}
+    If $A \subseteq B$ are rings, then \begin{enumerate}
+        \item If $B$ integral over $A$, then \begin{itemize}
+            \item $B/ \frakb$ is integral over $A / A \cap \frakb$ for all ideals $\frakb$ of $B$.
+            \item $S^{-1}B$ is integral over $S^{-1}A$ for all multiplicative sets $S \subseteq A$.
+        \end{itemize}
+        \item If $\bar A$ is the integral closure of $A$ in $B$, then $S^{-1} \bar A$ is the integral closure of $S^{-1}A$ in $S^{-1}B$ (i.e. $ \bar{S^{-1}A} = S^{-1} \bar A$).
+        
+    \end{enumerate}
+\end{fancyprop}
+\proof In notes.
+\begin{fancylem}{}
+    $A \subseteq B$ an integral extension of rings, then \begin{enumerate}
+        \item $A \cap B^{\times} = A^{\times}$ (units of $A$).
+        \item If $A,B$ are domains then $A$ a field $\Leftrightarrow$ $B$ a field.
+    \end{enumerate}
+\end{fancylem}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item $\supseteq$ is clear. \gap 
+    $\subseteq$: Take $a \in A \cap B^{\times}$, then $ab=1$ for some $b \in B$. We want to show $b \in A$. $b$ is integral over $A$. Therefore $b^{n} + a_{1}b^{n-1} + \dots + a_{n}b^{0} =0$ where $a_{i} \in A$. Then we multiply by $a^{n-1}$ to get: \[ b + a_{1} + a \cdot a_{2} + a^{2} \cdot a_{3} + \dots + a^{n-1} \cdot a_{n} = 0.\] Then \[ b = -(a_{1} + a \cdot a_{2} + a^{2} \cdot a_{3} + \dots + a^{n-1} \cdot a_{n}) \] so $b \in A$.
+    \item Assume $B$ is a field. Then $A^{\times} = A \cap B^{\times} = A \cap (B \setminus \{ 0 \}) = A \setminus \{ 0 \}$. Therefore $A$ is a field.\gap 
+    
+    Now assume that $A$ is a field. Take a non-zero element $0 \neq b \in B$, we want to show that $b \in B^{\times}$. Well $b$ is $A$-integral, so 
+
+    \[b^{n} + a_{1}b^{n-1} + \dots + a_{n}b^{0} = 0\] 
+    
+    for coefficients in $A$. Let $n \geq 1$ be minimal such that this holds. Then write this as 
+
+    \[ b(b^{n-1} + a_{1}b^{n-1} + \dots + a_{n-1}b^{0})=-a_{n}\]
+
+    Then $b \neq 0$ and $b^{n-1} + a_{1}b_{n-2} + \dots + a_{n-1}b^{0} \neq 0$ by the minimality of $n$. Therefore $a_{n} \neq 0$ since $B$ is a domain, but then $a_{n}$ is a unit, since $A$ is a field. Therefore \[ b(b^{n-1} + a_{1}b_{n-2} + \dots + a_{n-1}b^{0})(-a_{n}^{-1})=1.\] So $b$ is a unit.
+\end{enumerate}
+\begin{corr}{}
+    Let $A \subseteq B$ be an integral extension of rings, and $\frakq \in \spec B$. Then \[ \frakq \in \mspec B \Leftrightarrow \frakq \cap A \in \mspec A\]
+\end{corr}
+\proof There is a ring embedding \[ A / \frakq \cap A \hookrightarrow B / \frakq.\] These are both integral domains, and $B / \frakq$ is an integral extension of $A / \frakq \cap A$. Therefore by the previous theorem, $A/ \frakq \cap A$ is a field $\Leftrightarrow$ $B/\frakq$ is a field.
+\endproof 
+\section{Noether normalization and Hilbert's Nullstellensatz}
+\subsection{Noether normalization}
+\begin{fancydefine}{$k$-algebraically independent}
+    If $A$ is a $k$-algebra, $X_{1}, \dots X_{n} \in A$. Then $X_{1}, \dots, X_{n}$ are $k$\textbf{-algebraically independent} if \[ \forall 0 \neq p \in k[T_{1}, \dots, T_{n}], \,\,\, p(X_{1},\dots,X_{n}) \neq 0.\]
+    I.e. the $k$-algebra homomorphism
+    
+    \begin{align*}
+        k[T_{1},\dots T_{n}] &\to A\\
+        T_{i} \mapsto X_{i}
+    \end{align*}
+    is injective.
+\end{fancydefine}
+
+\begin{fancythm}{Noether Normalization}
+    If $A \neq 0$ is a finitely geneated $k$-algebra, then \[ \exists x_{1}, \dots, x_{n} \in A \,\,\,\,\,\, n\geq 0\] which are $k$-algebraically independent, such that: \[ A \text{ is finite over } k[X_{1},\dots, X_{n}]\]
+\end{fancythm}
+\begin{ex*} (Proof method)\textbf{.}\,\, 
+    If $A = k[T,T^{-1}]$.\gap 
+    First, $k[T] \subseteq k[T,T^{-1}]$ is not a finite extension.
+    \proof Assume that it were a finite extension. Then $T^{-1}$ is integral over $k[T]$. But then the integrality relation says that \[ (T^{-1})^{n} \in \spann_{k[T]}\{(T^{-1})^{0}, \dots, (T^{-1})^{n-1} \}\]
+    But then if we multiply by $T^{n}$, we get that \[ 1 \in \spann_{k[T]} \{ T^{n}, T^{n-1}, \dots, T^{1}\}\] 
+    which is obviously not true. So we get a contradiction.
+    \endproof
+    But take $c \in k$ a scalar which we will choose later. Then \[A = k[T,T^{-1}] = k[T,T^{-1}-cT]\]
+    So we claim that $k[T^{-1}-cT] \subseteq A$ is a finite extension for most values of $c \in k$.
+    \proof We have 
+    \begin{align*}
+        T \cdot T^{-1} -1 &= 0 \\
+        \Rightarrow ((T^{-1}-cT) + cT)\cdot T -1 &= 0\\
+        \Rightarrow c \cdot T^{2} + (T^{-1}-cT) \cdot T -1 &= 0
+    \end{align*}
+    And $c \in k$, $(T^{-1}-cT) \in k[T^{-1}-cT]$ and $-1 \in k[T^{-1} - cT]$. So as long as $c \neq 0$, we can multiply through by $c^{-1}$, so then $T$ is integral over $k[T^{-1}-cT]$.
+\end{ex*}
+\textit{Proof of Noether Normalization (8.2).}
+We will prove it assuming that $k$ is infinite\footnote{for pedagogical reasons.}, but the proof will work in general.\gap Our strategy will be to induct on the minimal number $m$ of generators of $A$ as a $k$-algebra.\gap 
+\textbf{Base case:} If $m=0$ then $A=k$. So take the \say{polynomial algebra} over $0$ variables, which is just $k$ itself.\gap 
+\textbf{Inductive step:} Assume that $A$ is generated by $X_{1}, \dots, X_{m} \in A$. If $X_{1},\dots,X_{m}$ are algebraically independent, then take the polynomial algebra just to be $A$ itself. \gap 
+Otherwise, we take claim (*) to be: $\exists c_{1}, \dots c_{m-1} \in k$ such that $X_{m}$ is integral over $B = k[X_{1} - c_{1}X_{m}, X_{2}-c_{2}X_{m}, \dots, X_{m-1}-c_{m-1}X_{m}]$.\gap 
+First we prove that claim (*) is sufficient: 
+\[ A = B[X_{m}] \Rightarrow A \text{ finite over } B\] since $X_{m}$ is integral by (*). Now, by the inductive hypothesis, we have $n<m$ and $Z_{1}, \dots, Z_{n} \in B$ which are $k$-algebraically independent, and such that $B$ is finite over $k[Z_{1},\dots, Z_{n}] := A'$. So $A$ is finite over $A'$ by transitivity of finiteness. Therefore (*) is sufficient \gap 
+Proof of (*): We have by assumption that $X_{1}, \dots, X_{m} \in A$ are \textit{not} algebraically independent over $k$. Therefore, $\exists 0 \neq f \in k[T_{1},\dots, T_{n}]$ such that $f(X_{1}, \dots, X_{m})=0$.\gap 
+\underline{Want:} $X_{m}$ is integral over $k[X_{1}-c_{1}X_{m}, X_{2}-c_{2}X_{m}, \dots, X_{m-1}-c_{m-1}X_{m-1}]$. \gap Write $f$ as the sum of its homogeneous parts, \gap (for example $f = (T_{1}^{2}T_{2} +3T_{2}^{3}) + (2T_{1}T_{3} + T_{2}T_{3}) + (T_{2} + T_{3}) + 1$, where we collected terms of like degree.) \gap
+Let $F \neq 0$ be the part of degree $\deg f$ (i.e. of highest degree). Then for $c_{1}, \dots, c_{m-1} \in k$ which we will choose later, we have: \[ f(T_{1} + c_{1}T_{m}, \dots, T_{m-1} + c_{m-1}T_{m-1},T_{m}) := g(T_{1},\dots, T_{m})\]
+becomes equal to \[ F(c_{1}, \dots, c_{m-1},1) \cdot T_{m}^{r} + \begin{cases}\text{terms of degree $<r$ in $T_{m}$}\\ \text{with coefficients in $k[T_{1}, \dots, T_{m-1}]$} \end{cases} \]
+(this is very analogous to what we did in the example after the statement of Noether Normalization (8.2)). Now notice \begin{enumerate}
+    \item $g(X_{1}-c_{1}X_{m}, \dots, X_{m-1}-c_{m-1}X_{m},X_{m}) = f(X_{1}, \dots, X_{m})=0$
+    \item $g$ as a polynomial in $T_{m}$ over $k[T_{1}, \dots, T_{m-1}]$ has degree $\leq r$, the coefficient of $T_{m}^{r}$ is $F(c_{1},\dots, c_{m-1},1)$.
+\end{enumerate}
+Now $F(T_{1}, \dots, T_{m})$ is a non-zero homogeneous polynomial, so $F(T_{1}, \dots, T_{m-1},1)$ is not the zero polynomial (see example sheet $1$). Therefore, there are $c_{1}, \dots, c_{m-1}$ such that $F(c_{1}, \dots, c_{m-1},1) \neq 0$. This is now an integrality relation, since the highest coefficient is a scalar, so we can divide by it. \endproof
+\subsection{Hilbert's Nullstellensatz}
+\begin{fancyprop}{Zariski's Lemma}
+    Let $k \subseteq L$, $L$ a field which is f.g. as a $k$-algebra. Then $\dim_{k} L < \infty$.
+\end{fancyprop}
+\proof By Noether, we have some \[ k[x_{1}, \dots, x_{l}] \subseteq L \] such that $L$ is a finite extension. Then finite $\Rightarrow$ integral, so this is an integral extension of integral domains. But then if one of these is a field, then the other must be, and we know that $L$ is a field. So we must have that $k[X_{1}, \dots, X_{l}]$ is a field. Therefore, in fact, this must be a polynomial algebra over $0$ variables. So $k \subseteq L$ is finite. \endproof
+From now, let $k \subseteq \Omega$ be fields, where $\Omega$ is algebraically closed.
+\begin{fancydefine}{Algebraic set}
+    \hspace{0.1cm}
+    \begin{enumerate}
+        \item Let $S$ be a subset of $k[T_{1}, \dots, T_{n}]$. Then \[V(S) = \{ \mathbf{x} \in \Omega^{n} \, : \, f(\mathbf{x}) = 0 \,\, \forall f \in S\}.\] A set of the form $V(S)$ is called a $k$\textbf{-algebraic subset} of $\Omega^{n}$ (or, an algebraic subset of $\Omega^{n}$ defined over $k$).
+        \item Let $X$ be a subset of $\Omega^{n}$. Then \[ I(X) = \{ f \in k[T_{1},\dots, T_{n}] \, : \, f(\mathbf{x}) = 0 \,\, \forall \mathbf{x} \in X\}.\]
+    \end{enumerate}
+    Clearly, if $\fraka$ is the ideal of $k[T_{1}, \dots, T_{n}]$ generated by $S$, then $V(\fraka) = V(S)$
+\end{fancydefine}
+Recall that for all $k \subseteq L$ a finite field extension, there is a $k$-algebra embedding \[ L \to \Omega.\]
+\begin{fancythm}{}
+    Let $\fraka \subseteq k[T_{1}, \dots, T_{n}]$ be an idea, then we have:\begin{enumerate}
+        \item \textbf{Weak Nullstellensatz:} $V(\fraka) = \emptyset \Leftrightarrow  1 \in \fraka$
+        \item \textbf{Strong Nullstellensatz:} $I(V(\fraka)) = \sqrt{\fraka}$. 
+    \end{enumerate}
+\end{fancythm}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item[1.] Proving $\Leftarrow$ is clear. For $\Rightarrow$, assume that $1 \notin \fraka$. Then $\exists \frakm \in \mspec k[T_{1}, \dots, T_{n}]$ such that $\fraka \subseteq \frakm$. \gap This implies that $\frac{k[T_{1},\dots, T_{n}]}{\frakm}$ is a field which is finitely generated over $k$ as an algebra. Therefore $\dim_{k} \left( \frac{k[T_{1}, \dots, T_{n}]}{\frakm} \right) < \infty$. \gap But then, there is an injective $k$-algebra homomorphism: \begin{center}
+        \begin{tikzcd}[row sep = 0.6in]
+            k[T_{1}, \dots, T_{m}]/\frakm \arrow[r] & \Omega\\
+            k[T_{1}, \dots, T_{m}] \arrow[u, twoheadrightarrow] \arrow[ur, dashrightarrow, "\varphi"]
+        \end{tikzcd}
+    \end{center}
+    where $\ker \varphi = \frakm$. Write $\bar X = (\varphi(T_{1}), \dots, \varphi(T_{n})) \in \Omega^{n}$. For $f \in k[T_{1}, \dots, T_{n}]$ we have $\varphi(f) = f(\bar X)$. So $\forall f \in \fraka \subseteq \frakm = \ker \varphi$, we have \[ f(\bar X) = \varphi(f) = 0.\] And so, $\bar X \in V(\fraka)$.
+    \item[2.] Let $f \in \sqrt{\fraka}$, so that $f^{l} \in \fraka$ for some $l \geq 1$. Then \[ f^{l}(\bar X) = 0 \,\,\, \forall \bar X \in V(\fraka)\] Therefore $f(\bar X) =0$, so $f \in I(V(\fraka))$.\gap 
+    Conversely, take $f \in I(V(\fraka))$. We want $f \in \sqrt{\fraka}$, so we want that $\bar f$\footnote{the image of $f$ in the quotient ring.} is nilpotent in $k[T_{1}, \dots, T_{n}] / \fraka$, as this would imply that $f \in \sqrt{\fraka}$. But this in turn is implied by \[ \left( k[T_{1},\dots, T_{n}]/\fraka\right)_{\bar f} = 0.\]
+    This is isomorphic to \[ k[T_{1}, \dots, T_{n}, T_{n+1}]/(\fraka^{e} + (T_{n+1}f - 1))\] 
+    Write $\frakb = (\fraka^{e} + (T_{n+1}f-1))$. We want that $1 \in \frakb$ to get that the ring is $0$. But by the weak Nullstellensatz, this means we want $V(\frakb) = \emptyset$.\gap 
+    Take $\bar X = (X_{1}, \dots, X_{n+1}) \in V(\frakb) \subseteq \Omega^{n+1}$. Then write $\bar X_{0} = (X_{1}, \dots, X_{n}) \in V(\fraka)$. Then, since $f \in I(V(\fraka))$, we have $f(\bar X_{0}) = 0$ so $\left(T_{n+1}f\right)(\bar X) = 0$. But then $\left(T_{n+1}f -1\right)(\bar X) = -1 \neq 0$, which contradicts that $\bar X \in V(\frakb)$. Therefore $1 \in \frakb$ by the Weak Nullstellensatz, so the quotient ring is in fact $0$, and therefore $\bar f$ is nilpotent, which means that $f \in \sqrt{\fraka}$.
+\end{enumerate}
+\endproof
+Recall that $\sqrt{\sqrt{I}} = \sqrt{I}$. Now some facts from algebraic geometry: 
+\begin{enumerate}
+    \item $X \subseteq Y \subseteq \Omega^{n} \Rightarrow I(X) \supseteq I(Y)$. \gap Similarly, $S \subseteq T \subseteq k[T_{1},\dots,T_{n}] \Rightarrow V(T) \supseteq V(S)$.
+    \item $S \subseteq k[T_{1}, \dots T_{n}] \Rightarrow S \subseteq I(V(S))$.
+    \item $X \subseteq \Omega^{n} \Rightarrow X \subseteq V(I(X))$.
+    \item If $X \subseteq \Omega^{n}$ is an algebraic set, then $X = V(I(X))$. \proof If $X$ algebraic, then $X = V(\fraka)$ for some $\fraka$. This implies that $V(I(X)) = V(I(V(\fraka))) \subseteq V(\fraka) =X$. \endproof 
+    \item $X \subseteq \Omega^{n} \Rightarrow I(X)$ is a radical ideal. \[ I(X) = \sqrt(I(X)).\]
+\end{enumerate}
+\begin{fancyprop}{}
+    Let $k = \Omega$ be an algebraically closed field, and $n \geq 0$. There is a bijection:
+    \begin{align*}
+        \{\, \text{algebraic subsets of $\Omega^{n}$}\,\} &\leftrightarrow \{\,\text{Radical ideals of $\Omega[T_{1}, \dots, T_{n}]$} \, \}\\
+        X &\mapsto I(X)\\
+        V(\fraka) &\mapsfrom \fraka
+    \end{align*}
+\end{fancyprop}
+\proof Since $I(X)$ is radical, $X=V(I(X))$ this is already done. For the other direction, let $\fraka \subseteq k[T_{1}, \dots, T_{n}]$ be a radical ideal. Then $I(V(\fraka)) = \sqrt{\fraka} = \fraka$ by the strong nullstellensatz. \endproof
+
+\begin{corr}{}
+    Let $\Omega$ be an algebraically closed field. Then there is a bijection 
+    \begin{align*}
+        \Omega^{n} &\leftrightarrow \mspec \Omega[T_{1},\dots,T_{n}]\\
+        (X_{1}, \dots, X_{n}) &\mapsto (T_{1}-X_{1}, \dots, T_{n}-X_{n})
+    \end{align*}
+\end{corr}
+\proof $\frakm_{\bar X}$ is a maximal ideal\footnote{where $\bar X$ is a tuple of elements in $\Omega$.}, since it is the kernel of \begin{align*}
+    k[T_{1}, \dots, T_{n}] &\twoheadrightarrow \Omega\\
+    T_{i} &\mapsto X_{i}
+\end{align*}
+So we wish to prove that $\frakm_{\bar X} = I(\{\bar X\})$. Well $\frakm_{\bar X} \subseteq I(\{\bar X\}) \subsetneq \Omega[T_{1}, \dots, T_{n}]$. Therefore $\frakm_{\bar X} = I(\{ \bar X\})$. $V(\frakm_{\bar X}) = \{\bar X\}$. The claim follows from the inclusion reversing bijection from before.\endproof 
+\textbf{Claim:} Every prime ideal $\frakp$ is radical. Easily seen, since $x^{n} \in frakp \Rightarrow x \in \frakp$.
+\begin{fancydefine}{Irreducible variety}
+    $X \subseteq \Omega^{n}$ is \textbf{irreducibel} if $X$ is not the union of two proper algebraic subsets.
+\end{fancydefine}
+\begin{fancyprop}{}
+    If $X \subseteq \Omega^{n}$ is an algebraic set, then $X$ is irreducible iff $I(X)$ is prime.
+\end{fancyprop}
+\proof In the notes.
+\section{Integral and finite extensions - Part II}
+\begin{fancydefine}{Integral elements, Integral closure of an ideal}
+    Let $A \subseteq B$ be rings, and $\fraka \subseteq A$ an ideal. Then \begin{enumerate}
+        \item $x \in B$ is $\fraka$\textbf{-integral} if: \[ \exists f(T) = T^{n} + a_{1}T^{n-1} + \dots + a_{n}T^{0} \in A[T] \,\,\, \text{s.t.}\,\,\, f(x)=0\]
+        \item The \textbf{integral closue} of $\fraka$ in $B$ is \[ \{x \in B \, : \, x \text{ is $\fraka$-integral}\,\}\]
+    \end{enumerate}
+\end{fancydefine}
+\begin{fancyprop}{}
+    Let $A \subseteq B$ be rings, and let $\bar A$ be the integral closure of $A$ in $B$. Let $\fraka \subseteq A$ be an ideal of $A$. Then the integral closure of $\fraka$ in $B$ is $\sqrt{\fraka \bar A}$.
+\end{fancyprop}
+\proof If $b \in B$ is $\fraka$-integral, then \[ b^{n} + a_{1}b^{n-1} + \dots + a_{n}b^{0} = 0 \tag{$*$}\] Therefore, $b \in \bar A$. Therefore $b^{0}, \dots, b^{n-1} \in \bar A$, and so, by ($*$), $b^{n} \in \fraka \bar A$. Therefore $b \in \sqrt{\fraka \bar A}$.\gap 
+Conversely, assume $b \in \sqrt{\fraka \bar A}$. Then $b^{n} \in \fraka \bar A$ for some $n \geq 1$. Then we have \[ b^{n} = \sum_{i=1}^{m} a_{i} \cdot X_{i} \,\,\,\, m \geq 0 \tag{$**$}\] where $a_{i} \in \fraka$, and $X_{i} \in \bar A$. Then write $M := A[X_{1}, \dots, X_{m}]$, so that $M$ is a finite $A$-algebra. Then by ($**$), we have $b^{n}M \subseteq \fraka M$ (as an inclusion of $A$-modules). Then define \begin{align*}
+    f: M &\to M\\
+    f(m) &=b^{n}m
+\end{align*}
+Then $f(M) \subseteq \fraka M$, and $f$ is $A$-linear. Then by Cayley-Hamilton, we have: \[ f^{l} + \alpha_{1} f^{l-1} + \dots + \alpha^{l} f^{0}  = 0\] in $\End M$. So \[(b^{n})^{l} + \alpha_{1}(b^{n})^{l-1} + \dots + \alpha^{l}(b^{n})^{0} = 0\] in $B$. Therefore $b$ is $\fraka$ integral. \endproof
+\begin{corr}{}
+    Let $A \subseteq B$ as rings. $\fraka \subseteq A$, and $b \in B$. Then \[ \text{ $b$ is $\fraka$ integral } \Leftrightarrow \text{ b is $\sqrt{\fraka}$-integral}\]
+\end{corr}
+\proof We want $\sqrt{\fraka \bar A} = \sqrt{\sqrt{a} \bar A}$. \begin{enumerate}
+    \item[$\subseteq$:] Clear.
+    \item[$\supseteq$:] $\sqrt{I}^{e} \subseteq \sqrt{I^{e}}$. Therefore $\sqrt{\fraka} \bar A \subseteq \sqrt{\fraka \bar A}$. Then take radicals of both sides to get: \[ \sqrt{\sqrt{\fraka} \bar A} \subseteq \sqrt{\fraka \bar A}\]
+\end{enumerate}
+\endproof
+\begin{fancyprop}{}
+    If $A$ is an integrally closed integral domain with an ideal $\fraka$, and $A \subseteq B$, where $B$ is another integral domain. Then if $x \in B$. Consider $\Frac A \subseteq \Frac B$. The following are equivalent:
+    \begin{enumerate}
+        \item $b$ is integral over $\fraka$
+        \item $b$ is algebraic over $\Frac A$ with minimal polynomial over $\Frac A$ of the form \[ T^{n} + a_{1}T^{n-1} + \dots + a_{n}T^{0}\]
+        where $a_{i} \in \sqrt{\fraka}$.
+    \end{enumerate}
+\end{fancyprop}
+\proof The second claim implies that $b$ is $\sqrt{\fraka}$ integral, which implies by corollary 9.3 that $b$ is $\fraka$-integral. So $2 \Rightarrow 1$ is done.\gap 
+Now assume $1$, this implies: \[ b^{n} + a_{1}b^{n-1} + \dots + a_{n}b^{0} = 0\] Then $h = T^{n} + a_{1}T^{n-1} + \dots + a_{n}T^{0} \in (\Frac A)[T]$, and $h(b) = 0$. Let $f \in (\Frac A)[T]$ be the minimal polynomial of $b$ over $\Frac A$. Then fix $\Frac A \subseteq \Omega$ where $\Omega$ is an algebraically closed field, so that \[ f = \prod_{i=1}^{l} (T-\alpha_{i}) \tag{$*$}\] where $\alpha_{i} \in \Omega$, W.L.O.G. $\alpha_{1}=b$. Then we want to show that the coefficients of $f$ are in $\sqrt{\fraka}$.\gap By proposition 9.2 as well as the fact that $A$ is integrally closed, we have that the integral closure of $\fraka$ in $\Frac A$ is $\sqrt{\fraka}$\footnote{since $\bar A$ = $A$.}. Then we need that the coefficients are in $\Frac A$ and are $\fraka$-integral. The coefficients must be in $\Frac A$ by definition, and we obtain $\fraka$-integrality by expanding the brackets in ($*$), and seeing that the coefficients of $f$ are sums of products of $\alpha_{1}, \dots, \alpha_{l}$. By the proposition, the integral closure of $\fraka$ in $\Omega$ is closed under sums and products. So we just need to show that each $\alpha_{i}$ is $\fraka$-integral, but $\alpha_{i}$ and $b$ have the same minimal polynomial $f$ over $\Frac A$. Therefore \[ \exists \varphi_{i} : (\Frac A)[b] \to (\Frac A)[\alpha_{i}] \] where each $\varphi_{i}$ is a $\Frac(A)$-algebra isomorphism which takes \[ b \mapsto \alpha_{i}.\] So we have \[h(\alpha_{i}) = h(\varphi_{i}(b)) = \varphi_{i}(h(b)) = 0.\]
+\endproof 
+\section{Cohen-Seidenberg Theorems (Going up/down)}
+\begin{remark*}
+    If $\iota: A \hookrightarrow B$, then we can define \begin{align*}
+        \iota^{*} : \spec B &\to \spec A\\
+        \iota^{*}(\frakq) = \frakq \cap A
+    \end{align*}
+\end{remark*}
+\begin{fancyprop}{Incomparability}
+    Let $A \subseteq B$ be an integral extension, and $\frakq, \frakq' \in \spec B$ with $\frakq \subseteq \frakq'$, but  $\frakq \cap A = \frakq' \cap A$. Then $\frakq = \frakq'$.
+\end{fancyprop}
+\proof 
+Let $\frakp = \frakq \cap A = \frakq' \cap A$. Then define $S = A \setminus \frakp$. Then $\frakq$ and $\frakq'$ are prime ideals of $B$ not intersecting $S$, therefore $\frakq = (S^{-1}\frakq)^{c}$. and $\frakq' = (S^{-1}\frakq')^{c}$. Then $B_{\frakp} = (A \setminus \frakp)^{-1}B$\footnote{Since $\{ \text{prime ideals of $R$ disjoint from $S$} \} \leftrightarrow \spec S^{-1}R$}. Then we want $\frakq B_{\frakp} = \frakq' B_{\frakp}$. This can be shown by \[ \frakq B_{\frakp} \cap A_{\frakp} = S^{-1}(\frakq \cap A) = S^{-1} \frakp = \frakp A_{\frakp},\] and similarly for $\frakq' B_{\frakp} \cap A_{\frakp} = \frakp A_{\frakp}$. $\frakp A_{\frakp}$ is a maximal ideal of $A_{\frakp}$. Then $A \subseteq B$ an integral extension implies that \[ A_{\frakp} \hookrightarrow B_{\frakp}\] is also an integral extension, so $\frakq B_{\frakp} \subseteq \frakq' B_{\frakp}$ must also be maximal ideals of $B_{\frakp}$. Therefore $\frakq B_{\frakp} = \frakq' B_{\frakp}$. \endproof
+\begin{fancyprop}{Lying over}
+    Let $A \subseteq B$ be an integral extension of rings, and $\frakp \in \spec A$ a prime ideal. Then \[
+        \exists \frakq \in \spec B \text{ s.t. } \frakq \cap A = \frakp 
+    \]
+    (i.e. $i^{*} : \spec B \to \spec A$ is surjective for $i : A \to B$.)
+\end{fancyprop}
+\proof \begin{center}
+    \begin{tikzcd}
+        A \arrow[r] \arrow[d] & B \arrow[d, "\beta"]\\
+        A_{\frakp} \arrow[r] & B_{\frakp} = (A \setminus \frakp)^{-1}B
+    \end{tikzcd}
+\end{center}
+Take $\frakm \in \mspec B_{\frakp}$ maximal, then we can contract $\frakm$ back to $A$ in two ways via this commutative diagram. \gap Let's first contract to $A_{\frakp}$. We know that $A_{\frakp} \subseteq B_{\frakp}$ is an integral extension, since a localization of an integral extension stays an integral extension (7.14). Then $\frakm \cap A_{\frakp} \in \mspec A_{\frakp}$ by (7.16). But $\mspec A_{\frakp}$ contains only one element, $\frakp A_{\frakp}$. And then $\frakp A_{\frakp}$ contracts to $\frakp$ in $A$ under the localization map. Therefore $\frakm$ contracts to $\frakp$ under the map $A \to A_{\frakp} \to B_{\frakp}$. But this is the same map as $A \to B \to B_{\frakp}$. Therefore, $\beta^{-1}(\frakm) \cap A = \frakp$. And $\beta^{-1}(\frakm)$ is a contraction of a maximal ideal, so it is a prime ideal. \endproof
+\begin{fancyprop}{Going up}
+    Let $A \subseteq B$ an integral extension of rings, and $\frakq_{1} \in \spec B$, $\frakp_{1}, \frakp_{2} \in \spec A$ such that: \begin{align*}
+        \frakq_{1} \cap A = \frakp_{1} & & \frakp_{1} \subseteq \frakp_{2}
+    \end{align*}
+    Then there is a $\frakq_{2} \supseteq \frakq_{1}$ which lies in $\spec B$ such that $\frakq_{2} \cap A = \frakp_{2}$.
+\end{fancyprop}
+\proof We know $\frakp_{1} = \frakq_{1} \cap A$, so \begin{align*}
+    A/ \frakp_{1} \hookrightarrow B / \frakp_{2}\\
+    a + \frakp_{1} &\to a + \frakq_{1}
+\end{align*}
+From lying over, we know that there is a $\frakq_{2}/\frakq_{1} \in \spec B/ \frakq_{1}$ where $\frakq_{2} \in \spec B$, which contracts to $\frakp_{2}/\frakp_{1}$ in $A / \frakp_{1}$. \gap Then $\frakq_{2} \cap A = \frakp_{2}$, by the following diagram: \begin{center}
+    \begin{tikzcd}
+        A \arrow[r] \arrow[d] & B \arrow[d]\\ 
+        A/\frakp_{1} \arrow[r] & B/\frakq_{1}
+    \end{tikzcd}
+\end{center}
+Since $\frakq_{2}/\frakq_{1}$ lies in $B/\frakq_{1}$, and this contracts to $\frakp_{2}/\frakp_{1}$ in $A/\frakp_{1}$, which contracts to $\frakp_{2}$ in $A$. Then going the other way, we get $\frakq_{2}/\frakq_{1}$ contracts to $\frakq_{2}$ in $B$. And since the diagram commutes, $\frakq_{2}$ contracts to $\frakp_{2}$ in $A$.
+\endproof
+\begin{fancyprop}{Going down}
+    Let $A \subseteq B$ be an integral extension of integral domains. Assume that $A$ is integrally closed (i.e. integrally closed in $\Frac(A)$). Then if $\frakp_{1} \supseteq \frakp_{2}$ in $\spec A$ and $\frakq_{1} \in \spec B$. Then there exists $\frakq_{2} \in \spec B$ with $\frakq_{1} \supseteq \frakq_{2}$ such that $\frakq_{2} \cap A = \frakp_{2}$.
+\end{fancyprop}
+\proof Consider \[ A \to B \to B_{\frakq_{1}}\]
+The first map is injective, since it is inclusion, and the second is injective since a localisation of an integral domain is injective. Therefore the overall map is also injective. We want to prove: $\exists \frakn \in \spec B_{\frakq_{1}}$ such that $\frakn \cap A = \frakp_{2}$. \gap This is enough, since then we have $(\frakn \cap B) \cap A = \frakp_{2}$. But then $\frakn \cap B$ is a contraction of a prime ideal, so it must be in $\spec B$. So what we really want is: \gap 
+\textbf{Want: } $(\frakp_{2} B_{\frakq_{1}}) \cap A \subseteq \frakp_{2}$. (Since $\supseteq$ always holds\footnote{since if an ideal is contacted, and you extend it and contract it again, you get back to the same place.}.)
+It's useful to know that $(\frakp_{2}B_{\frakq_{1}}) = (\frakp_{2} B) B_{\frakq_{1}}$. \gap So take $\frac{y}{s} \in \frakp_{2}B_{\frakq_{1}}\cap A$ where $y \in \frakp_{2}B$ and $s \in B\setminus \frakq_{1}$. Since this is what a general element looks like in $\frakp_{2}B_{\frakq_{1}}$. \gap 
+Now we have that $A \subseteq B$ is an integral extension, so the integral closure of $\frakp_{2}$ in $B$ is $\sqrt{frakp_{2}B}$. Therefore $y$ is integral over $\frakp_{2}$. We also have $A$ is integrally closed over $\Frac(A)$, and that $\frakp_{2} = \sqrt{\frakp_{2}}$ so the minimal equation of $y \in \Frac(B)$ over $\Frac(A)$ has the form \begin{align*}
+    y^{r} + u_{1}y^{r-1} + \dots + u_{r}y^{0}=0 \tag{$*$}
+\end{align*}
+where each $u_{i} \in \frakp_{2}$. Then I can write \[ y = \frac{y}{s} \cdot s\] where $y \in B$, $s \in B$, and $\frac{y}{s} \in A$. So, in particular $y,s \in \Frac(B)$ and $\frac{y}{s} \in \Frac(A)$. Then rewriting ($*$): \[ \left( \frac{y}{s} \cdot s\right)^{r} + u_{1}\cdot  \left( \frac{y}{s} \cdot s\right)^{r-1} + \cdots + u_{r} \cdot \left( \frac{y}{s} \cdot s\right)^{0} \]
+Then we multiply through by $\left( \frac{s}{y} \right)^{r}$ to get \[ s^{r} + \left(\frac{s}{y} \right)^{1} \cdot u_{1} \cdot s^{r-1} + \dots + \left(\frac{s}{y} \right)^{r}\cdot u_{r} \cdot s^{0} = 0 \tag{$**$}\] Recall again that the $u_{i} \in \frakp_{2}$, $s \in B$, and $\frac{s}{y} \in \Frac(A)$. \gap Now, since $s \in B$, $s$ is integral over $A$. Therefore, the coefficients in ($**$) are in $A$. So \begin{align*}
+    \left(\frac{s}{y} \right) \cdot u_{1}, \dots, \left(\frac{s}{y} \right)^{r} \cdot u_{r} \in A
+\end{align*}
+Now assume that $\frac{y}{s} \notin \frakp_{2}$. Then \[u_{i} = \left(\frac{y}{s}\right)^{i} \cdot \left( \frac{s}{y} \right)^{i} \cdot u_{i}.\]
+Then $\left(\frac{y}{s}\right)^{i}$ is in $A$, but not in $\frakp_{2}$. We just concluded that $\left( \frac{s}{y} \right)^{i} \cdot u_{i} \in A \cap \frakp_{2}$ since we know that $u_{i} \in \frakp_{2}$. Therefore, by ($**$), $s^{r} \in \frakp_{2}B$, since $\left(\frac{s}{y}\right)^{i}\cdot u_{i} \in \frakp_{2}$. But \[\frakp_{2}B \subseteq \frakp_{1}B = (\frakq_{1} \cap A)B \subseteq \frakq_{1}.\] So $s \in \frakq_{1}$. But we \textit{know} that $s \notin \frakq_{1}$, since we divide by it in the localization ring $B_{\frakq_{1}}$, so it precisely cannot be in $\frakq_{1}$. Contradiction.
+\endproof
+\begin{remark*}
+    If there is a finitely algebra over a field $k$ which is also an integral domain, then we know it contains a polynomial algebra (and is integral over it). A polynomial algebra is always integrally closed. So this is precisely a time when we can use the going down theorem.
+\end{remark*}
+\section{Primary decomposition of ideals}
+\begin{fancydefine}{Primary ideal}
+    Let $I$ be an ideal of $R$. \begin{enumerate}
+        \item $I$ is prime if $R/I \neq 0$ and $0$ is the only $0$ divisor.
+        \item $I$ is radical if in $R/I$, the only nilpotent element is $0$.
+        \item I is \textbf{primary} if $R/I \neq 0$ and every zero divisor in $R/I$ is nilpotent.
+    \end{enumerate}
+    So, $I$ is prime $\Rightarrow$ $I$ is radical and primary.\gap
+    ($R$ itself is radical, but not prime or primary.)
+\end{fancydefine}
+\begin{ex*}
+    Let $R = \bbZ$, then $(6)$ is radical, but not primary, because in $\bbZ/(6)$, $2 \cdot 3 = 0$ but neither $2$ nor $3$ are nilpotent.\gap 
+    $(9)$ is primary but not radical, $R/(9)$.
+    So in general, if $0 \neq x \in \bbZ$, then $(x)$ is prime iff $|x|$ is prime, and $(x)$ is radical iff $x$ is square free. $(x)$ is primary iff $x=p^{n}$ for some $p$ prime, $n \geq 1$. 
+\end{ex*}
+\begin{fancyprop}{}
+    Let $I \subsetneq R$ an ideal, then \begin{enumerate}
+        \item $I$ primary $\Rightarrow$ $\sqrt{I} = \frakp$ prime. We say $I$ is $\frakp$ primary. (So)
+        \item $\frakq_{1}, \dots, \frakq_{n}$ are $\frakp$-primary, then $\frakq_{1} \cap \dots \cap \frakq_{n}$ is also $\frakp$-primary.
+        \item If $I$ has a \textbf{primary decomposition} \[I = \frakq_{1} \cap \dots \cap \frakq_{n}, \,\,\, \frakq_{i} \text{ primary}. \tag{$*$}\]
+        Then $I$ has a \textbf{minimal primary decomposition} of the same form as ($*$), such that $\sqrt{q_{1}}, \dots, \sqrt{q_{i}}$ are distinct, and no $\frakq_{i}$ can be dropped
+        \item If $\sqrt{I} \in \mspec R$, then $I$ is primary.
+        \item If $R$ is noetherian, then every ideal $I$ has a primary decomposition.
+    \end{enumerate}
+\end{fancyprop}
+\proof In example sheet
+\begin{ex*}
+
+    In $\bbZ$, $(90) = (2) \cap (3^{2}) \cap (5)$ is a primary decomposition.
+\end{ex*}
+\begin{exs*}
+    For $p \in \spec R$, if $\frakp^{n}$ is primary, then $\frakp^{n}$ is $\frakp$ primary, since $\sqrt{\frakp^{n}} = \frakp$.
+    \begin{enumerate}
+        \item Not every primary ideal is a power of a prime ideal. For example, let \begin{align*}
+            R = k[X,Y] & & \frakq = (X,Y^{2})
+        \end{align*}
+        Then $\frakq$ is primary, since $\sqrt{\frakq} = (X,Y) \in \mspec R$. So $\frakq$ is $(X,Y)$-primary.\gap
+        Another way to see that $\frakq$ is primary is by looking at \[k[X,Y]/(X,Y^{2}) \cong k[Y]/(Y^{2})\]
+        If $f \in k[Y]$ and $f+(y^{2})$ is a zero-divisor, then $y \sim f$, so $f + (y^{2})$ is nilpotent.
+        If $\frakq = p^{n}$ for some $\frakp \in \spec k$, then \[(X,Y) = \sqrt{\frakq} = \sqrt{\frakp^{n}} = \frakp.\]
+        Then $(X,Y) = \sqrt{\frakq} = \sqrt{\frakp^{n}} = \frakp$, so we have \[ (X,Y) \supsetneq (X,Y^{2}) \supsetneq (X,Y)^{2}.\]
+        So $(X,Y^{2}) \neq (X,Y)^{n}$ for any $n \geq 1$.
+        \item A power of a prime ideal, $\frakp^{n}$ is not always primary. Let \[R = k[X,Y,Z]/(XY-Z^{2}) = k[\bar X, \bar Y, \bar Z],\] where $\bar X$ is the image of $X$ under this quotient. Let $\frakp = (\bar X, \bar Z)$. Then we claim that $\frakp$ is prime, since $R/\frakp \cong k[Y]$ (since $X$ and $Z$ are both sent to zero in the quotient). Therefore $\frakp$ is prime. However $\frakp^{2} = (\bar{X}^{2}, \bar X \bar Z, \bar{Z}^{2})$, so $\bar X \cdot \bar Y = \bar{Z}^{2} \in \frakp^{2}$. So $(\bar X + \frakp^{2})\cdot (\bar Y + \frakp^{2}) = 0 + \frakp^{2}$. But $X + \frakp^{2} \neq 0 + \frakp^{2}$, so $\bar Y$ is indeed a zero-divisor in $R/\frakp^{2}$. But it is not nilpotent, since \[ R/\frakp^{2} = \frac{k[X,Y,Z]}{XY, X^{2}, XZ, Z^{2}}\] and so no power of $Y$ ends up in $\frakp$.
+    \end{enumerate}
+\end{exs*}
+\begin{fancythm}{}
+    Let $I = \frakq_{1} \cap \dots \cap \frakq_{n}$, a minimal primary decomposition. Now let $\frakp_{i} = \sqrt{\frakq_{i}}$. Then: \begin{enumerate}
+        \item The associated primes $\frakp_{1}, \dots, \frakp^{n}$ are determined by $I$. (So there can be multiple minimal primary decompositions, but the set of radicals does depend only on $I$).
+        \item The \textbf{isolated primes} of $I$: the minimal elements among $\frakp_{1}, \dots \frakp_{n}$ when orderd by inclusion are exactly the minimal prime ideals of $R$ containing $I$. These are called the \textbf{isolated primes} of $I$.
+        \item The \textbf{embedded primes} of $I$ are the associated primes which are not isolated (i.e. the rest of them).
+        \item If $\frakp_{1}, \dots, \frakp_{t}$, with $t \leq n$ are the isolated primes of $I$, then $\frakq_{1}, \dots, \frakq_{t}$ are determined only by $I$.
+    \end{enumerate}
+\end{fancythm}
+\proof In example sheet.
+\begin{ex*}
+    Let $R = k[X,Y]$, and $I=(X^{2},XY)$, then \[I = (X) \cap (X,Y)^{2},\] and \[I=(X) \cap (X^{2},Y).\]
+    \begin{align*}
+        \sqrt{(X)} = X & & \sqrt{(X,Y)^{2}} &= (X,Y)\\
+         & & \sqrt{(X^{2},Y)}=(X,Y)
+    \end{align*}
+    The associated primes of $I$ are therefore $(X)$ and $(X,Y)$. We have $(X) \subseteq (X,Y)$, and $(X)$ is an isolated prime, and $(X,Y)$ is an embedded prime.
+\end{ex*}
+If $I = \frakq_{1} \cap \dots \cap \frakq_{n}$ is a minimal primary decomposition, then $\sqrt{\frakq_{1}}, \dots, \sqrt{\frakq_{t}}$ are the isolated primes. Then $\sqrt{I}= \sqrt{q_{1}} \cap \dots \cap \sqrt{\frakq_{n}}$\footnote{Because these contain all the other ideals.} is a minimal primary decomposition of the radical of $\sqrt{I}$, and all associated primes are isolated. So the minimal primary decomposition of a radical ideal completely determines the minimal primary decomposition. So going from $I$ to $\sqrt{I}$ means that we \say{only remember the isolated primes of $I$,} and forget all the other embedded ideals. 
+\begin{ex*}
+    In $k[T_{1}, \dots, T_{n}]$ where $k \subseteq \bbC$. Then \[ V(I) = V(\sqrt{I})\] and \[ I(V(I)) = \sqrt{I},\] so $V(I)$ remembers $\sqrt{I}$ and nothing else about $I$.
+\end{ex*}
+\section{Direct and inverse limits and completions}
+Let $\calC$ be a category (like sets, groups, rings, $R$-modules, or $R$ algebras).
+\begin{fancydefine}{Directed Set}
+    \hspace{0.1cm}\begin{enumerate}
+        \item A \textbf{directed set} is a partially ordered set such that \[ \forall a,b \in I \,\, \exists c \in I \text{ s.t. } a \leq c, \,\, b \leq c\]
+        \item A \textbf{direct system} on $I$ is \[ ((X_{i})_{i \in I}, (f_{ij})_{i \leq j})\] where the $X_{i}$ are objects, and the $f_{ij}$ are morphisms, satisfying: \begin{itemize}
+            \item $f_{ii} = \id_{X_{i}}$ for all $i \in I$.
+            \item $f_{jk} \circ f_{ij} = f_{ik}$ for all $i \leq j \leq k$ in $I$.
+        \end{itemize}
+        \item An \textbf{inverse system} on $I$ is \[ ((Y_{i})_{i \in I}, (h_{ij})_{i \leq j})\] where $h_{ij} : X_{j} \to X_{i}$, which satisfies: \begin{itemize}
+            \item $h_{ii} = \id_{X_{i}}$
+            \item $f_{ij} \circ f_{jk} = f_{ik}$ for all $i \leq j \leq k$ in $I$.
+        \end{itemize}
+    \end{enumerate}
+\end{fancydefine}
+\begin{ex*}
+    Let $I = (\bbN, \leq)$ \begin{enumerate}
+        \item Define a direct system on $I$ which is given by first fixing a prime $p$, then take \begin{align*} 
+            X_{i} = \bbF_{p^{i!}} & & f_{ij}: \bbF_{p^{i!}} \to \bbF_{p^{j!}}
+        \end{align*}
+        Recall that if $a \sim b$, then there is an embedding $\varphi : \bbF_{p^{a}} \hookrightarrow \bbF_{p^{b}}$, and the collection of embeddings $\bbF_{p^{a}} \hookrightarrow \bbF_{p^{b}}$ is given by \[ \{x \mapsto (\varphi(x))^{p^{c}} \text{ s.t. } 0 \leq c \leq a-1\}\]
+        So for $i \leq j$, we will define \[ f_{ij} f_{j-1, j} \circ \dots \circ f_{i,i+1}.\]
+        \item Define an inverse system on $I$ by \begin{align*}
+            Y_{i} = \bbZ/p^{i}\bbZ & & f_{ij} : \bbZ/p^{j}\bbZ \to \bbZ/p^{i}\bbZ
+        \end{align*}
+        where $f_{ij}$ is given by the natural projection.
+    \end{enumerate}
+\end{ex*}
+\begin{fancydefine}{Direct limit/Inverse limit}
+    Let $(I, \leq)$ be a directed set, then \begin{enumerate}
+        \item If $((X_{i}), (f_{ij})_{i\leq j}) := D$ is a direct set on $I$. The \textbf{direct limit} of $D$ is denoted \[\lim_{\to} X_{i} = \left(\bigsqcup_{i \in I} X_{i} \right)/ \sim \] where for $x_{i} \in X_{i}$, and $x_{j} \in X_{j}$, we have \[x_{i} \sim x_{j} \Leftrightarrow f_{ik}(x_{i}) = f_{jk}(x_{j})\] for some $i \leq k$, $j \leq k$. (Equivalently, we could have written \say{the smallest equivalence relation satisfying $x_{i} \sim f_{ij}(x_{i})$} This gives more of a sense of what we are trying to capture.) 
+        \item Let $((Y_{i})_{i \in I}, (h_{ij})_{i \leq j}) := E$ be an inverse system on $I$, then the \textbf{inverse limit} of $E$ is: \[ \lim_{\leftarrow} = \{ \bar y \in \prod_{i \in I} Y_{i} \, | \, y_{i} = h_{ij}(y_{j}) \,\,\, \forall i \leq j\}  
+            \]
+    \end{enumerate}    
+\end{fancydefine}
+\begin{exs*}
+    \begin{enumerate}
+    \item The direct limit $\lim\limits_{\to} \bbF_{p^{i!}}$ is an algebraic closure of $\bbF_{p}.$
+    \proof First, $\bbF_{p}^{\text{alg}} := \lim\limits_{\to} \bbF_{p^{i!}}$ is algebraic over $\bbF_{p}$. Take $[x] \in \bbF_{p}^{\text{alg}}$, so then $x \in \bbF_{p^{i!}}$ for some $i \geq 1$. Then \[ x^{p^{i!}}-x=0\] Therefore \[ [x]^{p^{i!}} - [x] = 0,\] so we are done, since there is a polynomial equation with coefficients in $\bbF_{p}$ which has $[x]$ as a solution. \gap Now we show that $\bbF_{p}^{\text{alg}}$ is algebraically closed. So take \[ [h] \in (\bbF_{p}^{\text{alg}})[T], \, \,\,\,\, h \in \bbF_{p^{i!}}[T]\] where $[h]$ is an abuse of notation, meaning we take the equivalence class of all the coefficients. Therefore $h$ splits under some extension of $\bbF_{p^{i!}} \to \bbF_{p^{l}}$, but then $\bbF_{p^{l}}$ embeds into $\bbF_{p^{l!}}$, so $h$ splits in $\bbF_{p^{l!}}$. So $h$ must split under $h_{ij}: \bbF_{p^{i!}} \to \bbF_{p^{j!}}$. Then also $[h]$ must split in $\bbF_{p}^{\text{alg}}$.
+    \item Let $\bbZ_{p} := \lim\limits_{\leftarrow} \bbZ/p^{i}\bbZ$, where $\bbZ_{p}$ is the ring of $p$-adic integers. For example, take $p=5$, and a sequence $(d_{i})_{i=0}^{\infty}$ where $0 \leq d_{i} \leq 4$. Then $ 1 \in \bbZ_{5}$ is: \[ (1+5\bbZ, 1+5^{2}\bbZ, 1+ 5^{3}\bbZ, \dots),\]
+    and $-1 \in \bbZ_{5}$ is \[ (4_{5}+5\bbZ, 44_{5} + 5^{2}\bbZ, 444_{5} + 5^{3}\bbZ, \dots)\] where we write numbers in base $5$.
+    \end{enumerate}
+\end{exs*}
+\begin{fancydefine}{$\fraka$-adic completion}
+    Let $R$ be a ring, and $\fraka \subseteq R$ an ideal, then the $\fraka$\textbf{-adic completion} of $R$ is \[ \hat R = \lim_{\leftarrow} R/\fraka^{i},\]
+    where our direct system if $R/\fraka, R/\fraka^{2}, R/\fraka^{3}, \dots$, where the maps map from higher powers of $\fraka$ to lower powers of $\fraka$.
+\end{fancydefine}
+\begin{exs*}
+    \hspace{0.1cm}
+    \begin{enumerate}
+        \item If $R=\bbZ$ and $\fraka = (p)$, then \[ \hat R = \bbZ_{p}\]
+        \item If $R = k[T]$, and $\fraka = (T)$, then \[ \hat R = \lim_{\leftarrow} R/(T^{i}),\] so in this ring we don't have to stop polynomials at any point, so this is given by \[\hat R = k[[T]] = \{ \sum_{n=0}^{\infty} a_{i}T^{i} \, | \, a_{k} \in k\}.\]
+    \end{enumerate}
+\end{exs*}
+\begin{fancydefine}{$\fraka$-adic completion of a module}
+    If $M$ is an $R$-module, and $\fraka \subseteq R$ an ideal, then the $\fraka$\textbf{-adic completion of} $M$ is \[ \hat M = \lim_{\leftarrow} M/\fraka^{i}M\] which is an $\hat R$-module.
+\end{fancydefine}
+\begin{fancydefine}{Filtration}
+    \item More generally, a \textbf{filtration} of an $R$-module $M$ is a sequence $(M_{n})_{n \geq 1}$ of submoudles of $M$ such that $M_{n} \supseteq M_{n+1}$.
+    \item The completion of $M$ with respect to $(M_{n})_{n \geq 1}$ is \[ \lim_{\leftarrow} M/M_{n}\]
+\end{fancydefine}
+\begin{fancythm}{}
+    Let $R$ be a noetherian ring, and $\fraka \subseteq R$ an ideal, then: \begin{enumerate}
+        \item $\hat R$ is noetherian.
+        \item $\hat R \otimes_{R} (\cdot)$ is exact.
+        \item If $M$ is a finitely generated $R$-module, then \[ \hat R \otimes_{R} M \to \hat M\] is an $\hat R$-linear isomorphism. 
+    \end{enumerate}
+\end{fancythm}
+
+
+
+
+
+
+
+
+
+\end{document}

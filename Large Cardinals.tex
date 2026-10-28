@@ -1,0 +1,1059 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{James}
+\usepackage{dynkin-diagrams}
+\title{Large Cardinals}
+\author{James Hindmarch}
+\setcounter{section}{0}
+\date{January 2024}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\newpage
+\newlec
+\section{Introduction}
+Set theory today is largely about understanding the consequences of the incompleteness phenomenon, that is to say, that for any reasonable $T$ (i.e. the axioms are computably enumerable, the axioms are consistent, etc). Then there exists $\varphi$ such that: 
+\begin{align*}
+    T &\nvdash \varphi\\
+    T &\nvdash \neg \varphi\\
+\end{align*}
+In particular, $T \nvdash \Cons(T)$.
+As a consequence, \[ \{ \psi \, : \, T \vdash \psi\} \subsetneq \{ \psi \, : \, T + \varphi \nvdash \psi\},\] that is to say \[ T <_{\text{consequence}} T+ \varphi.\]
+So Modern set theory is about understanding this $<_{\text{consequence}}$ relation, and other similar relations. Large cardinal axioms arise, since they are one of the most natural hierarchies to determine the basis of measuring these strengths.\gap 
+The one large irony of this course is that we will not have a precise definition of \say{large cardinal.}
+
+A non-definition would be that a \textbf{large cardinal property} is a formula $\Phi$, such that $\Phi(\kappa)$ implies that $\kappa$ is a \underline{very large} cardinal, and that $\kappa$ is \underline{so large that} its existence cannot be proved in ZFC.\gap
+The underlined regions are informal, but we can make precise that we cannot prove it in ZFC. We can write: \[ \Phi C \Leftrightarrow \exists \kappa, \, \Phi(\kappa),\] and say that $\ZFC \nvdash \Phi C$.
+\begin{nonex}
+    $\kappa$ is called a \textbf{Aleph fixed point} if $\kappa = \aleph_{\kappa}$. 
+    \begin{align*}
+        0 &\neq \aleph_{0}\\
+        1 &\neq \aleph_{1}\\
+        &\vdots\\
+        \omega &\neq \aleph_{\omega}\\
+        &\vdots\\
+        \omega_{1} &\neq \aleph_{\omega_{1}}\\
+        &\vdots\\
+        \aleph_{\omega} &\neq \aleph_{\aleph_{\omega}}
+    \end{align*}
+\end{nonex}
+\begin{fancydefine}{Normal function class}
+    If $F: \Ord \to \Ord$, we say that $F$ is \textbf{normal} if: \begin{enumerate}
+        \item[(a)] $\alpha \leq \beta \Rightarrow F(\alpha) \leq F(\beta)$
+        \item[(b)] $\lambda$ a limit $\Rightarrow F(\lambda) = \cup_{\alpha < \lambda} F(\alpha)$.  
+    \end{enumerate}
+\end{fancydefine}
+\begin{fancyprop}{}
+    Every normal ordinal operation has arbitrarily large fixed points.
+\end{fancyprop}
+\proof In Logic and Set Theory. \endproof
+Therefore, since $\alpha \to \aleph_{\alpha}$ is normal, there must be aleph fixed points.
+\begin{nonex}
+    Let $\Phi(\kappa) \Leftrightarrow (\kappa = \aleph_{\kappa}) \wedge \Cons(\ZFC)$.\gap 
+    Then clearly $\Phi C \Rightarrow \Cons(\ZFC)$, so $\ZFC \nvdash \Phi C$. This feels like cheating, because it is. We want the size of the ordinals to be the reason that ZFC cannot prove their existence.
+\end{nonex}
+\section{Inaccessibility}
+\subsection{Sources of Large Cardinal Axioms}
+Look at $\omega$. It is \textit{far} bigger than any $n < \omega$. If we try to express this fact in terms of mathematical properties of $\omega$, then we can use these as large cardinal properties. Let's consider some of these properties: \begin{enumerate}
+    \item If $n < \omega$, then $n^{+} < \omega$, where $n^{+}$ refers to the \textit{cardinal} successor of $n$. In more formal terms we can write: \[ \Lambda(\kappa) \Leftrightarrow \forall \alpha\, \, (\alpha < \kappa \rightarrow \alpha^{+} < \kappa).\] Clearly, $\Lambda(\kappa) \Leftrightarrow \text{$\kappa$ is a limit cardinal}$. For example $\Lambda{\aleph_{\omega}}$. So $\Lambda(\kappa)$ entails neither that $\kappa$ is very large or the existence of $\kappa$ is unprovable.
+    \item If $n< \omega$, then $2^{n} < \omega$. Recall that $2^{n}$ is the size of the power set of $n$. Formally, we can write: \[ \Sigma(\kappa) \Leftrightarrow \forall \alpha \,\, (\alpha < \kappa \rightarrow 2^{\alpha} < \kappa)\] where $2^{\alpha}$ is the cardinality of $\calP(\alpha)$.\gap Similarly to the $\aleph$ hierarchy, we can define the $\beth$-hierarchy by: \begin{align*}
+        \beth_{0} &:= \omega\\
+        \beth_{\alpha+1} &:= 2^{\beth_{\alpha}}\\
+        \beth_{\lambda} &:= \cup_{\alpha < \lambda} \beth_{\alpha}.
+    \end{align*}
+    We don't need to know the truth or falsity of the continuum hypothesis in order to prove that $\aleph_{\alpha} \leq \beth_{\alpha}$, this is fairly immediate\footnote{Since $\beth_{\alpha+1}$ cannot be mapped into $\beth_{\alpha}$ by a diagonalisation argument. And $\aleph_{\alpha+1}$ is defined as the least ordinal such that this is true.}.\gap 
+    $\Sigma(\kappa)$ is saying that $\kappa$ is something we call a \textbf{strong limit} cardinal. Moreover, it is clear that $\kappa$ is a strong limit if and only if $\kappa = \beth_{\lambda}$ for $\lambda$ a limit cardinal.
+    \item If $s : n \to \omega$ for $n < \omega$, then $ \sup(s) = \cup \ran(s) < \omega$. I.e. we can never reach $\omega$ by taking a union of any finite number of finite sets.
+    \begin{fancydefine}{Cofinality}
+        Let $\lambda$ be a limit ordinal, and $C \subseteq \lambda$ is cofinal/unbounded if $\cup C = \lambda$. \[ \cf(\lambda) := \min \{ |C| \, : \, C \text{ is cofinal in $\lambda$ }\}\]
+        We call $\cf(\lambda)$ the \textbf{cofinality} of $\lambda$. Clearly $\cf(\lambda) \leq |\lambda|$ for any ordinal. So if $\lambda$ is a cardinal, then $\cf(\lambda) \leq \lambda$. 
+    \end{fancydefine}
+    \begin{fancydefine}{Singular/Regular cardinal}
+        A cardinal $\kappa$ is called \textbf{regular} if $\cf(\kappa) = \kappa$. Otherwise,. we call $\kappa$ \textbf{singular}.
+    \end{fancydefine}
+    \begin{exs*}
+        $\aleph_{0}$ is regular. $\aleph_{1}$ is regular (since countable unions of countable sets are countable). In general, $\aleph_{\alpha+1}$ is regular for each $\alpha$ (this is a question on Example sheet 1).\gap 
+        On the other hand $\aleph_{\omega} = \cup \{ \aleph_{n} \, : \, n \in \bbN\}$. So $\cf(\aleph(\omega)) = \aleph_{0} < \aleph_{\omega}$. In fact, limit cardinals often tend to be singular. For example, $\aleph_{\omega}, \, \aleph_{\omega_{1}},$ and $\aleph_{\aleph_{\omega}}$ are all singular.
+    \end{exs*}
+\end{enumerate}
+
+\begin{fancydefine}{Weakly Inaccessible/Inaccessible}
+    A cardinal $\kappa$ is called \textbf{weakly inaccessible} if it's a regular limit cardinal. We express this as $\mathsf{WI}(\kappa)$\gap 
+    A cardinal $\kappa$ is called \textbf{(strongly) inaccessible} if it's an uncountable regular strong limit cardinal. We express this as $\mathsf{I}(\kappa)$.\gap We write $\mathsf{IC}$ for $\exists \kappa. \, \sfI(\kappa)$ (and $\mathsf{WIC}$ is defined similarly).
+\end{fancydefine}
+Our goal now is to argue that $\mathsf{WI}$ and $\mathsf{I}$ are large cardinal properties in the sense of our non-definition. I.e. that they are both very large, and that $\ZFC \nvdash \sfIC$ and $\ZFC \nvdash \mathsf{WIC}$. \gap Obviously we can never prove that ZFC does not prove these things, because it \textit{could} be inconsistent, in which case it will prove everything, however we are able to show that if it is consistent then it doesn't prove the existence of these objects.
+\begin{fancyprop}{}
+    \[ \mathsf{WI}(\kappa) \Rightarrow \kappa = \aleph_{\kappa}\] I.e. if a cardinal is weakly inaccessible, then it is an aleph fixed point.
+\end{fancyprop}
+\proof Suppose not, then $\kappa < \aleph_{\kappa}$. Fix $\alpha$ such that $\kappa = \aleph_{\alpha}$. Clearly $\alpha < \kappa$. Since $\kappa$ is a limit cardinal, $\alpha$ must be a limit ordinal. Therefore \[ \aleph_{\alpha} = \cup_{\alpha < \beta} \aleph_{\beta},\]
+and so $\{\aleph_{\beta} \, : \, \beta < \alpha\}$ is cofinal in $\kappa$. Thus $\cf(\kappa) \leq |\alpha| < \kappa$, so $\kappa$ is singular, which implies $\neg \mathsf{WI}(\kappa)$. \endproof
+
+\newlec
+
+\begin{fancyprop}{}
+    A cardinal $\kappa$ is regular $\Rightarrow$ if $\lambda < \kappa$ and $\forall \alpha < \lambda, \, |X_{\alpha}| < \kappa$, then $\bigcup_{\alpha < \lambda} X_{\alpha} \neq \kappa$.
+\end{fancyprop}
+\proof We prove this by setting \begin{align*}
+    \alpha_{0} &:= \omega\\
+    \alpha_{n+1} &:= \aleph_{\alpha_{n}}\\
+    \kappa &:= \cup_{n \in \bbN} \alpha_{n}
+\end{align*}
+This implies that $\cf(\kappa) = \aleph_{0}$. I don't think this quite proves the claim in the proposition, at least not immediately. But the proposition is somewhat self-evident from the defintion anyway.\endproof
+Today we will focus more on $\sfIC$, rather than $\sfWIC$, and prove that $\sfZFC \notproves \sfIC$ (of course, assuming that $\sfZFC$ is consistent).
+\begin{remark*}
+    Many things in the relationship of $\sfWI$ and $\sfI$ are unclear: $2^{\aleph_{0}}$ is not a strong limit, so it is not $\sfI$. Is it possibly $\sfWI$?
+\end{remark*}
+\begin{remark*}
+    If GCH holds, then $\forall \alpha, \,\, 2^{\aleph_{\alpha}}=\aleph_{\alpha+1}$, then $\forall \alpha, \,\, \aleph_{\alpha} = \beth_{\alpha}$. In this world, being a limit is the same as being a strong limit, so $\sfI(\kappa) \Leftrightarrow \sfWI(\kappa)$.
+\end{remark*}
+So, how do we go about proving that $\sfZFC \notproves \sfIC$? Obviously, we assume that $\sfZFC$ is consistent, but beyond that? Some ideas: 
+\begin{enumerate}
+    \item Well, we do it by constructing models, e.g. assume that $M \models \sfZFC$, then construct an $N \models \ZFC + \neg \sfIC$. However we do not know how to do this right now.
+    \item The other way to do this, is to say that by G\"odel 2, we know that $\sfZFC \notproves \Cons(\sfZFC)$. So it is enough to prove that $IC \Rightarrow \Cons(\sfZFC)$.
+    \item For proving $\Cons(\sfZFC)$, we use G\"odel's Completeness theorem, i.e. that \[ \Cons(T) \Leftrightarrow \exists M \, (M \models T).\]
+\end{enumerate}
+We will do option $2$ today, and then we will see option $1$ later with our developed techniques.
+\subsection{Cumulative Hierarchy}
+\begin{fancydefine}{Cumulative Hierarchy}
+    The cumulative hierarchy is defined via: \begin{align*}
+        V_{0} &:= \emptyset\\
+        V_{\alpha+1} &:= \calP(V_{\alpha})\\
+        V_{\lambda} &:= \cup_{\alpha < \lambda} V_{\alpha}.
+    \end{align*}
+\end{fancydefine}
+Recall from example sheet 4 on Logic and Set Theory, that \begin{align*}
+    (V_{\omega}, \in) &\models \text{all axioms of $\sfZFC$ except infinity}\\
+    (V_{\omega + \omega}, \in) &\models \text{all axioms of $\sfZFC$ except replacement}
+\end{align*}
+We call the first finite set theory, or $\sfFST$, and the second $\sfZC$. Observe that for any $\alpha > \omega$, $\alpha$ a limit,$ V_{\alpha} \models \sfZC$ (there is nothing special about $\omega + \omega$ in this respect). Note that, therefore, since G\"odel's second incompleteness theorem applies to $\sfZC$, this shows that \say{Replacement} is something like a large cardinal axiom for $\sfZC$, since $\sfZFC \proves \exists M \,\, (M \models \sfZC)$.\gap 
+But why does replacement fail in $V_{\omega+\omega}$. Well, the ordinals greater than $\omega$ in $V_{\omega + \omega}$ are given by the set: \[ \{\omega + n \,: \, n \in \omega\},\] this set cannot live in $V_{\omega + \omega}$, since its rank is $\omega+\omega$. However, under replacement, \[ F: n \mapsto \omega + n\] is definable by a simple formula and, applied to $\omega \in V_{\omega+1}$ gives a counterexample to replacement. \gap 
+In some sense, the reason why replacement fails is because $\omega + \omega$ is \textit{singular}, there is a set smaller than it which has the same cardinality. What happens if we look at regular cardinals, say $\alpha = \aleph_{1}$?\gap
+Consider $\calP(\omega)$ which is an element of $V_{\omega+2} \subseteq V_{\omega_{1}}$. Moreover, there is a definable surjection from $\calP(\omega) \to \omega_{1}$, which is hidden in the proof of Hartogs' Lemma, given by \[ g: A \mapsto \begin{cases}
+    \alpha & \text{if $A$ codes a well-order of o.t. $\alpha$,}\\
+    0 & \text{otherwise.}
+\end{cases}
+\]
+Thus, $g$ has cofinal range in $\omega_{1}$ and therefore $V_{\omega_{n}} \nvDash \text{ Replacement}$.\gap 
+Our goal now will then be to show that \[ \sfI(\kappa) \Rightarrow V_{\kappa} \models \text{ Replacement}.\]
+\begin{fancydefine}{Second order replacement}
+    A set $M$ is said to satisfy \textbf{Second order replacement}(SOR) if for every $F : M \to M$ and every $x \in M$,\[ \{ F(y) \, : \, y \in x\} \in M.\]
+    Since this talks about every function-class, instead of just the definable ones, this is clearly stronger than the normal axiom of replacement we use in set theory, so if $M \models \text{SOR}$, then $M \models \text{ Replacement}$.
+\end{fancydefine}
+\begin{fancythm}{Zermelo's Theorem}
+    \[\sfI(\kappa) \Rightarrow V_{\kappa} \models \text{SOR}\]
+\end{fancythm}
+\begin{fancylem}{}
+    \[\sfI(\kappa),\, \lambda < \kappa \Rightarrow |V_{\lambda}| < \kappa.\]
+\end{fancylem}
+\proof By induction, \begin{itemize}
+    \item $|V_{0}|=0 < \kappa$
+    \item If $V_{\alpha} < \kappa$, then $|V_{\alpha+1}| = |\calP(V_{\alpha})| = 2^{|V_{\alpha}|} < \kappa$.
+    \item If $\lambda$ is a limit, and $|V_{\alpha}| < \kappa$ for all $\alpha < \lambda$, then \[ V_{\lambda} = \cup_{\alpha < \lambda} V_{\alpha},\] if $|V_{\lambda}|=\kappa$, then $\kappa$ is a union of a smaller set, which contradicts regularity.
+\end{itemize}
+\endproof 
+\begin{fancylem}{}
+    \[ \sfI(\kappa),\, x \in V_{\kappa} \Rightarrow |x| < \kappa.\]
+\end{fancylem}
+Suppose $x \in V_{\kappa} = \cup_{\alpha < \kappa} V_{\alpha}.$ Then $\alpha < \kappa$
+
+\proof Proof of Zermelo's theorem. Suppose that $F : V_{\kappa} \to V_{\kappa}$, then we need to show that \[ R := \{F(y) : y \in x\} \in V_{\kappa}.\]
+By Lemma 2, $|x|<\kappa$, so $|R|<\kappa$. For each $y \in x$, define $\alpha_{y} := \rank(F(y)) < \kappa$. Consider \[ A:= \{ \alpha_{y} : y \in x\}.\] Clearly, $|A| \leq |x| < \kappa$. Since $\kappa$ is regular, $A$ cannot be cofinal in it. So there is some $\gamma < \kappa$ such that $A \subseteq V_{\gamma}$. By definiion $R \subseteq V_{\gamma}$, so $R \in V_{\gamma+1} \subseteq V_{\kappa}$.
+\endproof
+
+\newlec
+So we have proved that $\sfI(\kappa) \Rightarrow V_{\kappa} \models \text{ SOR}$. Therefore $V_{\kappa} \models \sfZFC$. It felt as though the definition of $\sfI(\kappa)$ were designed to make this work, since we just needed that it was an strong limit cardinal, and that it was regular, (and uncountable). So a natural question is, is this an equivalence?
+Firstly, we will show \begin{fancythm}{Shepherdson}
+    If $V_{\kappa} \models \text{ SOR}$, then $\kappa$ is inaccessible.
+\end{fancythm}
+\proof Suppose $\neg \sfI(\kappa)$, so either \begin{enumerate} \item $\kappa$ is singular or
+    \item there is $\lambda < \kappa$ such that $2^{\lambda} \geq \kappa$. \end{enumerate}
+    Let's look at each of these cases:
+     \begin{enumerate}
+    \item Then $\kappa = \cup_{\alpha < \lambda} \kappa_{\alpha}$ for $\lambda < \kappa$ and $\kappa_{\alpha} < \kappa$. \gap Consider $\{\kappa_{\alpha} \, : \, \alpha< \lambda\} := \calC$, so $\calC \notin V_{\kappa}$. So $\calC$ is cofinal in $\kappa$ and $|\calC| = \lambda$. Therefore, we have a function class \[ F : \alpha \to \kappa_{\alpha}\] and $F(\lambda) = \calC \notin V_{\kappa}$. So $F$ witnesses that $V_{\kappa}$ doesn't satisfy SOR.
+    \item $2^{\lambda} \geq \kappa$. This means that there is a surjection \[ F : \calP(\lambda) \to \kappa.\]
+    Since $\lambda < \kappa$, $\calP(\lambda) \in V_{\lambda+2} \subseteq V_{\kappa}$. Therefore \[ F(\calP(\lambda)) = \kappa \notin V_{\kappa}.\] So $V_{\kappa} \notmodels \text{ SOR}$.
+\end{enumerate}
+\endproof
+There are some lingering questions: \begin{enumerate}
+    \item Is this also equivalent to $V_{\kappa} \models \sfZFC$?
+    \item Or even, is $\sfIC \Leftrightarrow \Cons(\sfZFC)$?
+\end{enumerate}
+Spoiler: the answer to both is no.\gap
+\section{Does $\sfIC \Leftrightarrow \Cons(\sfZFC)$? No.}
+Let's start with question 2. Assume $\sfI(\kappa)$, so we know that $V_{\kappa} \models \sfZFC$. By model theory, we know that there is going to be a countable elementary substructure such that \[(\calN, \in) \preceq (V_{\kappa}, \in).\] In particular $(\calN, \in) \models \sfZFC$. But what does $\calN$ look like? The proof of downwards L\"owenheim-Skolem is a Skolem hull construction. Built via: \begin{itemize}
+    \item $\calN_{0} = \emptyset$
+    \item $\calN_{k+1} = \calN_{k} \cup W(\calN_{k})$ where $W(\calM)$ is the set of witnesses for $\exists x. \, \varphi(x)$ formulae with parameters in $\calN_{k}$.
+    \item $\calN := \cup_{k \in \bbN} \calN_{k}$.
+\end{itemize}
+Elementariness then comes from Tarski-Vaught.\gap 
+This all seems quite abstract and that we won't be able to say much about $\calN$, but we can! For example, if $n \in \omega$, there is a formula $\varphi_{n}$ such that $V_{\kappa} \models \varphi_{n}(x) \Leftrightarrow x=n$. The formula $\exists x. \, \varphi_{n}(x)$ has precisely one witness. So $\omega \subseteq \calN$. Similarly, there are formulae: $\varphi_{\omega}$, $\varphi_{\omega + \omega}$, $\varphi_{\omega \cdot 3}$. \gap 
+But there is also $\varphi_{\omega_{1}}$ such that \[ x = \omega_{1} \Leftrightarrow V_{\kappa} \models \varphi_{\omega_{1}}(x)\] So $\omega_{1} \in \calN$, as the unique witness of $\exists x \, \varphi_{\omega_{1}}(x)$.\gap But $\calN$ is countable, it can't \textit{possibly} contain every ordinal below $\omega_{1}$. Similarly for $\omega_{2}$, $\omega_{3}$, and so on. So this model must have gaps, i.e. it must be non-transitive. \gap 
+But this $(\calN, \in)$ is well-founded, and extensional, so by Mostowski's collapsing theorem, there is a unique transitive $\calM$ such that \[ (\calM, \in) \equiv (\calN, \in).\]
+Thus $(\calM, \in) \preceq (\calN, \in) \preceq (V_{\kappa}, \in)$. So $\calM$ is a transitive model of $\sfZFC$. It is a transitive countable model. It will contain all the hereditarily-finite sets, and have some height which is a countable ordinal, say $\alpha$, which is given by $\alpha := \Ord \cap \calM$. The inverse of the Mostowski collapse is an elementary embedding from $\calM$ into $V_{\kappa}$. In particular, some $\beta < \alpha$ has the property \[ \calM \models \varphi_{\omega_{1}}(\beta).\]
+So \say{$x$ is a cardinal} cannot be absolute between $\calM$ and $V_{\kappa}$.
+\subsection{Theory of Absoluteness}
+Recall from Forcing \& The Continuum Hypothesis: $\Delta_{0}$ formulae are those with only bounded quantifiers (or equivalent to formulae with only bounded quantifiers). Some examples: \begin{itemize}
+    \item \say{$x$ is an ordinal}
+    \item \say{$f$ is a function}
+    \item \say{$x$ is a subset of $y$}
+    \item \say{$x$ is $\omega$}
+\end{itemize}
+$x$ is an ordinal is not $\Delta_{0}$ but the axiom of foundation provides the well-foundedness in $\sfZFC$, so in the context of $\sfZFC$ it \textit{is} $\Delta_{0}^{\sfZFC}$. \gap 
+We also have $\Sigma_{1}$ and $\Pi_{1}$, of the form $\exists x. \, \varphi(x)$ and $\forall x.\, \varphi(x)$ respectively. Some examples: \begin{itemize}
+    \item \say{$x$ is a cardinal}
+    \item \say{$x$ is the power set of $y$}
+\end{itemize}
+\begin{fancydefine}{Absolute}
+    $\varphi$ is called \textbf{absolute} for $\calM$, $\calN$ such that $\calM \subseteq \calN$, if $\forall x_{1}, \dots, x_{n} \in \calM$ \begin{align*}
+        \calM \models \varphi(x_{1}, \dots, x_{n}) \Leftrightarrow \calN \models \varphi(x_{1}, \dots, x_{n})
+    \end{align*}
+    And $\Rightarrow$ is upwards absolute and $\Leftarrow$ is downwards absolute.
+\end{fancydefine}
+\begin{fancythm}{}
+    \begin{itemize}
+        \item $\Delta_{0}$ formulae are absolute for transitive models. (I.e., $\calM \subseteq \calN$ both transitive, then $\varphi \in \Delta_{0}$ is absolute)
+        \item $\Pi_{1}$ formulae are downwards absolute for transitive models
+    \end{itemize}
+\end{fancythm}
+
+
+
+Then our example with $\calM, V_{\kappa}$ shows that \say{$x$ is a cardinal} cannot be $\Delta_{0}$, since it's not absolute for $\calM \subseteq V_{\kappa}$ both transitive models. \gap Similarly, \say{$x$ is the power set of $y$} cannot be $\Delta_{0}$, since if $p \in \calM$ such that that \[\calM \models p \text{ is the power set of } \omega,\] (which does exist(!)) then $p$ is countable, so $V_{\kappa} \notmodels p \text{ is the power set of } \omega$. So that's not $\Delta_{0}$ either.  \gap 
+This implies that all arithmetical statements, and therefore by encoding all syntactic statements are $\Delta_{0}$. So $\Cons(\sfZFC)$ is absolute between transitive models. (This is because we use $\omega$ as our bounded quantifier, this would not be the case in $\sfPA$).
+\begin{fancythm}{}
+    \begin{align*}
+        \sfIC &\Rightarrow \Cons(\sfZFC)\\
+        \sfIC &\nLeftarrow \Cons(\sfZFC)
+    \end{align*}
+\end{fancythm}
+\proof $\Rightarrow$ done. \gap 
+Since $\sfIC \Rightarrow \Cons(\sfZFC)$, we have $\calM \subseteq V_{\kappa} \subseteq V$ and $V \models \Cons(ZFC)$. $\calM$ is transitive, so by absoluteness $\calM \models \Cons(\sfZFC)$ and $\calM \models \sfZFC$, so \[\calM \models \sfZFC^* := \sfZFC + \Cons(\sfZFC).\]
+So by G\"odel's second incomplenetess theorem $\sfZFC^{*} \nvdash \sfIC$. \endproof
+\section{Is $\sfI(\kappa)$ equivalent to $V_{\kappa} \models \sfZFC$? No.}
+We see that our $\calM \neq V_{\alpha}$ for any $\alpha$. Clearly $\calM \neq V_{\omega}$, but \[|V_{\omega+1}| = |\calP(V_{\omega})| = 2^{\aleph_{0}}.\]
+So $\alpha > \omega$ means that $|V_{\alpha}| \geq 2^{\aleph_{0
+}}$. But $\calM$ was countable, so it can't possibly be any of these.
+
+\newlec
+
+If we consider our \say{gappy} (non-transitive) model $\calN$ from last time, and then look at the witnesses which we have in $\calN$. Then for each of these witnesses, consider which level of the Von-neumann hierarchy they live in. That is, define \begin{align*}
+    \alpha_{0} &:= 0\\
+    \alpha_{k+1} &:= \sup \{\rank(x) \, : \, x \in W(V_{\alpha_{k}}\}\\
+    \alpha &:= \sup\{\alpha_{n} \, : \, n \in \bbN\}
+\end{align*}
+\begin{fancythm}{}
+    We have that
+    \begin{enumerate}
+        \item[(A)] $V_{\alpha} \preceq V_{\kappa},$
+        \item [(B)] $ \alpha < \kappa.$
+    \end{enumerate}
+\end{fancythm}
+\proof $(A)$ is just Tarski-Vaught. \gap 
+We need to prove $(B)$, that we never get up to $\kappa$. First of all, we show that \[\forall k \in \bbN.\, \alpha_{k} < \kappa.\]
+We know that $\alpha_0 = 0 < \kappa$. Now suppose that $\alpha_{k} < \kappa$, then $V_{\alpha_{k}} < \kappa$ by Lemma 2.9.\gap 
+Therefore, we have that \[|W(V_{\alpha_{k}})| \leq \aleph_{0} \cdot |V_{\alpha_{k}}^{<\omega}| = |V_{\alpha_{k}}|<\kappa.\] Since we have the set of all formulae of size $\aleph_{0}$, and they can take parameters only in finite sequences $(V_{\alpha_{k}}^{< \omega})$. Therefore $\alpha_{k+1}< \kappa$ by regularity of $\kappa$. But then $\alpha$ is a countable union of $\alpha_{k}$, so again by regularity of $\kappa$, $\alpha < \kappa$.
+\endproof
+\begin{remark*}
+    \[\cf(\alpha)=\aleph_{0}.\] So in particular $\alpha$ is not an inaccessible cardinal.
+\end{remark*}
+So this gives us the \say{No} answer to question 1. 
+\begin{fancydefine}{Worldly cardinal}
+    We call $\alpha$ \textbf{worldly} if $V_{\alpha} \models \sfZFC$. Write $\sfWor(\alpha)$ for \say{$\alpha$ is worldly.}
+\end{fancydefine}
+So what we are saying as our answer to question 1 is that \[ \sfI(\kappa) \Rightarrow \sfWor(\kappa),\] but that \[ \sfI(\kappa) \nLeftarrow \sfWor(\kappa).\]
+\begin{corr}{}
+    \[ \sfIC \Rightarrow \sfWorC \Rightarrow \Cons(\sfZFC)\]
+\end{corr}
+\begin{fancythm}{}
+    $\sfWor(\kappa) \Rightarrow \kappa$ is a cardinal.
+\end{fancythm}
+\proof Observe that $\kappa$ is a limit ordinal, since $\sfZFC \proves \forall \alpha \exists \beta.\, \beta > \alpha$. That is, $\sfZFC$ proves that there is no greatest ordinal, but $V_{\kappa}$ would model that there is a greatest ordinal, which is not possible.\gap 
+Suppose $\kappa$ is not a cardinal, then there is a $\lambda < \kappa$ such that there is a bijection from $\lambda$ to $\kappa$, in particular $\lambda < \kappa < \lambda^{+}$. From the proof of Hartogs' lemma, we have that there is $R \subseteq \lambda \times \lambda$ such that \[ (\lambda, R) \equiv (\kappa, \in).\] Where does $(\lambda, R)$ live? Well, consider that $(\alpha, \beta) = \{\{\alpha\}, \{\alpha, \beta\}\} \in V_{\lambda}$, since these elements are always less than $\lambda$, and we only add $1$ by taking sets and pairings. Also, $\lambda \times \lambda \in V_{\lambda+1}$, so $R \in V_{\lambda + 1}$. Moreover, $(\lambda, R)$ itself is $\{\{\lambda\}, \{\lambda, R\}\}$ which lives in $V_{\lambda+3} \subseteq V_{\kappa}$. So $V_{\kappa}$ contains a well-order $(\lambda, R)$ of order type $\kappa$. Therefore, since \[\sfZFC \proves \text{ every well-order is isomorphic to a unique ordinal,}\]
+if we have \[V_{\kappa} \models \sfZFC + \text{ there is a well-ordering of order-type $\kappa$},\] then this means that $\kappa \in V_{\kappa}$, which is a contradiction. \endproof
+\section{Consistency Strength Hierarchy}
+Fix a base theory $\calB$ (for our purposes $\calB = \sfZFC$, but our definitions will make sense in other contexts). 
+\begin{fancydefine}{Consistency Strength}
+    If $\calT, \calS$ are extensions of $\calB$, then we say \[ \calT \leq_{\Cons} \calS \Leftrightarrow \calB \proves \Cons(\calS) \Rightarrow \Cons(\calT),\]
+    As usual, \[\calT \equiv_{\Cons} \calS \Leftrightarrow \calT \leq_{\Cons} \calS \text{ and } \calS \leq_{\Cons} \calT \]
+    And \[ \calT <_{\Cons} \calS \Leftrightarrow \calT \leq_{\Cons} \calS \text{ and } \calS \nleq_{\Cons} \calT\] We say that this is comparing theories by \textbf{consistency strength}.
+\end{fancydefine}
+Some comments on this definition:
+\begin{enumerate}
+    \item If $I$ is inconsistent, then $\calT \leq_{\Cons} I$. All inconsistent theories are equiconsistent.
+    \item In particular, $\calT$ is consistent if and only if \[ \calT <_{\Cons} I.\]
+    We will write $\perp$ for an inconsistent theory.
+    \item $<_{\Cons}$ is more than just \say{proving more theorems.} If $\varphi$ is such that 
+    \begin{align*}
+        \sfZFC &\notproves \varphi\\
+        \sfZFC &\notproves \neg \varphi
+    \end{align*}
+    Then it is not necessarily the case that $\sfZFC <_{\Cons} \varphi$ or $\sfZFC <_{\Cons} \neg \varphi$. The obvious example of such a $\varphi$ is the continuum hypothesis. \textit{But} we still have \[ \{ \psi \, : \, \sfZFC + \varphi \proves \psi\} \supsetneq \{\psi \, : \, \sfZFC \proves \psi\}.\]
+    \item G\"odel's second incompleteness theorem tells us that (for nice $\calT$ \footnote{computably enumerable axioms etc.}) if $\calT \neq \perp$, then \[ \calT <_{\Cons} \calT + \Cons(\calT).\]
+    \begin{remark*}
+        It is possible to have a consistent $\calT$ such that $\calT + \Cons(\calT)$ is inconsistent. The example is $\sfZFC + \neg \Cons(\sfZFC) := \sfZFC^{\dagger}$. Clearly $\sfZFC^{\dagger} \supset \sfZFC$, so $\Cons(\sfZFC^{\dagger}) \Rightarrow \Cons(\sfZFC)$. So therefore $\sfZFC^{\dagger} + \Cons(\sfZFC^{\dagger}) \Rightarrow \perp$.
+    \end{remark*}  
+\end{enumerate}
+So to summarise what we were saying before in terms of consistency strength, we have \[ \sfZFC <_{\Cons} \sfZFC+ \Cons(\sfZFC) <_{\Cons} \sfZFC + \sfWorC.\]
+Where the final $<_{\Cons}$ follows from the same argument that we used to show that $\sfIC \Rightarrow \Cons(\sfZFC + \Cons(\sfZFC))$. And we also have \[\sfZFC + \sfWorC <_{\Cons} \sfZFC + \sfIC.\]
+\subsection{Negation of Large Cardinal Axioms}
+In general, the negation of large cardinal axioms are not very strong. For example, we will see that $\sfZFC + \neg \sfIC \equiv_{\Cons} \sfZFC$. We have already shown that $I(\kappa) \Rightarrow V_{\kappa}\models \sfZFC$. If $\kappa$ is the least inaccessible cardinal, can $V_{\kappa} \models \sfZFC + \sfIC$? Note that \say{$\lambda$ is inaccessible} is a $\Pi_{1}$ statement, and therefore must be downwards absolute. If we have $\kappa_{0} < \kappa_{1}$, where both are inaccessible cardinals, then we have \[ V_{\kappa_{1}} \models \sfZFC + \sfI(\kappa_{0}).\] This doesn't answer our question though. To answer our question we need the following lemma 
+\begin{fancylem}{}
+    If $\alpha$ is a limit ordinal, then the statement \say{$\lambda$ is inaccessible} is absolute for $V_{\alpha}, V$.
+\end{fancylem}
+\proof \newlec Each of the statements \say{$\lambda$ is regular} and \say{$\lambda$ is a strong limit} are $\Pi_{1}^{\sfZF}$, and therefore downwards absolute, but not in general upwards absolute. So what we need to prove is that $\sfI(\lambda)$ is upwards absolute, e.g. that if $V_{\alpha} \models \sfI(\lambda)$, then $\sfI(\lambda)$. Suppose not, then we have two cases: \begin{enumerate}
+    \item[Case 1.] $\lambda$ is singular, so there is a cofinal set $C$ of size $\gamma < \lambda$, then there is a function \[ f: \gamma \to C.\] Note that \say{singular} is $\Sigma_{1}$, witnessed by $C, \gamma, f$. $C \in V_{\lambda+1}$ since it is a subset of $\lambda$, $\gamma \in V_{\lambda}$, and $f \in V_{\lambda+2}$. All of these are in $V_{\alpha}$, since $\alpha$ is a limit ordinal. Therefore \[V_{\alpha} \models \text{ $C$ is a cofinal set of cardinality $< \lambda$}.\] Therefore $V_{\alpha} \models \lambda \text{ is singular}$, so $V_{\alpha} \models \neg \sfI(\lambda)$.
+    \item[Case 2.] $\lambda$ is not a strong limit, so there is $\gamma< \lambda$ and $f: \calP(\gamma) \to \lambda$ a surjection. Then we have that \[\calP(\gamma) \in V_{\gamma+2} \subseteq V_{\lambda} \subseteq V_{\alpha},\]
+    and \[ f \in V_{\lambda+2} \subseteq V_{\alpha}.\] Thus $V_{\alpha} \models f \text{ is a surjection from $\calP(\gamma)$ to $\lambda$}$, and therefore $V_{\alpha} \models \text{$\lambda$ is not a strong limit.}$ So $V_{\alpha} \models \sfI(\lambda)$.
+\end{enumerate} 
+\endproof 
+\begin{fancythm}{}
+    Suppose $\sfZFC + \sfIC$, and $\kappa$ is the least inaccessible, then $V_{\kappa} \models \sfZFC + \neg \sfIC$.
+\end{fancythm}
+\proof Suppose $V_{\kappa} \models \sfZFC+\sfIC$, then there is $\lambda < \kappa$ such that $V_{\kappa} \models \sfI(\lambda)$. By the lemma, we therefore have $\sfI(\lambda)$. This contradicts the minimality of $\kappa$. \endproof 
+Rephrasing the above, we have that \[\sfZFC + \sfIC \proves \text{ there is a transitive model of $\sfZFC + \neg \sfIC$}.\]
+For $T$, write $T^{*} := T + \Cons(T)$. Observe: \begin{enumerate}
+    \item[(i)] If $S \proves \text{there is a transitive model of $T$}$. Then $S \proves \Cons(T^{*})$. This comes from a bootstrapping argument, using the absoluteness of consistency statements for transitive models.
+    \item[(ii)] If $S \proves T$, then $\Cons(S) \Rightarrow \Cons(T)$.
+    \item[(iii)] G\"odel 2: If $T \neq \perp$, then $\Cons(T) \not\Rightarrow \Cons(T^{*})$. 
+\end{enumerate}
+We can put this together to prove \begin{fancyprop}{}
+    \[\Cons(\sfZFC + \neg \sfIC) \not\Rightarrow \Cons(\sfZFC + \sfIC)\]
+\end{fancyprop}
+\proof Write $N := \sfZFC + \neg \sfIC$. Suppose $\Cons(\calN) \Rightarrow \Cons(\sfZFC + \sfIC)$. We saw in theorem 5.3 that $\sfZFC + \sfIC \Rightarrow \text{there is a transitive model of $N$}.$ Thus by (i), $\sfZFC+\sfIC \Rightarrow \Cons(N^{*})$. So $\Cons(N) \Rightarrow \Cons(\sfZFC + \sfIC) \Rightarrow \Cons(N^{*})$. But this contradicts G\"odel 2. \endproof 
+\subsection{Weakly inaccessibles}
+Observe that none of the proofs we did in lectures 2-4 work with weakly inaccessibles, since being a strong limit was very important. (Not even the proof $\sfZFC \notproves \sfWIC$!)\gap 
+Also, GCH (the statement that $\forall \alpha. \, 2^{\aleph_{\alpha}}=\aleph_{\alpha+1}$). GCH implies that $\forall \alpha. \, \aleph_{\alpha} = \beth_{\alpha}$ by induction. So, since a limit implies you are a limit of the $\aleph$ operation, and strong limit implies you are a limit of the $\beth$ operation, $\sfGCH$ says that every limit cardinal is a strong limit cardinal. This helps because in \say{Forcing and the continuum hypothesis,} we will show: \begin{fancythm}[]
+    If $\calM \models \sfZFC$, there is $L \subseteq \calM$ such that $L$ is transitive in $\calM$, and $L \models \sfZFC + \sfGCH$. (With $\Ord \cap L = \Ord \cap \calM$.)
+\end{fancythm}
+\proof In forcing and the continuum hypothesis. \endproof
+\begin{corr}{}
+    If $\calM \models \sfZFC + \sfWIC$, then $L \models \sfZFC + \sfIC$. So $\sfIC \equiv_{\Cons} \sfWIC$.
+\end{corr}
+\proof Absoluteness of the ($\Pi_{1}^{\sfZF}$) statement $\sfWI(\lambda)$ between transitive models, so \[ L \models \sfZFC + \sfGCH + \sfWIC \Rightarrow L \models \sfZFC + \sfIC.\] \endproof 
+An interesting question is whether we can have $\sfWI(2^{\aleph_{0}})$. We might see the (positive) answer at the end of the forcing course.
+\section{The Measure Problem}
+Fix $I = [0,1] \subseteq \bbR$. 
+\begin{fancydefine}{Measure} 
+    We say a function $\mu : \calP(I) \to I$ is called a \textbf{measure} if: \begin{enumerate}
+        \item[(i)] $\mu(I)=1$, $\mu(\emptyset)=0$.
+        \item[(ii)] Translation invariance: if $X \subseteq [0,1]$ and $r \in \bbR$, and $X+r = \{ x+r \, : \, x \in X\} \subseteq [0,1]$, then $\mu(X) = \mu(X+r)$.
+        \item[(iii)] Countable additivity: If $A_{n}$ is a countable family of pairwise disjoint sets, then \[ \mu\left( \cup_{n \in \bbN} A_{n}\right) = \sum_{n \in \bbN} \mu(A_{n}).\] 
+    \end{enumerate}
+\end{fancydefine}
+Lebesgue asked whether a measure existed. Vitali answered this question in the negative: there is no such function. As a remark: Vitali's theorem is a $\sfZFC$ theorem (which involves using the axiom of choice nontrivially). Solovay, 1970, proved that $\Cons(\sfZFC + \sfIC) \Rightarrow \Cons(\sfZF + \text{there is a measure})$. Shelah published a paper in 1984, titled \say{Can you take Solovay's inaccessible away?} The answer is no. \gap
+\newlec  
+Banach suggested that condition (ii) should be replaced by (ii') \[ \forall x \in [0,1], \,\, \mu(\{x\})=0.\]
+The Banach measure problem is then, does there exist a $\mu$ satisfying (i), (ii'), (iii). \gap 
+First, let's show that (ii) $\Rightarrow$ (ii'): If $\mu(\{x\})=\varepsilon>0$, then by translation invariance, we have that every singleton has the same measure $\varepsilon$. Then we just need to find $n \in \bbN$ such that $n \cdot \mu(\{x\}) >1$, and so we have a contradiction.\gap Observe that for any $\varepsilon$, there can be only finitely many pairwise disjoint sets with measure $\geq \varepsilon$.
+\begin{fancythm}{Banach-Kuratowski 1929}
+    $\sfCH$ implies that Banach's measure problem has answer \say{no.}
+\end{fancythm}
+Note that by removing condition (ii) and replacing it with (ii'), this problem has changed from a question about the real numbers to a question purely about sets (particularly with cardinaly $2^{\aleph_{0}})$), since the problem is invariant under bijection. Therefore, whether a set permits a Banach measure is a cardinal property.
+\begin{fancydefine}{$\lambda$-additivity}
+    A Banach measure $\mu$ is called $\lambda$\textbf{-additive}, if for all $\gamma < \lambda$ and pairwise disjoint families of sets $\{A_{\alpha} \, : \, \alpha < \gamma\}$, then \[ \mu\left(\cup_{\alpha < \gamma} A_{\alpha}\right) = \sup \left\{ \sum_{\alpha \in F} \mu(A_{\alpha}) \, : \, F \text{ a finite subset of $\gamma$}\right\}\]
+\end{fancydefine}
+\begin{fancythm}{}
+    If $\kappa$ is the smallest cardinal that has a Banach measure, that measure is $\kappa$-additive.
+\end{fancythm}
+\begin{fancydefine}{Real-valued measurable}
+    We call a cardinal $\kappa$ \textbf{real-valued measurable}, and write $\RVM(\kappa)$ if there is a $kappa$-additive Banach measure on $\kappa$.
+\end{fancydefine}
+Our first observation about real-valued measurable cardinals is: \begin{fancyprop}{}
+    Real-valued measurable cardinals must be regular
+\end{fancyprop}
+\proof Suppose not, so $C \subseteq \kappa$ is a cofinal subset with $|C|=\lambda <\kappa$. Then we can write $C$ as an increasing enumeration of $\lambda$ many things: \[ C = \{\gamma_{\alpha} \, : \, \alpha < \lambda\}\]
+Consider $C_{\alpha} = \{ \xi \, : \, \gamma_{\alpha} \leq \xi < \gamma_{\alpha+1}\}$. Then we know two things: \begin{enumerate}
+    \item $\kappa = \cup_{\alpha < \lambda} C_{\alpha}$
+    \item $C_{\alpha}$ is a pairwise disjoint family.
+    \item $|C_{\alpha}| \leq |\gamma_{\alpha+1}| < \kappa$.
+\end{enumerate}
+We have that $C_{\alpha} = \cup_{x \in C_{\alpha}} \{x\}$. Then by (3) and $\kappa$-additivity, $\mu(C_{\alpha})=0$. Then from (1) we get that $\mu(\kappa)=0$ using $\kappa$-additivity and (2): that $C_{\alpha}$ are pairwise disjoint.
+\subsection{Combinatorial observations about real-valued measurable cardinals}
+\begin{fancylem}{Pigeonhole principle}
+    If $\kappa$ is regular and $\lambda < \kappa$, and $f: \kappa \to \lambda$, then there is $\alpha \in \lambda$ such that \[ |f^{-1}(\{\alpha\})=\kappa|.\]
+\end{fancylem}
+\proof $\kappa = \cup_{\alpha<\lambda} f^{-1}(\{\alpha\})$, and regularity means that $\kappa$ cannot be a union of small sets. \endproof
+\begin{fancylem}{}
+    All successor cardinals are regular. (example sheet 1).
+\end{fancylem}
+\begin{fancylem}{}
+    If $\mu$ is a Banach measure on some set $S$ and $C$ is a family of pairwise disjoint subsets of $S$ with positive measure, then $C$ is countable.
+\end{fancylem}
+\proof Let $C_{n} := \left\{A \in C \, : \, \mu(A) > \frac{1}{n}\right\}$, then this set must be finite by the previous obseervation. $C = \cup_{n \in \bbN} C_{n}$, so $C$ must be countable (since it is a countable union of countable sets.) \endproof
+\begin{fancylem}{Ulam}
+    For any cardinal $\lambda$, there is an assignment: \begin{align*}
+        \alpha < \lambda^{+} & & \xi < \lambda
+    \end{align*}
+    with \[ (\alpha,\xi) \mapsto A_{\alpha}^{\xi} \subseteq \lambda^{+},\]
+    such that \begin{enumerate}
+        \item[(a)] If you fix $\xi$, $\{A_{\alpha}^{\xi} \, : \, \alpha < \lambda^{+}\}$ is a pairwise disjoint family.
+        \item[(b)] If you fix $\alpha$, then $ \left| \lambda^{+} \setminus \bigcup_{\xi < \lambda}A_{\alpha}^{\xi} \right| \leq \lambda$.
+    \end{enumerate}
+    We call these Ulam matrices.
+\end{fancylem}
+\proof Fix $\gamma < \lambda^{+}$. Fix a surjection \[ f_{\gamma} : \lambda \to \gamma+1\]
+Define $A_{\alpha}^{\xi} := \{\gamma, f_{\gamma}(\xi) = \alpha\}$. Property (a) is obvious. For property (b), observe that $\lambda^{+} \setminus \bigcup_{\xi < \lambda}A_{\alpha}^{\xi} \subseteq \alpha$.
+\endproof 
+\begin{fancythm}{}
+    \[ \RVM(\kappa) \Rightarrow \sfWI(\kappa)\]
+\end{fancythm}
+\proof Already know that $\RVM(\kappa) \Rightarrow$ $\kappa$ is regular. So towards a contradiction, assume $\kappa=\lambda^{+}$. Let $(A_{\alpha}^{\xi} \,; \, \alpha<\lambda^{+}, \, \xi < \lambda)$ be an Ulam matrix for $\lambda$. By (b), $\left| \lambda^{+}\setminus \cup_{\xi < \lambda} A_{\lambda}^{\xi}\right| \leq \lambda$. Write $Z:=\lambda^{+}\setminus \cup_{\xi < \lambda} A_{\lambda}^{\xi}$. \gap
+Then by $\kappa$-additivity $\mu(Z)=0$, so $\mu(\cup_{\xi <\lambda} A_{\alpha}^{\xi})=1$. Therefore, by $\kappa$-additivity, we must have some $\xi_{\alpha}$ such that $\mu(A_{\alpha}^{\xi_{\alpha}})>0$. Write now: \begin{align*}
+    f: \lambda^{+} &\rightarrow \lambda\\ 
+    \alpha &\mapsto \xi_{\alpha}
+\end{align*}
+So by pigeonhole principle, there is a set $A \subseteq \lambda^{+}$ of size $\lambda^{+}$, and $\xi$ such that $\forall \alpha \in A$, $\xi_{\alpha} = \xi$. So (by property (a) of Ulam matrices) $\{A_{\alpha}^{\xi} \, : \, \alpha \in A\}$ is a size $\lambda^{+}$ collection of pairwise disjoint sets with positive measure. This is impossible by lemma 3. \endproof 
+\begin{fancydefine}{Ulam}
+    A Banach measure $\mu$ is called \textbf{two-valued} if $\ran(\mu)= \{0,1\}$.
+\end{fancydefine}
+Two-valued measures correspond directly to ultrafilters. Recall that \begin{fancydefine}{Filter}
+    $F$ is a filter on $S$ if \begin{itemize}
+        \item $\emptyset \notin F$.
+        \item $A \subseteq B$, $A \in F \Rightarrow B \in F$.
+        \item $A,B \in F \Rightarrow A \cap B \in F$.
+        \item $A \in F$ or $S\setminus A \in F$. (\textbf{ultra}).
+        \item $\forall x \in S, \, \{x\} \notin F$. (\textbf{non-principal})
+        \item If $\forall \gamma <\lambda$, $\{A_{\alpha} \, ; \, \alpha < \gamma \} \subseteq F$, then $\cap_{\alpha<\gamma} A_{\alpha} \in F$. ($\lambda$\textbf{-complete})
+    \end{itemize}
+\end{fancydefine}
+We have, if $\mu$ is a two-valued Banach measure on $S$, then $ F = \{ A \, : \, \mu(A)=1\}$ is a two-valued, $\lambda$-complete, nonprincipal ultrafilter on $S$.
+
+
+
+
+\begin{remark*}
+    This links the search for a Banach measure on $[0,1]$ to the question of whether $\sfWI(2^{\aleph_{0}})$ can hold. Also remember Banach-Kuratowski ($\sfCH$ implies there is no Banach measure since $\sfCH$ implies $2^{\aleph_{0}}$ is $\aleph_{1}$, and hence not $\sfWI$).
+\end{remark*}
+So the existence of a two-valued banach measure correspond to the existence of an ultrafilter, which is nonprincipal (by property (b) of Banach measures), and $\aleph_{1}$-complete (by property (c) of Banach measures).
+ 
+\newlec
+
+\begin{fancydefine}{Measurable}
+    We say that a cardinal, $\kappa$, is measurable, if there is a $\kappa$-complete nonprincipal ultrafilter on $\kappa$. $\omega$ satisfies this, so we also require $\kappa$ uncountable.
+\end{fancydefine}
+\begin{remark*}
+    We call a cardinal $\kappa$ \textbf{Ulam-measurable} if there is an $\aleph_{1}$-complete nonprincipal ultrafilter on $\kappa$. Then the least Ulam measurable cardinal is measurable (Example sheet 2).
+\end{remark*}
+\begin{fancythm}{}
+    \[\sfM(\kappa) \Rightarrow \sfI(\kappa)\]
+\end{fancythm}
+\proof Regularity already done in the $\RVM(\kappa)$ case. So assume towards contradiction that $\exists \lambda < \kappa$ such that $2^{\lambda} \geq \kappa$. Now fix an injection \begin{align*}
+    f : \kappa &\to  B_{\lambda}\\
+\end{align*}
+where $B_{\lambda} = \{f \, | \, f : \lambda \to 2\}$. Now also, fix an $\alpha< \lambda$, then for each $\gamma < \kappa$, it is either the case that:
+\[ f(\gamma)(\alpha)=0,\] or 
+\[ f(\gamma)(\alpha)=1.\]
+Now define $A_{0}^{\alpha}= \{ \gamma \, : \, f(\gamma)(\alpha)=0\}$, and define similarly $A_{1}^{\alpha} = \{ \gamma \, : \, f(\gamma)(\alpha) = 1\}$.
+Then $A_{0}^{\alpha} \cup A_{1}^{\alpha} = \kappa$ and $A_{0}^{\alpha} \cap A_{1}^{\alpha} = \emptyset$. So there is exactly one number $b \in \{0,1\}$ such that $A_{b}^{\alpha} \in U$, the ultrafilter that we recover from the two-valued measure.\gap 
+Define the function $c(\alpha):=b$ iff $A_{b}^{\alpha} \in U$. Clearly $c \in B_{\lambda}$. Write $X_{\alpha}:= A_{c(\alpha)}^{\alpha} \in U$ for all $\alpha$. THen by $\kappa$-additivity, we have \[ \bigcap_{\alpha < \lambda} A_{\alpha} \in U\]
+Then we have \begin{align*} 
+    \gamma \in \bigcap_{\alpha < \lambda}X_{\alpha} &\Leftrightarrow \forall \alpha <\lambda.\, \gamma \in X_{\alpha} = A_{c(\alpha)}^{\alpha}\\
+    &\Leftrightarrow \forall \alpha <\lambda.\, f(\gamma)(\alpha)=c(\alpha)\\
+    &\Leftrightarrow f(\gamma) = c.
+\end{align*}
+Therefore $\bigcap\limits_{\alpha<\lambda} X_{\alpha} \subseteq \{f^{-1}(c)\}$, so it contains at most one element. Therefore $\bigcap\limits_{\alpha < \lambda} \notin U$, since otherwise $U$ is either principal, or not $\kappa$-complete. This gives a contradiction \endproof
+Clearly, in general, ultrafilters are not $\kappa^{+}$-complete, except for principal ultrafilters (since if you take any number of intersections, the principal element will always remain in the set). If $\{\alpha\} \notin U$ for any $\alpha \in \kappa$, then $\kappa = \bigcup\limits_{\alpha<\lambda}\{\alpha\}$.
+\begin{fancydefine}{Diagonal Intersection}
+    If $(A_{\alpha} \, : \, \alpha \leq \kappa)$, write the diagonal intersection:
+    \[ \bigtriangleup_{\alpha \leq \kappa} A_{\alpha} := \left\{ \xi \in \kappa \, : \, \xi \in \bigcap_{\alpha < \xi} A_{\alpha}\right\}\] 
+\end{fancydefine}
+\begin{fancydefine}{Normal filter}
+    A filter on $\kappa$ is called \textbf{normal} if it's closed under diagonal intersections.
+\end{fancydefine}
+\begin{fancythm}{}
+    $\sfM(\kappa)$ implies that there is a $\kappa$-complete normal nonprincipal ultrafilter on $\kappa$.
+\end{fancythm}
+\proof Example Sheet 2.
+\endproof 
+\subsection{Combinatorics}
+\begin{fancythm}{Ramsey's (Infinite) Theorem}
+    Let $[\bbN]^{2}$ be the set of all two element subsets of $\bbN$. (In general $[X]^{n}$ is the set of $n$-element subsets of $X$.) A two-colouring map is a function of the form \[ c: [\bbN]^{2} \to \{\text{red},\,\text{blue}\}.\]
+    Then (infinite) Ramsey's theorem says that for every colouring $c$, there is $X \subseteq \bbN$ which is infinite such that $c\upharpoonright [X]^{2}$ is \textbf{monochromatic} (or homogeneous).
+\end{fancythm}
+\begin{remark*}
+    Everything here is invariant under bijections, so of course it is a cardinal property. We didn't use anything about e.g. the additive structure of the naturals.
+\end{remark*}
+Erd\H{o}s came up with a nice notation for this:
+\begin{fancydefine}{Erd\H{o}s' Arrow Notation}
+    For every $n$ colouring $c: [\kappa]^{n} \to m$, we write: \[ \kappa \to (\lambda)^{n}_{m}\] to mean that there is a monochromatic subset $X \subseteq \kappa$ of size $\lambda$, of the colouring $c$, i.e. so that $|c[[X]^{n}]|=1$.
+\end{fancydefine}
+\begin{ex*}
+    In this notation, Ramsey's theorem becomes: \[ \aleph_{0} \to (\aleph_{0})^{2}_{2}\]
+\end{ex*}
+\begin{fancydefine}{Weakly Compact}
+    A cardinal $\kappa$ is called \textbf{Weakly compct} $\sfW(\kappa)$ if \[ f : \kappa \to (\kappa)^{2}_{2}\]
+\end{fancydefine}
+\begin{remark*}
+    The name will be explained later.
+\end{remark*}
+\begin{fancythm}{Erd\H{o}s}
+    Every weakly compact cardinal is inaccessible. \[ \sfW(\kappa) \Rightarrow \sfI(\kappa)\]
+\end{fancythm}
+\proof We will start by showing $\kappa$ is regular. Suppose not, then \[\kappa = \bigcup_{\alpha<\lambda}  X_{\alpha},\]
+for $\lambda <\kappa$, and $|X_{\alpha}|<\kappa$, and $X_{\alpha}$ pairwise disjoint. Now define a coloruing: \[ c: \{\gamma, \delta\} \mapsto \begin{cases}
+    \text{Red} & \text{$\gamma$ and $\delta$ lie in the same $X_{\alpha}$}\\
+    \text{Blue} & \text{o.w.}
+\end{cases}
+\]
+We have a set $H$ which is monochromatic for $c$. Then if it's coloured Red, one of the two $X_{\alpha}$ is large; Blue implies that $\lambda$ is large. So $\kappa$ must be regular.\gap 
+Now we show that $\kappa$ is a strong limit. We want to assume $2^{\lambda}\geq \kappa$ for $\lambda < \kappa$ and arrive at a contradiction. Define $B_{\lambda} = \{f \, | \, f: \lambda \to 2\}$. Then we can order $B_{\lambda}$ lexicographically, according to $1>0$, and the ordering of $\lambda$. Then it is a \textbf{combinatorial fact} that $(B_{\lambda}, \leq_{\text{lex}})$ is a totally ordered set such that there are no increasing or decreasing chains of length $\kappa>\lambda$. (Example sheet number $2$). If $2^{\lambda} \geq \kappa$, there is a family of pairwise distinct elements of $B_{\lambda}$ of length $\kappa$: $\{f_{\alpha} \, : \,  \alpha<\kappa\} \subseteq B_{\lambda}$. Then define for $\{\alpha, \beta\} \in [\kappa]^{2}$ that: 
+\[ c({\alpha, \beta}) = \begin{cases}
+    \text{Red} & \text{if $\alpha< \beta \Leftrightarrow f_{\alpha} \leq_{\text{lex}} f_{\beta}$}\\
+    \text{Blue} & \text{o.w.}
+\end{cases}\]
+If $H$ is a monochromatic subset for $c$, then if it is red, $f_{\alpha}$ forma a $\leq_{\text{lex}}$-increasing sequence of length $\kappa$. If it is blue , then $f_{\alpha}$, forms a $\leq_{\text{lex}}$ decreasing sequence of length $\kappa$. These both contradict the combinatorial fact, so we arrive at a contradiction. \endproof 
+\newlec
+So far, we have: 
+\begin{center}
+\begin{tikzcd}
+    \sfM(\kappa) \arrow[r, Rightarrow]& \RVM(\kappa) \arrow[dd, Rightarrow]\\
+    \sfW(\kappa) \arrow[d,Rightarrow]& \\
+    \sfI(\kappa) \arrow[d, Rightarrow] \arrow[r,Rightarrow]& \sfWI(\kappa)\\
+    \sfWor(\kappa) & \\
+\end{tikzcd}
+\end{center}
+Then we also have $\RVM(\kappa)$ and $\sfM(\kappa)$ are equiconsistent with a variant of G\"odel's constructible universe. We have a similar thing for $\sfI(\kappa)$ and $\sfWI(\kappa)$, which are not necessarily equivalent, but equiconsistent. We are clearly missing something, which we will now prove:
+
+\begin{fancythm}{}
+    \[\sfM(\kappa) \Rightarrow \sfW(\kappa)\]
+\end{fancythm}
+\proof Fix some colouring $f : [\kappa]^{2} \to 2$. Fix $\alpha$ so that 
+\begin{align*} 
+    X_{0}^{\alpha} &= \{ \beta \, : \, f(\{\alpha,\beta\})=0\} \\
+    X_{1}^{\alpha} &= \{\beta \, : \, f(\{\alpha,\beta\})=1\}
+\end{align*}
+Then $X_{0}^{\alpha} \cup X_{1}^{\beta} = \kappa \setminus\{\alpha\}$, which must have measure $0$. So there is exactly one $i \in \{0,1\}$ such that $X_{i}^{\alpha} \in U$, the ultrafilter given by the measure. Let $c : \kappa \to 2$ be such that $X_{c(\alpha)}^{\alpha} \in U$. Then define \begin{align*}
+    X_{0} &= \{\alpha \, : \, c(\alpha)=0\}\\
+    X_{1} &= \{\alpha \, : \, c(\alpha)=1\}\\
+\end{align*}
+So exactly one of $X_{0}$ and $X_{1}$ is in $U$.\gap 
+So we claim that if $X_{i} \in U$, then there is $H$ with $|H|=\kappa$ which is monochromatic for $i$. (This is clearly symmetric, so we will show this when $i=0$.) Assume that $X_{0} \in U$, then define \[ Z_[\alpha] = \begin{cases}
+    X_{0}^{\alpha} & \text{if $c(\alpha) = 0$.}\\
+    \kappa & \text{if $c(\alpha)=1$.}
+\end{cases}\] 
+Clearly, $Z_{\alpha} \in U$ for all $\alpha$. Then \[ \bigtriangleup_{\alpha < \kappa} Z_{\alpha} \in U\] by normality. Then define \[H = X_{0} \cap \bigtriangleup_{\alpha < \kappa} Z_{\alpha} \in U\] so $|H|=\kappa$. Fix $\gamma < \delta$, $\gamma, \delta \in H$.Then we have $\gamma, \delta \in X_{0}$, so $c(\gamma)=c(\delta)=0$. Also $Z_{\gamma}=X_{0}^{\gamma}$, and $Z_{\delta}=X_{0}^{\delta}$. Then $\delta \in \bigtriangleup_{\alpha<\kappa} Z_{\alpha}$, so by the definition of diagonal intersection, $\delta \in \bigcap_{\xi < \delta} Z_{\xi} \subseteq Z_{\gamma} = X_{0}^{\gamma}$. But then $f(\{\gamma, \delta\})=0$. \endproof
+
+
+\section{Large Cardinals for Infinitary Logic}
+
+Recall the compactness theorem for first-order logic: For any first order language $L_{S}$ and $\Phi \subseteq L_{S}$, $\Phi$ is satisfiable iff $\forall \Phi_{0} \subseteq \Phi$ such that $|\Phi_{0}| < \lambda_{0}'$ we have that $\Phi_{0}$ is satisfiable. This cannot work for languages with infinite length conjunctions and disjunctions.  For example, if we have \begin{align*}
+    \varphi_{=n} := \text{\say{There are exactly $n$ elements}}\\
+    \varphi_{\geq n} := \text{\say{There are at least $n$ elements}}
+\end{align*}
+Then we can define $\varphi_{F} = \bigvee_{i \in \bbN} \varphi_{=n}$, and $\Psi = \{ \varphi_{\geq n} \, : \, n \in \bbN\}$. Then $\Psi \cup \varphi_{F}$ is finitely satisfiable, but not satisfiable.\gap 
+\begin{fancydefine}{$\calL_{\kappa \kappa}$ languages}
+    Fix \begin{enumerate}
+        \item Variables \footnote{Enough variables e.g. if disjunctions get uncountable then we will need uncountably many elements.}
+        \item $S$ of standard (finite arity) function, relation, constant symbols.
+        \item Logical synbols $\wedge$, $\vee$, $\neg$, $\exists$, $\forall$.
+        \item Infinitary logical symbols: \begin{align*}
+            \bigwedge_{\alpha < \lambda} && \bigvee_{\alpha < \lambda} && \exists^{\alpha} && \forall^{\alpha}
+        \end{align*}
+        for $\lambda < \kappa$.
+    \end{enumerate}
+    The syntax is as expected, if $\varphi_{\alpha}$ are $L_{S}$-formulas for $\alpha < \lambda$, then so are $\bigwedge_{\alpha<\lambda} \varphi_{\alpha}$ and $\bigvee_{\alpha<\lambda} \varphi_{\alpha}$. If $\bar{v}$ is a sequence of variables of length $\lambda$, then $\exists^{\lambda} \bar{v} \varphi$, $\forall^{\lambda}\bar{v} \varphi$ are formulas. \gap 
+    The semantics are: we say that $\calM \models \bigwedge_{\alpha<\lambda}$ if and only if for all $\alpha<\lambda$, $\calM \models \varphi_{\alpha}$. We say $\calM \models \exists^{\lambda}\bar{v}\varphi$ 
+    if and only if there is $a: \lambda \to \calM$, such that $\calM \frac{a(0)a(1)\dots a(\xi) \dots}{v_{0}v_{1}\dots v_{\xi}\dots} \models \varphi$
+\end{fancydefine}
+\begin{fancydefine}{Compactness}
+    We say that a $\calL_{\kappa \kappa}$ language \textbf{satisfies compactness} if for all $\Phi \subseteq L_{S}$, $\Phi$ is satisfiable if and only if $\forall \Phi_{0} \subseteq \Phi$, $\Phi_{0}< \kappa$, then $\Phi_{0}$ is satisfiable.
+\end{fancydefine}
+Observe that $\calL_{\omega \omega}$ is ordinary first-order logic, so every $\calL_{\omega \omega}$ model satisfies compactness. (Like a lot of our large cardinal axioms, this one also comes from properties of $\omega$.)
+\begin{fancydefine}{Strongly compact}
+    We say a cardinal $\kappa$ is called \textbf{strongly compact}, written $\sfSC(\kappa)$ if every $\calL_{\kappa \kappa}$ language is compact.
+\end{fancydefine}
+\begin{fancythm}{Keisler-Tarski}
+    $\sfSC(\kappa) \Rightarrow$ every $\kappa$-complete filter on $\kappa$ can be extended to a $\kappa$-complete ultrafilter on $\kappa$.
+\end{fancythm}
+\proof Design $\calL$ according to the following: for each $A \subseteq \kappa$, take a constant symbol $c_{\alpha}$, there are $2^{\kappa}$ many symbols. Then $\calL^{*}$ is defined as $\calL$ plus an extra constant symbol $c$. Now define $\calM = (\calP(\kappa), \in \{A\, : \, A \subseteq \kappa\})$ where $c_{A}$ is interpreted by $A$. Let $\Phi := \Th_{\calL}(\calM)$. Note that \begin{align*} 
+    \calM &\models \forall x ( x \in c_{\alpha} \rightarrow \text{\say{$x$ is an ordinal}})\\
+    \calM &\models \forall x ( \text{\say{$x$ is an ordinal}} \rightarrow x \in c_{A} \vee x \in c_{\kappa \setminus A}) \tag{$*$}
+\end{align*}
+$\calL^{*} \supseteq \Phi^{*} = \Phi \cup \{ c \in c_{A} \, : \, A \in F\}$. Then we claim that $\Phi^{*}$ is $\kappa$-satisfiable: If $A_{\alpha}$, $\alpha < \kappa$ are subsets of $\kappa$ such that $c \in c_{A_{\alpha}}$ show up in $\Phi^{*}$; then any element of $\eta \in \cap_{\alpha < \lambda} A_{\alpha}$ can be chosen as the interpretation of $c$. By $\kappa$-completeness of $F$, $\cap_{\alpha < \lambda} A_{\alpha}$ is non-empty. So interpret $c$ by $\eta$. By $\sfSC(\kappa)$, we get that $\Phi^{*}$ is satisfiable, so $\calM \models \Phi^{*}$. Then $U := \{ A \ : \calM \models c \in C_{A}\}$. Then we claim $U$ is a $\kappa$-complete ultrafilter extending $\calF$: \begin{itemize}
+    \item $F \subseteq U$ is true by design.
+    \item $U$ is ultra, since for every $A$, either $A$ or $\kappa \setminus A$ is in $U$ by $(*)$.
+    \item  $U$ is $\kappa$-complete. If $\{A_{\alpha} \, : \, \alpha < \lambda\} \subseteq U$, then let $A := \bigcap_{\alpha<\lambda} A_{\alpha}$. Now $\calM \models \forall x (x \in C_{A} \Leftrightarrow \bigwedge_{\alpha <\lambda} x \in c_{A_{\alpha}})$, therefore $A \in U$.
+\end{itemize}
+
+
+
+
+
+\begin{corr}{}
+    $\sfSC(\kappa) \Rightarrow \sfM(\kappa)$
+\end{corr}
+\proof Let $F := \{ A \subseteq \kappa\, : \, |\kappa \setminus A| < \kappa\}$. This is a $\kappa$ complete filter on $\kappa$. If $U \supseteq F$, then $U$ must be nonprincipal, so by Keisler-Tarski, extend $F$ to a $\kappa$-complete ultrafilter which is nonprincipal. \endproof 
+
+\newlec
+
+\subsection{Reflection}
+\begin{fancydefine}{Keisler extension property, KEP}
+    A cardinal $\kappa$ has the \textbf{Keisler extension property} (written $\sfKEP(\kappa)$) if there is $\kappa \in X \supsetneq V_{\kappa}$ transitive such that $V_{\kappa} \preceq X$.
+\end{fancydefine}
+\begin{fancyprop}{}
+    If $\sfI(\kappa)$ and $\sfKEP(\kappa)$, then there is $\lambda < \kappa$ such that $\sfI(\lambda)$.
+\end{fancyprop}
+\proof Fix some $X$ as in the Keisler extension property. We know that $\kappa$ being inaccessible means that $X \models \sfI(\kappa)$, because $\kappa \in X$ and $\sfI$ is (downwards) absolute for transitive models of $\sfZFC$. We also know that $V_{\kappa} \models \sfZFC$. But then by elementarity, $X \models \sfZFC$.\gap 
+Putting these together, we obtain that $X \models \sfZFC + \sfIC$. But then, again by elementarity, $V_{\kappa} \models \sfZFC + \sfIC$. Therefore, $V_{\kappa} \models \exists \lambda. \sfI(\lambda)$. So take this $\lambda < \kappa$ such that $V_{\kappa} \models \sfI(\lambda)$. By absoluteness of inaccessible cardinals for von Neumann ranks, we get that $\sfI(\lambda)$. \endproof
+We say that this is a reflection, because what goes on in $X$ is reflected in what goes on in $V_{\kappa}$, as a result of the elementary equivalence between them (and absoluteness properties of inaccessible cardinals). \gap 
+We can improve this argument, if we fix $\alpha< \kappa$, then by the argument from the proof $X \models \exists \lambda > \alpha. \, \sfI(\lambda)$. Then by elementarity, this also reflects in $V_{\kappa}$, since $\alpha \in V_{\kappa}$. So from $\sfKEP(\kappa)$ and $\sfI(\kappa)$ we get (since $\alpha$ was arbitrary), that $\{\lambda < \kappa \, : \, \sfI(\lambda)\}$ is cofinal in $\kappa$.
+\begin{corr}{}
+    Let $A:= \exists \kappa. \, \sfI(\kappa) \wedge \sfKEP(\kappa)$. Then \[ \sfZFC + \sfIC <_{\Cons} \sfZFC + A.\]
+\end{corr}
+\proof We need to prove $\sfZFC + A \proves \Cons(\sfZFC + \sfIC)$. But we've just proved that \[\sfZFC + A \proves \exists \lambda_{0}, \lambda_{1}. \, \lambda_{0} < \lambda_{1} \wedge \sfI(\lambda_{0}) \wedge \sfI(\lambda_{1}).\]
+But $V_{\lambda_{1}} \models \sfZFC + \sfIC$, so $\Cons(\sfZFC + \sfIC)$. \endproof 
+\begin{remark*}
+    This is our general technique to prove $<_{\Cons}$. If $\Phi, \Psi$ are large cardinal properties with the appropriate amount of absoluteness so that everything works, then we show that $\sfZFC + \Phi(\kappa) \proves \{\lambda < \kappa \, : \, \Psi(\lambda)\} \text{ is cofinal.}$. Then $\sfZFC + \Phi C \proves \Cons(\sfZFC + \Psi C)$.
+\end{remark*}
+\begin{fancythm}{}
+    \[ \sfSC(\kappa) \Rightarrow \sfKEP(\kappa).\]
+    Immediate Corollary: $\sfZFC + \sfIC <_{\Cons} \sfZFC + \sfSCC$.
+\end{fancythm}
+\proof An idea is to take elementary diagrams (but this won't work immediately, because the model we get might not even be well-founded, so we wouldn't even be able to Mostowski collapse it to make it nice). Instead, we take the \say{elementary diagram} expressed as $\calL_{\kappa \kappa}$ sentences.\gap 
+So fix $V_{\kappa}$ and add $c_{x}$ - constant symbols for every $x \in V_{\kappa}$. Then set $L$ to be the language with $\in$ and $\{c_{x} \, : \, x \in V_{\kappa}\}$ (without any $\calL_{\kappa \kappa}$ sentences). And set \[ \gamma = \left(V_{\kappa}, \in, \{x \, : \, x \in V_{\kappa}\}\right).\] Then $\Th(\gamma)$ is the elementary diagram of $V_{\kappa}$, so if $\calM \models \Th(\gamma)$, then $V_{\kappa} \subseteq \calM$. Let $L_{\kappa}$ be the $\calL_{\kappa \kappa}$-language with some symbols. Consider \[ \psi := \forall^{\omega} \bar{v} \bigwedge_{i \in \omega} v_{i+1} \notin v.\] This expresses well-foundedness (assuming AC). Now if \[ \Phi := \Th_{L_{\kappa}}(\gamma),\] then $\psi \in \Phi$, since $V_{\kappa}$ actually is well-founded. Thus if $\calM \models \Phi$, then $\calM$ is a well-founded model containing $V_{\kappa}$. Then by taking the Mostowski collapse, we get a transitive model containing $V_{\kappa}$. \gap 
+But we need it to be bigger than $V_{\kappa}$, we don't want to have just recreated $V_{\kappa}$ with extras steps. To ensure this, extend $L_{\kappa}$ to $L_{\kappa}^{+}$ with one extra constant $c$. Then \[ \Phi^{+}= \Phi \cup \{ c \text{ is an ordinal} \} \cup \{c \neq c_{x} \, : \, x \in V_{\kappa}\}.\] Any model of $\Phi^{+}$ is (by previous) also a transitive superset of $V_{\kappa}$ that contains an ordinal $\geq \kappa$. So by transitivity $\kappa$ is in the model.\gap 
+Now we need to show that $\Phi^{+}$ is satisfiable. We will do this by showing that it is $\kappa$-satisfiable using $\sfSC(\kappa)$. Let $\Phi_{0} \subseteq \Phi^{+}$ of size $< \kappa$. Since $|V_{\kappa}| = \kappa$, there is some ordinal $\alpha < \kappa$ such that $c \neq c_{\alpha} \in \notin \Phi_{0}$. Take $\gamma$ together with interpretation $c \mapsto \alpha$. This is a model of $\Phi_{0}$. \endproof 
+
+If we analyse the proof that we've just given, we can notice that we only required $\sfSC(\kappa)$ for languages with at most $\kappa$ many symbols. If we define $\sfWC(\kappa)$ by \say{Every $\calL_{\kappa \kappa}$-language with at most $\kappa$ many symbols satisfies $\kappa$-compactness.} Then this theorem that we've proved shows $\sfWC(\kappa) \Rightarrow \sfKEP(\kappa)$. \gap 
+\textbf{Fact without proof}: $\sfWC(\kappa) \Leftrightarrow \sfW(\kappa)$.\gap 
+(Don't worry about the $\sfSC(\kappa) \Rightarrow \sfM(\kappa)$ proof also working with $\sfWC(\kappa)$ cardinals, for that we needed terms for everything in the filter, i.e. $2^{\kappa}$-many symbols, so this wouldn't work with $\sfWC(\kappa)$.)
+\newlec 
+\section{Reflection}
+\subsection{Taking the ultrapower of the universe}
+In order to avoid proper classes, let's take the ultrapower of a (very nice) \textit{set universe}. That is, our universe will be a set, and not a class. Later, we will briefly explain how the techniques we use could also apply to a proper class universe.\gap 
+We want our universe to be as nice as possible, and the nicest possible universes that we have seen look like $V_{\lambda}$. So we will assume that $\kappa < \lambda$, and $\kappa$ is measurable, and $\lambda$ is inaccessible. So in particular, $V_{\lambda} \models \sfZFC + \sfMC$\footnote{So, because this is a set universe, this is slightly stronger that $\sfZFC + \sfMC$, since we suppose the existence of an inaccessible above it (Why not use a worldly cardinal above it? Because cofinality works better this way.)}. \gap
+Now, fix $U$ to be a $\kappa$-complete nonprincipal ultrafilter on $\kappa$ and form the ultrapower by $U$. That means $f : \kappa \to V_{\lambda}$ and $f \sim_{U} g$ if and only if $\{\alpha \, : \, f(\alpha) = g(\alpha)\} \in U$. Denote $\sim_{U}$-equivalence classes by $[f]$. Then \[ V_{\lambda}^{\kappa}/U := \{ [f] \, : \, f : \kappa \to V_{\lambda}\},\] and we write that $[f]E[g] \Leftrightarrow \{ \alpha \, : \, f(\alpha) \in g(\alpha)\} \in U$. \gap 
+We can embed $V_{\lambda}$ into $V_{\lambda}^{\kappa}/U$ by, for each $x \in V_{\lambda}$, taking the constant function $c_{x} : \kappa \to V_{\lambda}$, given by $c_{x}(\alpha)=x$ for all $\alpha < \kappa$. Then \begin{align*}
+    l : V_{\lambda} &\to V_{\lambda}^{\kappa}/U\\
+    x &\mapsto [c_{x}]
+\end{align*}
+is an elementary embedding (using \L o\'s' theorem). Therefore \[ (V_{\lambda}, \in) \equiv (V_{\lambda}^{\kappa}/U, E). \] In particular $[c_{\kappa}]$ is a measurable cardinal in $V_{\lambda}^{\kappa}/U$, so the ultrapower models $\sfZFC + \sfMC$.
+\begin{remark*}(1).
+    Suppose $V_{\lambda}^{\kappa}/U \models [f] \text{ is an ordinal.}$. Then by \L o\'s' theorem, \[ X := \{\alpha \, : \, f(\alpha) \text{ is an ordinal.} \} \in U.\]
+    If we define \[ f'(\alpha) = \begin{cases}
+        f(\alpha), & \alpha \in X\\ 
+        0, & \text{otherwise.}
+    \end{cases}\]
+    then $f \sim_{U} f'$, so $[f]=[f']$. So, without loss of generality, we could assume that $f: \kappa \to \lambda$ (since $\lambda$ was inaccessible, $f$ cannot be cofinal,so there is $\gamma < \lambda$ such that $f : \kappa \to \gamma$). Note also that, for example $(f+1)(\alpha)=f(\alpha)+1$, since we have \[ \{\alpha \, : \, (f+1)(\alpha) \text{ is the successor of }f(\alpha)\} = \kappa \in U.\] So by \L o\'s again, $[f+1]$ is the successor of $[f]$.
+\end{remark*}
+\begin{remark*}(2).
+    If $f : \kappa \to V_{\lambda}$ is arbitrary, then $\{ \rank(f(\alpha)) \, : \, \alpha \in \kappa\}$ cannot be cofinal in $\lambda$, so there is some $\gamma$ such that $f \in V_{\gamma}$. Note also that $[f]$ is unbounded in $V_{\lambda}$ because we could change the \say{unimportant} values to $\eta$ for any $\eta$ instead of $0$, which is what we usually do.
+\end{remark*}
+\begin{remark*}(3).
+    Given $f$, by remark 2, assume $f \in V_{\gamma} \subsetneq V_{\lambda}$. If $[g]E[f]$, then \[ X := \{ \alpha \, : \, g(\alpha) \in f(\alpha) \} \in U.\] Now define \[ g'(\alpha) = \begin{cases}
+        g(\alpha), & \alpha \in X\\
+        0, & \text{otherwise.}
+    \end{cases}\]
+    Then $g' \sim_{U} g$, and $g' \in V_{\gamma}$. Therefore \[ \left|\{ [g] \, : \, [g] E [f] \} \right| \leq |V_{\gamma}| < \lambda.\]
+\end{remark*}
+\begin{fancylem}{}
+    $V_{\lambda}^{\kappa}/U$ is well-founded.
+\end{fancylem}
+\proof Suppose it weren't, then we would have $\{f_{n} \, : n \in \omega\}$, a strictly decreasing sequence. Then $[f_{n+1}]E[f_{n}]$. So by definition of ultrapowers, we have: \[ X_{n} := \{ \alpha \, : \, f_{n+1}(\alpha) \in f_{n}(\alpha)\} \in U.\]
+Then $\kappa$-completeness implies that \[ X := \bigcap_{n \in \omega} X_{n} \in U.\] Pick $\alpha \in X$. Then $\{ f_{n}(\alpha) \, : \, n \in \omega\}$ is a decreasing $\in$-sequence in $V_{\lambda}$. This is a contradiction since we know $V_{\lambda}$ is well-founded.\endproof 
+By lemma 8.1 and Mostowski, we find $M$ transitive such that \[ \pi : (V_{\lambda}^{\kappa}/U, E) \cong (M, \in).\]
+Put $l$ (the elementary embedding from $V_{\lambda}$ into $V_{\lambda}^{\kappa}/U$) and $\pi$ together, define $j := \pi \circ l$. Then $j : (V_{\lambda}, \in) \to (M, \in)$. And \begin{align*} j(x) &= \pi \circ l(x)\\ &= \pi(l(x)) \\ &=\pi([c_{x}]).\end{align*} In general, for $f: \kappa \to V_{\lambda}$, write $(f) = \pi([f])$ (the Mostwoski collapse of the equivalence class of $f$). What does $M$ look like in relation to $V_{\lambda}$? \gap \large 
+\textbf{Attempts to answer the above question}\normalsize
+\begin{enumerate}
+    \item[(1)]First, could it be some transitive set that extends above $V_{\lambda}$? No.
+\end{enumerate}
+\begin{fancylem}{}
+    $M \subseteq V_{\lambda}$
+\end{fancylem}
+\proof Note that ES1 Q8 proved that $V_{\lambda} = H_{\lambda}$ for $\lambda$ inaccessible (which it is here). Since $M$ is transitive, if $\forall x \in M$, $|x|<\lambda$, then $M \subseteq H_{\lambda}$. But remark 3 shows precisely that this is the case. \endproof
+\begin{enumerate}
+    \item[(2)] What if $M$ were a transitive set that extends above $V_{\kappa}$ (but remains contained below $V_{\lambda}$)? No.
+\end{enumerate}
+\begin{fancylem}{}
+    $\Ord \cap M = \lambda$.
+\end{fancylem}
+\proof By remark 1 (or just elementarity), if $\alpha < \lambda$, then $j(\alpha)$ is an ordinal. Note that $j$ is order preserving ($\alpha < \beta \Rightarrow j(\alpha) < j(\beta)$). Therefore, $j$ is an order-preserving embedding from $\lambda$ into $\Ord \cap M \subseteq \lambda$, so it must be unbounded in $\lambda$, so by transitivity, $\Ord \cap M = \lambda$. \endproof
+\begin{enumerate}
+    \item[(3)] So $M$ must contain all of the ordinals less than $\lambda$. So could it be that it is a transitive set which extends all the way up to $\lambda$ in ordinals, but misses some of the elements of $V_{\kappa}$? No.
+\end{enumerate}
+\begin{fancylem}{}
+    $j \upharpoonright V_{\kappa} = \id \upharpoonright V_{\kappa}$. In particular, $V_{\kappa} \subseteq M$.
+\end{fancylem}
+\proof We prove this by $\in$-induction on $V_{\kappa}$. Suppose $x \in V_{\kappa}$ such that $\forall y \in x, j(y)=y$. Then we want to prove that $j(x)=x$. \endproof 
+\begin{enumerate}
+    \item[($\supseteq$)] Take $z \in x$. By elementarity $z=j(z) \in j(x)$. Therefore $z \in j(x)$ as desired.
+    \item[($\subseteq$)] Take $z \in j(x)$. Then we can find some $f$ such that $z = (f)$. So $(f) \in c_{x}$ in another way to phrase $z \in j(x)$. This rephrasing means: \[ \{\alpha \, : \, f(\alpha) \in c_{x}(\alpha)\} = \{\alpha \, : \, f(\alpha) \in x\} \in U.\]
+    This set can be written as: \[ \bigcup_{y \in x} \{ \alpha \, : \, f(\alpha)=y\}.\]
+    This is a union of $|x|$ many sets, i.e. a union of $<\kappa$ many sets. Then by $\kappa$-completeness, one of these sets must be in $U$, since the union is in $U$ and it is a union of $<\kappa$ many things. Therefore $\{\alpha \, : \, f(\alpha)=y\} \in U$. So $f \sim_{U} c_{y}$. Therefore, $(f) = j(y)$ and $j(y)=y$ by the inductive hypothesis. So $z$ is $y$ for some $y \in x$, therefore $z \in x$.
+\end{enumerate}
+\endproof 
+\begin{enumerate}
+    \item[(4)] So, the answer to our questions mean $M$ contains all of $V_{\kappa}$ and is a subset of $V_{\lambda}$. Then the only question remaining is, does it equal $V_{\lambda}$.
+\end{enumerate}
+\newlec 
+\begin{fancylem}{}
+    $j \neq \id$. More concretely, there is an object in $V_{\lambda}$ which does not get mapped to itself, specifically $j(\kappa) > \kappa$.
+\end{fancylem}
+\proof We know that $j(\kappa) = c_{\kappa}$. Also, by lemma 8.4, for each $\alpha < \kappa$, $j(\alpha)=c_{\alpha}=\alpha$. Consider \begin{align*}
+    \id : \kappa &\to \kappa\\
+    \gamma &\mapsto \gamma
+\end{align*}
+Then $c_{\alpha}<(\id) \Leftrightarrow \{\gamma \, : \, c_{\alpha}(\gamma) < id(\gamma) \} \in U$. But this set is $\{\gamma \, : \, \alpha <\gamma \}$ . By a size argument, this must be in $U$, so $\alpha < \id$. (This uses nonprincipality of the ultrafilter). \gap 
+Similarly, we have $(\id) < (c_{\kappa}) \Leftrightarrow \{\gamma \, : \, \id(\gamma) < c_{\kappa}(gamma)\}$. And this set is the set of ordinals that are less than $\kappa$, so it is just $\kappa$, and therefore must be in the ultrafilter, so $(\id) < j(\kappa)$.\gap 
+Then we have for all $\alpha < \kappa$, that \begin{align*}
+    \alpha < (\id) &< j(\kappa)\\
+    \kappa \leq (\id) &<j(\kappa)
+\end{align*}
+Therefore $j(\kappa) > \kappa$. \endproof 
+
+\begin{remark*}\hspace{0.1cm}
+    \begin{enumerate}
+        \item This implies $j \upharpoonright V_{\kappa+1} \neq \id$.
+        \item It also shows that some elements of $M$ come from functions that are non-constant, and specifically non-constant on a set which \textit{is} in the ultrafilter.
+        \item $\{j(x) \, : \, x \in V_{\lambda}\} \subsetneq M$. So there is a copy of $V_{\lambda}$ sitting inside $M$, but which is not all of $M$. This copy is also not transitive (which follows, I think, fron the $j(\kappa)>\kappa$ thing).
+        \item If $f: \kappa \to \kappa$ such that $\forall \gamma. \, \id(\gamma) < f(\gamma)$, then $(\id)<(f)$. In particular, you could take $f_{2}: \gamma \mapsto \gamma \cdot 2$, or $f_{3} : \gamma \mapsto \gamma \cdot 3$, and we would be able to say $(\id)<(f_{2})<(f_{3})$.
+        \item At the moment, we do not know whether $(\id)=\kappa$. We'll try to figure out a function that grows slower than the identity. Try $f(\gamma) = \gamma -1$, but we can't do this with ordinals obviously. So we try next \[ f(\gamma) = \begin{cases}
+            \gamma - 1, & \text{if $\gamma$ successor,}\\
+            \gamma, & \text{if $\gamma$ a limit}
+        \end{cases}\]
+        Whether this function is less than the identity depends on whether $\{\alpha \, : \, \alpha \text{ is a limit}\}$ is in the ultrafilter or not. We'll discuss this more in lecture 12.
+    \end{enumerate}    
+\end{remark*}
+\begin{fancydefine}{}
+    If $j : V_{\lambda} \to M$ is any elementary embedding, $M \subseteq V_{\lambda}$ is transitive, we call $\mu$ the \textbf{critical point} of $j$, which we write as $\mu = \crit(j)$ if $j \neq \id$ and $\mu = \min\{\alpha \, : \, j(\alpha)>\alpha\}$.
+\end{fancydefine}
+Note that in this terminology, $\kappa = \crit(j)$ where $j$ is the Mostowski collapse of the ultrapower embedding.\gap 
+\textbf{Observations about }$\mathbf{M}$:\\ 
+$M$ is closed under finite intersections, i.e. if $A,B \in M$, then $A \cap B \in M$. \gap 
+$V_{\kappa} \in M$: we claim that $W := \{ y \in M\, : \, M \models \rank(y) < \kappa\}$ is equal to $V_{\kappa}$. Clearly, sicne $M \models \sfZFC$, $W$ is just $M$'s version of $V_{\kappa}$, and so $W \in M$ (because $V_{\kappa}$ is in $V_{\lambda}$). \gap 
+To prove that $W = V_{\kappa}$, if $x \in V_{\kappa}$, then $\rank(x) = \alpha < \kappa$. Then by lemma 8.4, $j(x)=x$. So by elementarity, $\rank(x)=\rank(j(x))=j(\alpha)=\alpha$, with the last equality coming from lemma 8.4. Therefore $V_{\kappa} \subseteq W$. \gap 
+For inclusion the other way, suppose that $M \models \rank(y)=\gamma$ for some $\gamma < \kappa$. Then wlog there is $(f)$ such that $y=(f)$, and $f: \kappa \to V_{\gamma+1}$. But then $|V_{\gamma+1}|<\kappa$. Thus, by the argument in lemma 8.4, there is some $x$ in $V_{\gamma+1}$ such that $\{\alpha \, : \, f(\alpha)=x\} \in U$. Then $f \sim_{U} c_{x}$, so $(f)=j(x)=x \in V_{\kappa}$. \endproof 
+\begin{fancylem}{}
+    $V_{\kappa+1} \subseteq M$. Note that $j \upharpoonright V_{\kappa+1} \neq \id$, so this does not follow from lemma 8.44.
+\end{fancylem}
+\proof We claim that for any $A \in V_{\kappa+1}$ (so $A \subseteq V_{\kappa}$), we have that $A = j(A) \cap V_{\kappa}$. Note that by the observation, $V_{\kappa} \in M$ and $M$ is closed under intersections. \gap 
+Take $x \in A \subseteq V_{\kappa}$. Then $x \in A$, so by elementarity $j(x) \in j(A)$, so $x \in j(A) \cap V_{\kappa}$.\gap 
+Now take $x \in j(A) \cap V_{\kappa}$. Since $x \in V_{\kappa}$, $j(x)=x$. Therefore, $j(x) \in j(A)$. Then by elementarity, we must also have $x \in A$. \endproof 
+\begin{fancylem}{}
+    $V_{\lambda} \models j(\kappa)$ has at most $2^{\kappa}$ many elements.
+\end{fancylem}
+\proof Remember that if $f \in V_{\gamma}$, then $|(f)| \leq |V_{\gamma}|$. If $(f) \in j(\kappa) = c_{\kappa}$, then we can assume that $f$ is a function from $\kappa \to \kappa$. There are only $2^{\kappa}$ many such functions. \endproof 
+
+In particular, $V_{\lambda} \models j(\kappa) \text{ not a strong limit cardinal}$.
+\begin{fancylem}{}
+    $M \neq V_{\lambda}$.
+\end{fancylem}
+\proof $M \models j(\kappa) \text{ is measurable}$ by elementarity. So $M$ thinks that $j(\kappa)$ is a strong limit. Therefore $M$ and $V_{\lambda}$ must be different. \endproof
+This isn't very constructive, but actually we can (and will, see ES3) show that the ultrafilter we need is missing from $M$, you get this by showing lemma 8.4 for abritrary $N \subseteq V_{\lambda}$ transitive such that $u \in N$. This will imply that $V_{\kappa+2} \nsubseteq M$, so that is where something is missing.\gap 
+\newlec
+So, does $M \models \kappa$ is measurable. Certainly not by $U$M but maybe some other $U' \in V_{\kappa+2}$ which is $\kappa-$complete and non-principal.
+\subsection{Back to the reflection theorem}
+Remember the Keisler extension property, which says that if $X$ is an elementary transitive extension of $V_{\kappa}$, and $\Phi$ is any property such that $X \models \Phi(\kappa)$, then $X \models \exists \mu.\, (\alpha < \mu \wedge \Phi(\mu))$. Then by elementarity, $V_{\kappa}$ models the same thing. Then the set $C_{\Phi} = \{ \gamma < \kappa\, : \, \Phi(\gamma)\} \subseteq \kappa$ is cofinal in $\kappa$. \gap 
+If $\Phi$ is any property such that $M \models \Phi(\kappa)$, then for all $\alpha < \kappa$, we have that \[ M \models \exists \mu (\alpha = j(\alpha) < \mu < j(\kappa) \wedge \Phi(\mu)).\]
+Then by elementarity, \[ V_{\lambda} \models \exists \mu ( \alpha < \mu < \kappa \wedge \Phi(\mu)).\]
+And $C_{\Phi} = \{\gamma < \kappa \, : \, \Phi(\gamma)\}$ is cofinal in $\kappa$.
+\begin{exs*}\hspace{0.1cm}
+    \begin{enumerate}
+        \item Let $\Phi = \sfI$ (inaccessibility). Then by absoluteness $M \models \sfI(\kappa)$, so $C_{\sfI} = \{ \gamma < \kappa \, : \, \sfI(\gamma)\}$ is cofinal. Thus every measurable cardinal is the $\kappa^{\text{th}}$ inaccessible (which we already knew (apparently)).
+        \item Let $\Phi = \sfW$ (weak compactness). Then we can prove that $M \models \sfW(\kappa)$. Fix a colouring $c : [\kappa]^{2} \to 2$ in $M$ and find $H \in [\kappa]^{\kappa}$ in $M$ which is monochromatic for $c$. By $\sfW(\kappa)$ in $V_{\lambda}$, have $H$ homogeneous as above in $V_{\lambda}$. But $H \subseteq \kappa$, so it lives in $V_{\kappa+1}$, therefore it must also live in $M$, since $M$ contains $V_{\kappa+1}$. \gap 
+        Then, by reflection, we get that $C_{\sfW} = \{ \gamma < \kappa \, : \, \sfW(\gamma)\}$ is cofinal in $\kappa$.
+        \begin{remark*}
+            We say a property $\Phi$ is called $\beta$\textbf{-stable} if for all transitive models $M$ and all $\kappa$, we have $\Phi(\kappa)$ and $V_{\kappa+\beta} \subseteq M \Rightarrow M \models \Phi(\kappa)$. We have just shown that weak compactness is $1$-stable \textit{and} that $1$-stable properties of measurable cardinals reflect at a measurable. Measurability is a $2$-stable property. being a $\kappa$-complete nonprincipal ultrafilter is absolute. Then $M(\kappa) \Leftrightarrow \exists U. \, (U \in V_{\kappa+2} \wedge \Xi(U))$.
+        \end{remark*}
+        \item Suppose $M \models \kappa$ is measurable. Then by the same argument as before, $C_{M} := \{ \gamma < \kappa\, : \, M(\gamma)\}$ is cofinal in $\kappa$. Therefore $\kappa$ is the $\kappa^{text{th}}$ measurable cardinal. This is because \textit{M} is seeing $\kappa$ as measurable!
+    \end{enumerate}
+\end{exs*}
+\begin{fancydefine}{Surviving}
+    $\kappa$ is called \textbf{surviving}, written $\sfSurv(\kappa)$ if there are $\lambda > \kappa$ such that $\sfI(\lambda)$, and $U$ is a $\kappa$-complete nonprincipal ultrafilter on $\kappa$, $M$ a transitive model such that $M \cong V_{\lambda}^{\kappa}/U$, and $j$ an elementary embedding derived from $U$, and \[ M \models \kappa \text{ is measurable}.\]
+\end{fancydefine}
+Then by the above, the first surviving cardinal is the $\kappa^{\text{th}}$ measurable.
+\begin{corr}{}\hspace{0.1cm} 
+    \[ \sfMC <_{\Cons} \sfSurvC\]
+\end{corr}
+\proof Let $\kappa$ be surviving, so $\sfSurv(\kappa)$. By previous, find $\lambda_{0} < \lambda_{1} < \kappa$ such that $\sfM(\lambda_{0})$, $\sfM(\lambda_{1})$, therefore $\sfI(\lambda_{1})$ since measurable implies inaccessible. Then \[ V_{\lambda_{1}} \models \sfZFC + \sfM(\lambda_{0}),\]
+by $2$-stability of $M$, and $V_{\lambda_{0}+2} \subseteq V_{\lambda_{1}}$. \endproof 
+\subsection{Fundamental Theorem on Measurable Cardinals}
+\begin{fancythm}{Fundamental Theorem on measurable cardinals}
+    Suppose $\lambda$ is inaccessible, $\kappa < \lambda$, then TFAE \begin{enumerate}
+        \item[(i)] $\kappa$ is measurable.
+        \item[(ii)] There is $M$ transitive with $V_{\kappa+1} \subseteq M$ and $j: V_{\lambda} \to M$ elementary such that $j \neq \id$. and $\kappa = \crit(j)$.
+    \end{enumerate}
+\end{fancythm}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item[(i) $\Rightarrow$ (ii)] Done. This is what we've been showing this whole time.
+    \item[(ii) $\Rightarrow$ (i)] Define the ultrafilter which makes $\kappa$ measurable. Define this via \[ U = U_{\kappa} := \{ A \subseteq \kappa \, : \, \kappa \in j(A)\}.\] And since $j$ is elementary, $A \subseteq \kappa \Rightarrow j(A) \subseteq j(\kappa)$, so this is not the empty set. \gap 
+    Then we need to prove that $U$ is a $\kappa$-complete nonprincipal ultrafilter.
+    \begin{enumerate}
+        \item To show $\kappa \in U$, $\kappa \in U \Leftrightarrow \kappa \in j(\kappa)$. That's true since $j(\kappa) >\kappa$. (Since $\kappa = \crit(j)$).
+        \item $\emptyset \notin U$. $\emptyset \in U \Leftrightarrow \kappa \in j(\emptyset)= \emptyset$. That's false.
+        \item If $A \in U$, and $B \supseteq A$, then $B \in U$. Then $A \in U \Leftrightarrow \kappa in j(A)$. By elementarity, $j(B) \supseteq j(A)$. Therefore $\kappa \in j(B)$, and so $B \in U$.
+        \item Suppose $A$ is not in $U$, then $\kappa \notin j(A)$. Then we want to show that $\kappa \setminus A \in U$ which is true if and only if $\kappa \in j(\kappa \setminus A) = j(\kappa) \setminus j(A)$. $\kappa \in j(\kappa)$, so $\kappa \setminus A \in U$.
+        \item Our definition looks very like a principal filter, however, interestingly we can show that it is a non-principal ultrafitler. Fix $\alpha \in \kappa$, and show that $\{\alpha\} \notin U$ which is true if and only if $\kappa \notin j(\{\alpha\}) = \{j(\alpha)\}$, but $\alpha < \kappa$, so $j(\alpha)=\alpha$, and $\kappa \notin \{\alpha\}$ clearly.
+        
+        \item Now to show $U$ is $\kappa$-complete. Fix $\{A_{\alpha} \, : \, \alpha<\gamma\} \subseteq U$. That is, $\kappa \in j(A_{\alpha})$ for all $\alpha < \gamma$. Then we want to show \[ \bigcap_{\alpha<\gamma} A_{\alpha} \in U.\]
+        This holds if and only if $\kappa \in j(\bigcap_{\alpha<\gamma} A_{\alpha})$. But we have $\beta \in \bigcap_{\alpha < \gamma} A_{\alpha}$ is just a formula that says $\bar{A}$ is a sequence of objects $A_{\alpha}$, and the $\alpha^{\text{th}}$ element of this sequence is $A_{\alpha}$, and $\beta$ is an element of each $A_{\alpha}$ in this sequence. Therefore, $\beta$ is in $j(\bigcap_{\alpha<\gamma} A_{\alpha})$ if and only if for all elements of the sequence $j(\bar{A})$, $\beta$ is in that element. Clearly $j(\bar{A})$ is a sequence of subsets of $j(\kappa)$ of length $j(\gamma)$. But $j(\gamma) = \gamma$. Since $A_{\alpha}$ is the $\alpha^{\text{th}}$ element of this sequence, $j(A_{\alpha})$ is the $j(\alpha)^{\text{th}}$ element of $j(\bar{A})$. But $j(\alpha)=\alpha$. So $j(\bar{A})=\{j(A_{\alpha}) \, : \, \alpha < \gamma\}$. That means that $j(\bigcap_{\alpha< \gamma} A_{\alpha}) = \bigcap_{\alpha < \gamma} j(A_{\alpha})$. But $\kappa$ lives in each of these sets by elementarity.
+    \end{enumerate} 
+\end{enumerate}
+\endproof 
+
+\newlec So, in this proof we have shown that if $\bar{A}$ is a sequence of subsets of $\kappa$ of length $\gamma$, then $j(\bar{A})$ is a sequence of subsets of $j(\kappa)$ of length $j(\gamma)$. Also, if $A_{\alpha}$ is the $\alpha^{\text{th}}$ element of $\bar{A}$, then $j(A_{\alpha})$ is the $j(\alpha)^{\text{th}}$ element of $j(\bar{A})$. In the proof, $\gamma < \kappa$, so $j(\gamma) = \gamma$, and for all $\alpha < \gamma$, $j(\alpha)=\alpha$. So $j(\bar{A})= \{j(A_{\alpha}) \, : \, \alpha < \gamma\}$.\gap 
+If $\gamma = \kappa$, then $j(A_{\alpha})$ is a sequence of length $j(\kappa)>\kappa$, for $\alpha < \kappa$, the $j(\alpha)^{\text{th}}$ element of $j(\bar{A})$ is $j(A_{\alpha})$. Beyond $\kappa$, however, we have no clue what the elements of $j(\bar{A})$ look like.
+\begin{fancyprop}{}
+    For arbitrary $j$ with $\crit(j)=\kappa$, $U_{j}$ is a normal ultrafilter. I.e. for all $\bar{A}$ such that $A_{\alpha} \in U$ and length $\kappa$, \[\bigtriangleup_{\alpha < \kappa} A_{\alpha} \in U.\]
+\end{fancyprop}
+\proof Suppose that $A_{\alpha} \in U_{j} \Leftrightarrow \kappa \in j(A_{\alpha})$. Then $\bigtriangleup_{\alpha<\kappa} A_{\alpha} \in U_{j}$ if and only if $\kappa \in j\left(\bigtriangleup_{\alpha<\kappa} A_{\alpha} \right)$.\gap 
+Then we analyse what $j\left(\bigtriangleup_{\alpha<\kappa} A_{\alpha}\right)$ is. Recall that  
+\begin{align*}
+    \xi \in \bigtriangleup_{\alpha<\kappa} A_{\alpha} &\Leftrightarrow \xi \in \bigcap_{\alpha < \xi} A_{\alpha}\\
+    &\Leftrightarrow \forall \alpha < \xi (\xi \in A_{\alpha})\\
+    &\Leftrightarrow \forall \alpha < \xi (\xi \in \alpha^{\text{th}} \text{ element of $\bar{A}$.})\\
+\end{align*}
+Therefore,
+\begin{align*}
+    \xi \in j \left(\bigtriangleup_{\alpha < \kappa} A_{\alpha}\right) &\Leftrightarrow \forall \alpha < \xi (\xi \in j(\alpha)^{\text{th}} \text{ element of $j(\bar{A})$.})\\
+    \kappa\in j \left(\bigtriangleup_{\alpha < \kappa} A_{\alpha}\right) &\Leftrightarrow \forall \alpha < \kappa (\kappa \in j(\alpha)^{\text{th}} \text{ element of $j(\bar{A})$.})\\
+    &\Leftrightarrow \forall \alpha < \kappa ( \kappa \in j(A_{\alpha}))
+\end{align*}
+And for $\alpha < \kappa$, $j(\alpha)=\alpha$. And $\kappa$ is in the $\alpha^{\text{th}}$ element of $j(\bar{A})$, which is $j(A_{\alpha})$. Therefore this is the case, so it is a normal ultrafilter. \endproof
+\begin{remark*}\hspace{0.1cm}
+    \begin{enumerate}
+        \item This provides an alternative proof of the existence of a normal ultrafilter on a measurable cardinal.
+        \item This means that $j \mapsto U_{j}$ and $U \mapsto j_{U}$ are in general not inverses of each other. If $U$ is not normal, then $U_{j_{U}} \neq U$, since $U_{j_{U}}$ is always normal.
+        \item We can also show 
+        \begin{fancyprop}{}
+            If $U$ is a $\kappa$-complete nonprincipal ultrafilter on $\kappa$, then TFAE: \begin{enumerate}
+                \item[(i)] $U$ is normal.
+                \item[(ii)] $(\id)=\kappa$.
+            \end{enumerate}
+        \end{fancyprop}
+        \proof Example Sheet 3. But the main point of the argument was done with the alternative characterisation of normal ultrafilters on sheet 2. \endproof 
+    \end{enumerate}
+\end{remark*} 
+\subsection{Alternative View of Reflection}
+Suppose $U$ is normal, $\kappa$-complete, nonprincipal. Then if $M \models \Phi(\kappa) \Leftrightarrow \calM \models \Phi((\id))$, then by \L os' Theorem, $\{\alpha <\kappa \, : \, \Phi(\id(\alpha))\} \in U$, which is the set of $\alpha < \kappa$ such that $\Phi(\alpha)$. So $\Phi$ reflects not just on a set of size $\kappa$, but also on an ultrafilter set. In particular, if $\calM \models \kappa$ \text{ is measurable}, and $U$ is normal (so $\kappa$ is \say{suriving}), then $\{ \alpha \, : \, \alpha \text{ is measurable}\} \in U$. 
+If $U$ is not normal, we can take $U_{j_{U}}$ (this could change whether $\calM \models \sfM(\kappa)$, so have to be careful). 
+\gap 
+\textbf{Characterize \say{surviving}}:\gap 
+\begin{fancythm}{}
+    $\kappa$ is surviving $\Leftrightarrow$ there is a normal ultradilter on $\kappa$ such that $C := \{ \alpha \, : \, \alpha \text{ is measurable} \} \in U$.
+\end{fancythm}
+\proof \hspace{0.1cm}
+\begin{enumerate}
+    \item[$\Rightarrow$] As we just argued.
+    \item[$\Leftarrow$] Suppose $C \in U$, then for each $\alpha \in C$, we can find an $\alpha$-complete nonprincipal ultrafilter on $\alpha$, call it $U_{\alpha}$. Then \[ f : \alpha \mapsto \begin{cases}
+        U_{\alpha}, & \text{ if $\alpha \in C$.}\\
+        \emptyset, & \text{otherwise.}
+    \end{cases} \]
+    Then $\{\alpha \, : \, f(\alpha) \text{ is an $\id(\alpha)$-complete ultrafilter on $\id(\alpha)$}\} = C$ is in $U$ if and only if $M \models (f) \text{ is an $(\id)$-complete non-principal ultrafilter on $(\id)$}$. So $M \models (f) \text{witnesses that $\kappa$ is measurable}$. 
+\end{enumerate}
+\endproof
+This shows that \say{being surviving} is a $2$-stable property: If $N$ is transitive such that $V_{\kappa + 2} \subseteq N$, then $\kappa$ is surviving $\Leftrightarrow \, N \models \kappa$ is surviving.
+\begin{fancydefine}{$<_{M}$, the Mitchell Order}
+    If $U$, $U'$ are two normal ultrafilters on $\kappa$, we write $U <_{M} U'$ if $C = \{ \alpha \, : \, \alpha \text{ is measurable}\} \in U$, and there is a sequence of ultrafilters $U_{\alpha}$ on $\alpha \in C$ such that $A \in U'$ if and only if $\{\alpha \, : \, A \cap \alpha \in U_{\alpha}\} \in U$.\gap 
+    This is known as the \textbf{Mitchell ordering of normal ultrafilters}.
+\end{fancydefine}
+Then $\kappa$ is surviving if and only if there are $U,U'$ normal on $\kappa$ such that $U<_{M}U'$. This is more or less what we just proved with the observation that $h(\alpha) = A \cap \alpha$ has the property that $(h)=A$. \gap 
+Note that talking about sequences of Mitchell-ordered ultrafilters is also $2$-stable.
+
+
+\section{Embeddings}
+
+\begin{fancydefine}{Embedding axiom}
+    A large cardinal axiom $\Phi$ is called an \textbf{embedding axiom} if $\Phi(\kappa) \Leftrightarrow$ there is $M$ transitive and $j: V_{\lambda} \to M$ elementary with $\crit(j)=\kappa$, plus additional properties.
+\end{fancydefine}
+Therefore $\sfM(\kappa)$ is the simplest embedding axiom. All larger large cardinal axioms that we consider in this course from now on will be embedding axioms.
+
+\begin{fancydefine}{$\beta$-strong embeddings}
+    An embedding $j: V_{\lambda} \to M$ is called $\beta$\textbf{-strong} if $V_{\kappa+\beta} \subseteq M$, with $\crit(j)=\kappa$.\gap 
+    A cardinal $\kappa$ is called $\beta$\textbf{-strong} if there is a $\beta$-strong embedding with $\crit(j)=\kappa$.
+\end{fancydefine}
+It is clear that if $\Phi$ is $\beta$-stable, then $\Phi$ is preserved by a $\beta$-strong embedding.
+\begin{corr}{}
+    If $\Phi$ is $\beta$-stable and $\kappa$ is $\beta$-strong with $\Phi(\kappa)$, then $\kappa$ is the $\kappa^{\text{th}}$ cardinal with property $\Phi$.
+\end{corr}
+\proof Omitted. Follows from earlier discussion about $\beta$-stable cardinals. \endproof 
+Note that $\kappa$ is measurable means that $\kappa$ is 2-strong. But $\kappa$ is 2-strong implies that $\{\alpha \, : \, \alpha \text{ is measurable}\}$ and $\{ \alpha \, : \, \alpha \text{ is surviving}\}$ have size $\kappa$. \gap 
+If we write $\beta-\sfS(\kappa)$ for $\kappa$ is $\beta$-strong, then $\sfSurvC <_{\Cons} 2-\sfSC$. This also gives an example of $j_{U_{j}} \neq j$. If $j$ is $2$-strong, then $j$ cannot be the ultrapower embedding of any ultrafilter, since these are never $2$-strong.\gap 
+\newlec 
+Recall that we say a large cardinal property $\Phi$ is $\beta$-stable if for all $M$ transitive such that $V_{\kappa+\beta} \subseteq M$, $\Phi(\kappa) \Rightarrow M \models \Phi(\kappa)$. \gap 
+For a non-trivial embedding $j$, we say that $j$ is $\beta$-strong if $\kappa = \crit(j)$ and $V_{\kappa + \beta} \subseteq M$. Also, we say that a cardinal $\kappa$ is $\beta$-strong if there is a $\beta$-strong $j$ with $\crit(j)=\kappa$. \gap
+Informally, $\beta$-strong embedding reflect any $\beta$-stable property of $\kappa$ to an unbounded subset of $\kappa$.
+\subsection{Witness objects}
+\begin{fancydefine}{Witness objects of rank $\beta$}
+    A large cardinal property $\Phi$ is said to have \textbf{witness objects of rank} $\beta$ if there is a formula $\Phi$ which is downwards absolute for transitive models, and \[ \Phi(\kappa) \Leftrightarrow \forall x \, \exists y. \, (y \in V_{\kappa + \beta} \wedge \Phi(x,y,\kappa))\]
+\end{fancydefine}
+\begin{exs*}\hspace{0.1cm}
+    \begin{itemize}
+        \item Weak compactness is rank $1$, by the formula: \[ \forall c \, \exists H. \, (H \in V_{\kappa+1} \wedge \text{ $H$ is homogeneous for $c$})\] 
+        \item Measurability by the formula: \[ \exists U. \, (U \text{ is a $\kappa$ complete n.p. ultrafilter on $\kappa$})\] and obviously $U$ lives in $V_{\kappa+2}$.
+    \end{itemize}
+\end{exs*}
+Observe that if $\Phi$ has witness objects of rank $\beta$, then $\Phi$ is $\beta$-stable. Some examples of properties and witness objects
+\begin{align*}
+    \text{Property} && \text{Stability} & & \text{Witness objects}\\
+    \text{Inaccessibility} & & \text{$0$-stable} & & \text{-}\\
+    \text{Weak Compactness} & & \text{$1$-stable} & & \text{Homogeneous sets in $V_{\kappa+1}$}\\
+    \text{Measurability} & & \text{$2$-stable} & & \text{An ultrafilter in $V_{\kappa+2}$}\\
+    \text{Surviving} & & \text{$2$-stable} & & \text{A pair $U<_{M} U'$ of ultrafilters in $V_{\kappa+2}$.}\\
+\end{align*}
+Observe that if $\beta$-strong cardinals have witness objects, they can't be of rank $\beta$.
+\subsection{Getting rid of the annoying inaccessible}
+All of the \say{taking ultrapowers of the universe} section was only about set-sized universe (which we got by assuming that there is an inaccessible $\lambda > \kappa$). Why did we assume this? \begin{itemize}
+    \item \textbf{Problem 1}: The definition of ultrapowers requires a set model.
+    \item \textbf{Problem 2}: In the fundamental theorem of measurable cardinals, we quantified over $j$ and $M$. If these are proper classes instead of set models, then how could we do this?
+    \item \textbf{Problem 3}: Also in the fundamental theorem of ultrapowers, we used the word \say{elementary}. We can only define this for set models because we can define a truth function, what does it mean when we're talking about classes?
+\end{itemize}
+\subsubsection{Problem 1: Taking ultrapowers without a set model}
+We took $V_{\lambda}^{\kappa}/ \sim_{U}$ What if we try this with $V^{\kappa}/\sim_{U}$. Clearly $V^{\kappa}$ is the proper class of all functions $f$ with $\dom(f) = \kappa$. The definition of $\sim_{U}$ still makes sense as a relation, because for any functions, they will live somewhere. However, equivalence classes of this relation will be proper classes, since \[ [f]_{U} = \{ g \in V^{\kappa} \, : \, f \sim_{U} g\}.\]
+This $V_{\kappa}/\sim_{U}$ is no longer a standard class, because it is a class of classes. Even in G\"odel-Bernays, members of classes are sets, never classes. \gap 
+We solve this using \textbf{Scott's Trick}: \gap 
+    Scott's trick say that if $C \neq \emptyset$ is a class, then there is $\alpha$ minimal such that $C \cap V_{\alpha} \neq \emptyset$. \gap 
+    Therefore, if we define \[ \scott(C) := C \cap V_{\alpha}\] for $\alpha$ minimal, then \[ [f]_{U} \neq [g]_{U} \Rightarrow \scott([f]_{U}) \neq \scott([g]_{U}).\]
+    Then Scott's idea is to define $V^{\kappa}/ U$ as \[ \{ \scott([f]_{U}) \, : \, \dom(f) = \kappa \}\]
+    Here, all the definitions work. 
+Then in order to get a transitive $M$, we need a class version of Mostowski's theorem. but first we need to define a notion that allows the proof to go through:
+\begin{fancydefine}{Set-like}
+    $E$ is \textbf{set-like} if for all $x \in C$: \[ \{ y \in C \, : \, yEx\}\] is a set.
+\end{fancydefine}
+Now for the theorem:
+ \begin{fancythm}{Class Version of Mostowski}
+    If $C$ is a proper class, $E \subseteq C \times C$, a binary relation on $C$ that is well-founded, extensional and \textbf{set-like} then there is a unique transitive class $T$ such that \[ (T, \in) \cong (C, E).\]
+\end{fancythm}
+\proof The proof of this theorem is virtually identical to the set version, only you use \say{set-like} at the appropriate moment. \endproof 
+\subsubsection{Problems 2 and 3: Fixing the problems with quantification and elementarity}
+The fundamental thoerem of measurable cardinals says that \[ \sfM(\kappa) \Leftrightarrow \exists j, \, \exists M. \, (j : V_{\lambda} \to M) \wedge \crit(j)=\kappa \wedge j \text{ is elementary.}\] 
+The quantifiers $\exists j$, and $\exists M$, are the second problem. Then the statement $j$ is elementary is the third. To fix these problems, we just have to get our hands dirty with class theory. \gap 
+Standard class theories are: 
+\begin{itemize}
+    \item NBG (von Neumann-Bernays-G\"odel)
+    \item KM (Kelly-Morse)
+\end{itemize}
+NBG is the \say{minimal} class theory, where classes are the things that can be made by formulae, so all of the classes are definable (more info in Forcing and the Continuum Hypothesis Sheet 2). Kelly-Morse class theory presupposes the existence of an inaccessible cardinal, and says that the things that are sets in that model which aren't sets in our original theory are classes, so there are undefinable classes by a simple countability argument. \gap 
+Either of these resolve the quantification problem, since we can quantify over our classes in a $2$-sorted language, and everything is all fine. But this doesn't immediately solve the problem about elementarity, since we still can't define a truth function, according to logic (Tarski's undefinability).\gap 
+So, elementarity simply cannot be expressed as a single formula anymore, instead it becomes a schema. This causes additional problems with the quantification (since we would get a different embedding for every formula). One possible solution is to extend our language by a symbol $c_{j}$, which we could then have a schema of properties about that would all hold for $c_{j}$. Another trick is to observe that $\Sigma_{1}$ elementarity is enough for elementarity. If interested, see Kanamori page 45.
+\newlec 
+\section{Up: Cardinals that are too big}
+\subsection{Embedding Cardinals}
+After showing we can get rid of the inaccessible, we will go back to using it in order not to introduce weird metamathematical considerations. \gap 
+Let $\kappa = \crit(j)$ where $j : V_{\lambda} \to M$ is elementary, along with the usual other properties of $j$ and $M$.
+\begin{ex*}
+    $\beta$-strong cardinals, i.e. cardinals so that $V_{\kappa + \beta} \subseteq M$. These cardinals increase consistency strength considerably, since e.g. measurables and surviving cardinals have witness objects in $V_{\kappa+2}$, so $2$-strength means that these properties reflect to an unbounded subset of $\kappa$. 
+\end{ex*}
+\begin{remark*}
+    Obviously, cardinals of $2$-strength cannot have witness objects of rank $\kappa + 2$. However, witness objects for strength do exist, they are called \textbf{extenders}, and if $\mu$ is the least $\beth$-fixed point bigger than $|V_{\kappa+\beta}|$, then the witness object for $\beta$-strength has rank $\mu$\footnote{This bound is probably overkill, but it is sufficient.}.
+\end{remark*}
+\begin{fancydefine}{Strong Cardinal}
+    A cardinal $\kappa$ is called \textbf{strong} if it is $\beta$-strong for all $\beta < \lambda$. Where $\lambda$ is the inaccessible above $\kappa$, as we have been using it.
+\end{fancydefine}
+\begin{remark*}
+    The precise quantifiers for this definition are: \[ \forall \beta, \, \exists j. \, (V_{\kappa + \beta} \subseteq M).\] And we will end up switching the quantifiers around later. This notion of strong cardinals means that they do not have a single witness object of a fixed rank (because if they did, then strength would reflect strength). 
+\end{remark*}
+\subsection{Supercompactness}
+\begin{fancydefine}{Supercompactness}
+    We say that a model $M$ is closed under $\mu$-sequences if \[ M^{\mu} \subseteq M.\]
+\end{fancydefine}
+\begin{fancythm}{}
+    If $\kappa$ is measurable and $j : V_{\lambda} \to M$ is the ultrapower embedding, then $M$ is closed under $\kappa$-sequences, but not under $\kappa^{+}$-sequences.
+\end{fancythm}
+\proof First we will show that $M$ is closed under $\kappa$-sequences. Suppose $S := \{ (f_{\alpha}) \, : \, \alpha < \kappa\} \in M^{\kappa}$, then we need to show that $S \in M$. \gap 
+Find $h$ such that $(h) = \kappa$, then we define $g(\xi)$ to be a function with domain $h(\xi)$ and $\forall \alpha \in h(\xi). \, g(\xi)(\alpha) = f_{\alpha}(\xi)$. Observe that $\{ \xi \, : \, \dom(g(\xi))= h(\xi)\} = \kappa \in U$. By \L o\'s, $\dom((g))=(h)=\kappa$. Then \[\{ \xi \, : \, \alpha \in \dom(g(\xi)) \Rightarrow g(\xi)(\alpha)=f_{\alpha}(\xi)\} = \kappa \in U.\]
+Then \L o\'s again gives that $\alpha \in \dom(g) = \kappa \Rightarrow (g)(\alpha)=f_{\alpha}$. So $(g)=S$. \gap 
+Second we need to show that $M$ is not $\kappa^{+}$-closed. Let $T := \{ j(\alpha) \, : \, \alpha <\kappa^{+}\} \in M^{\kappa^{+}}$. Then we claim that $T \notin M$. \gap 
+\textbf{Subclaim:} $T$ is unbounded in $j(\kappa^{+})=j(\kappa)^{+}$ (by elementarity). \gap 
+If $(f) < j(\kappa^{+}) = (c_{\kappa^{+}})$ then w.l.o.g. $f : \kappa \to \kappa^{+}$. Since $\kappa^{+}$ is regular, there must be some $\alpha < \kappa^{+}$ such that $f: \kappa \to \alpha$. So $(f) < (c_{\alpha}) = j(\alpha) \in T$. But $j(\kappa^{+}) = j(\kappa)^{+}$ is regular, so can't have small unbounded subsets. But $|T| = \kappa^{+} < j(\kappa^{+})$. Thus $T \notin M$. \endproof 
+\begin{fancydefine}{$\mu$-supercompact}
+    An embedding $j$ is called $\mu$\textbf{-supercompact} if $M^{\mu} \subseteq M$.\gap
+    Then we say that a cardinal $\kappa$ is $\mu$\textbf{-supercompact} if there is a $\mu$-supercompact embedding  with $\crit(j)=\kappa$.
+\end{fancydefine}
+Observe that $\kappa$ is measurable implies that $\kappa$ is $\kappa$-supercompact (but the embedding from the measure is not $\kappa^{+}$ supercompact).\gap 
+\begin{fancydefine}{Supercompact Cardinals}
+    A cardinal $\kappa$ is called simply \textbf{supercompact} if \[ \forall \mu. \, \kappa \text{ is $\mu$-supercompact.}\]
+    Importantly, the quantifiers are $\forall \mu, \, \exists j. \, M^{\mu} \subseteq M$.
+\end{fancydefine}
+\begin{remark*}
+    There is a link between supercompactness and strength, if $\kappa$ is $2^{\kappa}$-supercompact, then $\kappa$ is $2$-strong. This is because being $2$-strong is equivalent to $V_{\kappa+2} \subseteq M$, and $|V_{\kappa+1}| = \calP(V_{\kappa+1})$, and $|V_{\kappa+1}| = 2^{\kappa}$. So for every $A \in V_{\kappa+2}$, $A$ is a $2^{\kappa}$-sequence of elements of $M$, so $A \in M$, so $V_{\kappa+2} \subseteq M$. \gap 
+    In general, if $\kappa$ is $|V_{\kappa+\beta}|$-supercompact, then $\kappa$ is $\beta+1$-strong.
+\end{remark*}
+\begin{corr}{}
+    $\kappa$ is supercompact $\Rightarrow$ $\kappa$ is strong.
+\end{corr}
+\proof Omitted \endproof 
+This seems like strength is stronger than supercompactness, because we need \textit{a lot} of supercompactness to get a relatively small amount of strength. However, this is not the case. It is much harder to go from strength to supercompactness, because strength is a \say{local} property. From knowing that there is some subset $V_{\kappa+\beta}$ in $M$, it is hard to say anything about sequences that could be much higher than $V_{\kappa+\beta}$. So in fact supercompactness is stronger than strength.
+\gap 
+Now, we will switch the quantifiers.
+\begin{fancydefine}{Reinhardt}
+    We say that a cardinal $\kappa$ is \textbf{Reinhardt} if \[\exists j, \, \forall \beta < \lambda. \,V_{\kappa+\beta} \subseteq M.\]
+    This is equivalent to saying $M = V_{\lambda}$. \gap 
+    In other words, there is $j : V_{\lambda} \to V_{\lambda}$ such that $j$ is elementary and $\crit(j)=\kappa$.
+\end{fancydefine}
+\begin{fancythm}{Kunen}
+    $\sfZFC \Rightarrow$ There are no Reinhardt cardinals.\footnote{This proof does use choice, and it is currently an open (and big) question whether $\sfZF$ + there is a Reinhardt cardinal is consistent.}
+\end{fancythm}
+\proof Find the least $j$-fixed point above $\kappa$, using our usual construction \begin{align*}
+    \kappa_{0} &= \kappa\\
+    \kappa_{i+1} &= j(\kappa_{0})\\
+    \hat{\kappa} &= \bigcup_{i \in \omega} \kappa_{i}
+\end{align*}
+We'll show that $V_{\hat{\kappa}+1} \nsubseteq M$. For this, we'll need a combinatorial lemma, and for this lemma, we need a definition: 
+\begin{fancydefine}{$\omega$-J\'onsson}
+    For any cardinal $\delta$, we say that $f: [\delta]^{\omega} \to \delta$ is $\omega$\textbf{-J\'onsson} if for every $X \subseteq \delta$ such that $|X|=\delta$, we have $\{f(A) \, : \, A \in [X]^{\omega}\}=\delta$. %I think A \in [X]^{\omega} is correct from how we use it later, but unsure.
+\end{fancydefine}
+\begin{fancylem}{Erd\"os-Hajnal, 1966}
+    Every cardinal $\delta$ has an $\omega-$J\'onsson function.
+\end{fancylem}
+\proof Omitted \endproof 
+\newlec 
+\begin{fancylem}{Kunen's Lemma}
+    Under the previous assumptions about $\kappa$, $V_{\hat{\kappa}+1} \nsubseteq M$.
+\end{fancylem}
+\proof Towards a contradiction, assume $V_{\hat{\kappa}+1} \subseteq M$. And let \[ f : [\hat{\kappa}]^{\omega} \to \hat{\kappa}\] be $\omega$-J\'onsson for $\hat{\kappa}$. We get immediately that \[ M \models j(f) \text{ is $\omega$-J\'onsson for $j(\hat{\kappa})=\hat{\kappa}$.} \tag{$*$}\]
+Define $X := \{ j(\alpha) \, : \, \alpha \in \hat{\kappa}\} \in V_{\hat{\kappa}+1}$. We claim that $X \notin M$, which finishes the proof. \gap 
+Clearly $|X|= \hat{\kappa}$, but also since we assumed $V_{\hat{\kappa}+1} \subseteq M$, we also have \[ M \models |X| = \hat{\kappa}. \tag{$**$}\] Now, apply the definition of $\omega$-J\'onssons to ($*$) and ($**$) and get \[ M \models \{ j(f)(A) \, : \, A \in [X]^{\omega}\} = \hat{\kappa}.\] 
+Let's understand $j(f)(A)$ for $A \in [X]^{\omega}$ a bit better. Well, the set $A = \{ j(\alpha_{i}) \, : \, i \in \omega\}$ for some $\{\alpha_{i} \, : \, i \in \omega\} \in [\hat{\kappa}]^{\omega}$. Call this set of $\alpha_{i}$'s $a$. Then $j(a) = \{j(\alpha_{i}) \, : \, i \in \omega\} = A$.\gap
+\textbf{Aside:} In general, if $g(x)=y$, then $j(g)$ is a function, $j(x)$ is in the domain of $j(g)$, and $j(y)$ is the image of $j(x)$ under $j(g)$, since everything is elementary. Thus \[ j(g)(j(x)) = j(y) = j(g(x)).\]
+Returning to $j(f)(A)$, from the aside we know that this is \begin{align*}
+    j(f)(A) &= j(f)(j(a))\\
+    &= j(f(a)) \in X \tag{since $f(a) \in \hat{\kappa}$}
+\end{align*}
+We therefore proved that \[ M \models \hat{\kappa} = \{j(f)(A) \, : \, A \in [X]^{\omega}\} \subseteq X.\]
+Together, we have that $M \models \hat{\kappa} \subseteq X$. This is clearly false, since $\kappa=\crit(j)$, so $\kappa$ cannot live in $X$.
+\endproof 
+\endproof
+This proves Kunen's theorem.
+Let's analyse what happened in this proof. 
+\begin{remark*}\hspace{0.1cm}
+\begin{enumerate}
+    \item The Erd\"os-Hajnal result needs AC, and it is not known whether the proof works without AC (i.e. whether $ZF$ with a Reinhardt cardinal is inconsistent).
+    \item There is no need for $\lambda$ to be inaccessible, for any $\alpha$, if $j: V_{\alpha} \to M$, with $\crit(j)=\kappa$, such that $\hat{\kappa}\leq \alpha$, since we need $\hat{\kappa} \in V_{\alpha}$, and in fact $\hat{\kappa}+2 \leq \alpha$ since we need the J\'onsson function for $\hat{\kappa}$ is in $V_{\alpha}$, then we have $V_{\hat{\kappa}+1} \nsubseteq M$. We get a corollary from this:
+\end{enumerate}
+\end{remark*}
+\begin{corollary}
+    For any ordinal $\delta$, there is no \[ j : V_{\delta+2} \to V_{\delta+2}\]
+    which is elementary with $\crit(j)=\kappa < \delta+2$.
+\end{corollary}
+\proof Observe that if $\hat{\kappa}< \delta+2$, then $\hat{\kappa} < \delta+1$ since that is definable in $V_{\delta+2}$ as \say{the largest ordinal}, and since $\delta$ is the predecessor of the largest ordinal, $\hat{\kappa}$ can also not be $\delta$. Thus also $j(\kappa)<\delta$ by elementarity. By inuction $\kappa_{i} < \delta$, and so $\hat{\kappa} \leq \delta$, so $\hat{\kappa}+2 \leq \delta+2$. So by the second remark $V_{\hat{\kappa}+1} \subseteq V_{\delta+2}$. This gives a contradiction. \endproof
+What about $j : V_{\delta+1} \to V_{\delta+1}$ or $j: V_{\delta} \to V_{\delta}$? The first is called I1, and the second is (unfortunately) called I3 (there is an I2 in between which we won't talk about). By restriction, I1 implies I3 (the nontriviality cannot occur at a rank $\delta$ set first, since the critical point must be below $\delta$). However, so far these have not been proven inconsistent.
+
+
+\newpage \textbf{The big picture:} 
+\begin{center}
+    \begin{tikzcd}
+        \text{Reinhardt (0=1)} \arrow[d,Rightarrow]\\
+        \text{I1} \arrow[d,Rightarrow]\\
+        \text{I3} \arrow[d,rightsquigarrow]\\
+        \text{Super-compact} \arrow[d,rightsquigarrow]\\
+        \text{Strongly Compact} \arrow[d,rightsquigarrow]\\
+        \text{Strong} \arrow[d,Rightarrow]\\
+        \text{Surviving} \arrow[d,Rightarrow]\\
+        \text{Measurable} \arrow[d,Rightarrow]\\
+        \text{Weakly Compact} \arrow[d,Rightarrow]\\
+        \text{Inaccessible} \arrow[d,Rightarrow]\\
+        \text{Worldly}
+    \end{tikzcd}
+\end{center}
+Up to measurable are \say{small} large cardinals, between measurable and strong are medium large cardinals, and above that are large large cardinals.
+
+
+
+
+
+
+\end{document}
